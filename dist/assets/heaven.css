@@ -1,0 +1,711 @@
+/* DioLink — calm, accessible foundations shared by Parish and User. */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Lora:wght@400;500;600&display=swap');
+:root, html[data-theme] {
+  --heaven-bg: #f6f7f3; --heaven-surface: #fff; --heaven-soft: #edf3ee;
+  --heaven-ink: #283f37; --heaven-muted: #60756c; --heaven-line: #dce5dc;
+  --heaven-accent: #376851; --heaven-gold: #866522;
+  --page-bg: var(--heaven-bg); --panel-bg: var(--heaven-surface);
+  --panel-bg-strong: var(--heaven-surface); --panel-photo-bg: var(--heaven-surface);
+  --panel-stroke: var(--heaven-line); --border-light: var(--heaven-line);
+  --text-primary: var(--heaven-ink); --text-secondary: var(--heaven-muted); --text-dim: var(--heaven-muted);
+  --font-outline: none; --shadow-soft: 0 4px 20px #283f3705;
+  font-family: 'DM Sans', 'Segoe UI', sans-serif; font-size: 16px; font-weight: 400;
+  color: var(--heaven-ink); background: var(--heaven-bg); color-scheme: light;
+}
+html[data-theme=dark] {
+  --heaven-bg: #17231e; --heaven-surface: #202f27; --heaven-soft: #2b3c32;
+  --heaven-ink: #ecf2e9; --heaven-muted: #b2c5b7; --heaven-line: #405448;
+  --heaven-accent: #a6d2b8; --heaven-gold: #e8cb88; color-scheme: dark;
+}
+html[data-design=heaven] body { margin: 0; background: var(--heaven-bg) !important; color: var(--heaven-ink); }
+html[data-design=heaven] *, html[data-design=heaven] *::before, html[data-design=heaven] *::after { box-sizing: border-box; text-shadow: none !important; }
+html[data-design=heaven] :is(button,input,select,textarea) { font-family: 'DM Sans','Segoe UI',sans-serif !important; font-size: 1rem; }
+#root :is(p,span,label,td,th,a,small,strong,div) { font-family: 'DM Sans','Segoe UI',sans-serif; }
+#root :is(h1,h2,h3,h4) { font-family: 'Lora',Georgia,serif !important; font-weight: 500 !important; letter-spacing: -.035em; line-height: 1.25; color: var(--heaven-ink) !important; }
+#root :is(h1,h2) { font-size: clamp(1.7rem,2.8vw,2.5rem); }
+#root h3 { font-size: 1.65rem; } #root h4 { font-size: 1.25rem; }
+#root :is(p,small,.screen-subtitle,.workspace__subtitle) { color: var(--heaven-muted); line-height: 1.7; font-weight: 400; }
+#root :is(.scene__watermark,.scene__glow,.sidebar::before,.dashboard-frame::before,.glass-card::before,.overview-shell::before,.workspace__topbar::before) { display: none !important; }
+#root .scene { padding: 0 !important; min-height: 100dvh; background: var(--heaven-bg) !important; }
+#root .dashboard-frame { width: 100%; min-height: 100dvh; padding: 0; display: grid; grid-template-columns: 244px minmax(0,1fr); gap: 0; border: 0 !important; border-radius: 0; box-shadow: none !important; background: var(--heaven-bg) !important; backdrop-filter: none; }
+#root :is(.sidebar,.workspace__topbar,.overview-shell,.glass-card,.profile-pill,.icon-button,.nav-item,.sidebar__footer,.login-panel,.login-card) { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; box-shadow: none !important; }
+#root .sidebar { position: sticky; top: 0; height: 100dvh; border: 0 !important; border-right: 1px solid var(--heaven-line) !important; border-radius: 0; padding: 32px 18px 20px; background: var(--heaven-surface) !important; gap: 20px; }
+#root .sidebar__brand { gap: 12px; padding: 0 6px 22px; border-bottom: 1px solid var(--heaven-line); }
+#root .sidebar__crest { width: 42px !important; height: 52px !important; min-width: 42px; }
+#root .sidebar__brand h1 { font-size: 1.65rem; margin: 0; }
+#root :is(.sidebar__eyebrow,.workspace__eyebrow,.login-role-panel__eyebrow) { font-size: .66rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--heaven-accent) !important; }
+#root .sidebar__caption { font-size: .72rem; line-height: 1.5; color: var(--heaven-muted); }
+#root .sidebar__nav { display: grid; gap: 5px; }
+#root .nav-item { min-height: 44px; padding: 10px 13px; gap: 12px; border: 1px solid transparent !important; border-radius: 9px; background: transparent !important; color: var(--heaven-muted) !important; font-size: .85rem; font-weight: 500; transform: none !important; }
+#root .nav-item:is(:hover,.is-active) { background: var(--heaven-soft) !important; color: var(--heaven-accent) !important; }
+#root .nav-item.is-active { font-weight: 700; border-color: var(--heaven-line) !important; }
+#root .nav-item__icon { width: 20px; height: 20px; background: transparent !important; }
+#root .nav-item--logout { margin-top: auto; }
+#root .sidebar__footer { padding: 14px 8px 0; border: 0 !important; border-top: 1px solid var(--heaven-line) !important; border-radius: 0; background: transparent !important; font-size: .72rem; }
+#root .workspace { min-width: 0; padding: 24px clamp(18px,3vw,44px) 48px; gap: 24px; }
+#root .workspace__topbar { min-height: 76px; padding: 0 0 22px; overflow: visible; border: 0 !important; border-bottom: 1px solid var(--heaven-line) !important; border-radius: 0; background: transparent !important; }
+#root .workspace__topbar h2 { font-size: 1.8rem; }
+#root .workspace__topbar--parish { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; flex-direction: row !important; align-items: center; }
+#root .workspace__topbar--parish .workspace__headline { min-width: 0; }
+#root .workspace__topbar--parish .workspace__actions { min-width: 0; }
+#root .profile-pill { border: 0 !important; background: transparent !important; border-radius: 8px; padding: 6px; }
+#root .profile-pill__avatar { background: var(--heaven-soft) !important; color: var(--heaven-accent) !important; width: 40px; height: 40px; }
+#root .profile-pill strong { font-size: .85rem; color: var(--heaven-ink); }
+#root .profile-pill span { font-size: .72rem; color: var(--heaven-muted); }
+#root :is(.icon-button,.user-topbar-menu) { width: 44px; height: 44px; min-height: 44px; border: 1px solid var(--heaven-line) !important; border-radius: 10px; background: var(--heaven-surface) !important; color: var(--heaven-accent) !important; }
+#root .user-topbar-menu { display: none; }
+#root .overview-shell { padding: 0; border: 0 !important; border-radius: 0; background: transparent !important; overflow: visible; }
+#root .overview-shell__header { padding: 0 0 24px; gap: 16px; }
+#root .screen-tag { padding: 5px 12px; font-size: .72rem; border: 1px solid var(--heaven-line); border-radius: 20px; background: var(--heaven-soft) !important; color: var(--heaven-accent) !important; }
+#root :is(.screen-grid,.overview-grid) { gap: 20px; min-width: 0; }
+#root :is(.glass-card,.page-card,.user-home-action,.user-summary-card,.user-home-card) { min-width: 0; border: 1px solid var(--heaven-line) !important; border-radius: 16px; background: var(--heaven-surface) !important; color: var(--heaven-ink); box-shadow: 0 3px 18px #203e2c03 !important; padding: 24px; }
+#root :is(.user-home-hero,.parish-hero,.parish-welcome-card) { background: var(--heaven-soft) !important; border-color: var(--heaven-line) !important; }
+#root :is(.user-home-action,.user-service-card) { transition: border-color .18s,transform .18s; }
+#root :is(.user-home-action,.user-service-card):hover { transform: translateY(-2px); border-color: var(--heaven-accent) !important; }
+#root :is(.user-home-action__icon,.stat-icon,.metric-icon) { background: var(--heaven-soft) !important; color: var(--heaven-accent) !important; box-shadow: none !important; }
+html[data-design=heaven] :is(input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea) { min-width: 0; max-width: 100%; min-height: 46px; padding: 11px 14px; color: var(--heaven-ink) !important; background: var(--heaven-surface) !important; border: 1px solid #b9cabe !important; border-radius: 8px !important; box-shadow: none !important; font-weight: 400; }
+html[data-design=heaven] :is(input,textarea)::placeholder { color: var(--heaven-muted) !important; opacity: 1; }
+html[data-design=heaven] select { appearance: auto !important; }
+html[data-design=heaven] option { color: var(--heaven-ink) !important; background: var(--heaven-surface) !important; }
+html[data-design=heaven] :is(input[type=checkbox],input[type=radio]) { accent-color: #376851; width: 18px; height: 18px; }
+html[data-design=heaven] :focus-visible { outline: 3px solid #86af91 !important; outline-offset: 3px; }
+html[data-design=heaven] :is(button,a) { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+#root :is(.primary-action,.login-submit,.primary-button,.user-primary-button,.certificate-request-button) { min-height: 46px; padding: 12px 20px; color: #fff !important; background: #376851 !important; border: 1px solid #376851 !important; border-radius: 8px; box-shadow: none !important; font-weight: 600; }
+#root :is(.secondary-action,.secondary-button,.filter-button) { min-height: 44px; padding: 10px 16px; border: 1px solid var(--heaven-line) !important; border-radius: 8px; color: var(--heaven-accent) !important; background: var(--heaven-surface) !important; box-shadow: none !important; }
+#root button:disabled { cursor: not-allowed; opacity: .5; }
+#root :is(.table-wrap,.data-table-wrap,.table-scroll) { max-width: 100%; overflow-x: auto; border: 1px solid var(--heaven-line); border-radius: 10px; }
+#root table { border-collapse: collapse; background: var(--heaven-surface) !important; width: 100%; }
+#root th { padding: 14px 16px; font-size: .72rem; font-weight: 600; letter-spacing: .04em; color: var(--heaven-muted) !important; background: var(--heaven-soft) !important; border-color: var(--heaven-line) !important; }
+#root td { padding: 16px; font-size: .85rem; border-color: var(--heaven-line) !important; color: var(--heaven-ink) !important; }
+#root :is(.status-badge,.badge,.chip) { border-radius: 20px; padding: 5px 10px; font-size: .7rem; font-weight: 600; box-shadow: none !important; }
+#root .status-badge--green { color: #315d43 !important; background: #e5f0e5 !important; }
+#root .status-badge--gold { color: #745b22 !important; background: #f6eed8 !important; }
+#root .status-badge--blue { color: #385e72 !important; background: #e7eff4 !important; }
+#root .status-badge--red { color: #9a3f3f !important; background: #f8e8e5 !important; }
+#root .empty-state { border: 1px dashed var(--heaven-line); border-radius: 12px; padding: 30px; color: var(--heaven-muted); background: var(--heaven-bg) !important; }
+#root :is(.topbar-menu,.notification-menu) { background: var(--heaven-surface) !important; border: 1px solid var(--heaven-line) !important; border-radius: 12px; box-shadow: 0 12px 40px #172c2520 !important; }
+html[data-design=heaven] :is(dialog,[role=dialog],.certificate-booking-modal__dialog,.logout-confirm__dialog) { color: var(--heaven-ink) !important; background: var(--heaven-surface) !important; border: 1px solid var(--heaven-line) !important; border-radius: 18px; max-width: calc(100vw - 32px); max-height: 90dvh; overflow-y: auto; }
+html[data-design=heaven] dialog::backdrop { background: #172c2566; backdrop-filter: blur(4px); }
+/* A quiet welcome: one introduction, two clear account choices. */
+#root .scene--login { padding: 56px 24px !important; display: grid; align-items: center; }
+#root .login-shell { width: min(1120px,100%); }
+#root .login-panel { padding: 0; border: 0 !important; border-radius: 0; gap: 28px; background: transparent !important; }
+#root .login-panel__topbar { padding: 0 8px; }
+#root .login-panel__brand { gap: 18px; }
+#root .login-panel__crest { width: 42px !important; height: 56px !important; }
+#root .login-panel__brand h1 { font-size: 2rem; }
+#root .login-panel__brand p { margin: 4px 0 0; font-size: .85rem; }
+#root .login-grid { grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid var(--heaven-line); border-radius: 24px; overflow: hidden; background: var(--heaven-surface); }
+#root .login-card { padding: 44px; border: 0 !important; border-radius: 0; gap: 22px; background: var(--heaven-surface) !important; }
+#root .login-card--intro { background: var(--heaven-soft) !important; position: relative; }
+#root .login-card--intro h2 { font-size: clamp(2.5rem,4vw,3.6rem); max-width: 390px; line-height: 1.15; }
+#root .login-card--intro::after { content: ''; display: block; height: 220px; margin-top: 8px; background: url('./heaven-church.svg') center bottom / contain no-repeat; }
+#root .login-card--intro .login-copy { font-size: 1rem; line-height: 1.9; font-weight: 400; }
+#root .login-card--form h3 { font-size: 2rem; }
+#root .login-card__header span { font-size: .85rem; font-weight: 400; }
+#root :is(.login-spotlight,.login-helper,.login-dashboard-grid,.login-shortcuts,.login-role-meta,.login-role-panel__meta,.login-spotlight__stats) { display: none !important; }
+#root .login-role-panel { padding: 0; border: 0 !important; border-radius: 0; background: transparent !important; gap: 20px; }
+#root .login-role-panel__header { display: none; }
+#root .login-role-tabs { grid-template-columns: 1fr 1fr !important; gap: 4px; padding: 4px; border: 1px solid var(--heaven-line); border-radius: 10px; background: var(--heaven-bg); }
+#root .login-role-tab { min-height: 46px; padding: 10px; text-align: center; place-items: center; border: 1px solid transparent !important; border-radius: 7px; background: transparent !important; box-shadow: none !important; transform: none !important; }
+#root .login-role-tab strong { display: none; }
+#root .login-role-tab span { font-size: .8rem; font-weight: 600; color: var(--heaven-muted); }
+#root .login-role-tab.is-active { border-color: var(--heaven-line) !important; background: var(--heaven-surface) !important; box-shadow: 0 2px 5px #203e2c08 !important; }
+#root .login-role-tab.is-active span { color: var(--heaven-accent); }
+#root .login-field { gap: 8px; } #root .login-field span { color: var(--heaven-ink); font-size: .85rem; font-weight: 500; }
+#root .login-field input { min-height: 50px; }
+#root :is(.login-mode-link,.login-forgot-link) { padding: 0; border: 0 !important; border-radius: 0; background: transparent !important; color: var(--heaven-accent) !important; font-size: .8rem; text-decoration: underline; text-underline-offset: 4px; box-shadow: none !important; }
+#root .heaven-password { position: relative; }
+#root .heaven-password input { width: 100%; padding-right: 64px; }
+#root .heaven-password__toggle { position: absolute; right: 6px; top: 4px; min-width: 52px; min-height: 42px; background: transparent !important; border: 0; color: var(--heaven-accent) !important; font-size: .8rem; }
+#root .login-submit { width: 100%; }
+#root .auth-notice { border-radius: 9px; background: var(--heaven-soft) !important; box-shadow: none !important; font-size: .85rem; }
+#root .login-card--form .auth-notice--info { display: none; }
+#root .login-terms-row { font-size: .78rem; line-height: 1.6; color: var(--heaven-muted); }
+#root :is(.rental-gif-login,.chancery-rental-gif-login) { display: none !important; }
+@media(min-width: 901px) { #root .sidebar-overlay { display: none; } }
+@media(max-width: 1100px) { #root .dashboard-frame { grid-template-columns: 218px minmax(0,1fr); } #root .workspace { padding: 22px; } #root .login-card { padding: 30px; } }
+@media(max-width: 900px) {
+  #root .dashboard-frame { display: block; }
+  #root .sidebar { position: fixed; left: 0; top: 0; bottom: 0; z-index: 1001; width: 260px; height: 100dvh; transform: translateX(-105%); transition: transform .2s ease; }
+  #root .sidebar.is-open { transform: translateX(0); }
+  #root .sidebar-overlay { display: none; position: fixed; inset: 0; width: 100%; height: 100dvh; z-index: 1000; background: #172c2566; border: 0; }
+  #root .sidebar-overlay.is-visible { display: block; }
+  #root .user-topbar-menu { display: inline-grid; place-items: center; flex-shrink: 0; }
+  #root .workspace { padding: 18px; }
+  #root .workspace__topbar { display: flex; gap: 12px; align-items: center; }
+  #root .workspace__topbar--parish { grid-template-columns: auto minmax(0, 1fr) auto; flex-direction: row !important; padding: 14px 0 22px; gap: 10px; }
+  #root .workspace__topbar--parish .workspace__headline { display: flex; flex-direction: column; }
+  #root .workspace__topbar--parish .profile-pill > div:not(.profile-pill__avatar) { display: none; }
+  #root .workspace__actions { margin-left: auto; }
+  #root .workspace__headline { min-width: 0; }
+  #root .workspace__topbar h2 { font-size: 1.3rem; }
+  #root .login-grid { grid-template-columns: 1fr; }
+  #root .login-card--intro { padding: 28px; gap: 12px; }
+  #root .login-card--intro::after { display: none; }
+  #root .login-card--intro h2 { font-size: 2.4rem; max-width: none; }
+}
+@media(max-width: 600px) {
+  #root .scene--login { padding: 24px 14px !important; }
+  #root .login-card { padding: 24px; }
+  #root .login-card--intro h2 { font-size: 2rem; }
+  #root .login-card__header--split { grid-template-columns: 1fr; gap: 5px; }
+  #root .login-mode-link { justify-self: start; }
+  #root .login-panel__brand h1 { font-size: 1.6rem; }
+  #root :is(.screen-grid,.overview-grid,.user-home-grid,.user-dashboard-grid,.parish-dashboard-grid) { grid-template-columns: minmax(0,1fr) !important; }
+  #root :is(.glass-card,.page-card) { padding: 18px; }
+  #root .profile-pill > div:not(.profile-pill__avatar) { display: none; }
+  #root .workspace__subtitle { display: none; }
+  #root .overview-shell__header { flex-wrap: wrap; gap: 12px; }
+  #root :is(.event-form,.service-form,.certificate-form,.registration-form) { grid-template-columns: minmax(0,1fr) !important; }
+  #root :is(.calendar-toolbar,.page-card__header) { flex-wrap: wrap; }
+  #root .diocese-calendar__day { padding: 4px; min-width: 0; }
+  #root .diocese-calendar__events span { font-size: .55rem; }
+}
+@media(prefers-reduced-motion: reduce) { html[data-design=heaven] *,html[data-design=heaven] *::before,html[data-design=heaven] *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
+/* Final layout refinements over the original portal-specific rules. */
+#root strong,#root button { font-weight: 600; }
+#root .login-panel__brand .sidebar__eyebrow { display: none; }
+#root .login-panel__brand .sidebar__caption { font-weight: 400; }
+#root .login-terms-card { background: #fff !important; border-color: #111827 !important; }
+#root :is(.login-terms-embed,.login-terms-embed__text) { color: #111827 !important; -webkit-text-fill-color: #111827 !important; font-size: 1rem !important; line-height: 1.6; font-weight: 500 !important; }
+#root .login-terms-link,
+#root .login-terms-help { color: #111827 !important; -webkit-text-fill-color: #111827 !important; }
+#root .login-terms-link { text-underline-offset: 3px; }
+
+/* Parish dashboard polish tuned to the supplied mockup. */
+html[data-design="heaven"] body {
+  background: #f3efe8 !important;
+}
+#root .scene {
+  background: #f3efe8 !important;
+}
+#root .dashboard-frame {
+  width: min(1550px, 100%);
+  min-height: 100dvh;
+  margin: 0 auto;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 270px minmax(0, 1fr);
+  gap: 0;
+  border: 0 !important;
+  border-radius: 0;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+#root .sidebar {
+  position: relative;
+  height: 100dvh;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 24px 18px 16px;
+  border: 0 !important;
+  border-right: 1px solid rgba(212, 225, 236, 0.18) !important;
+  border-radius: 0;
+  background: linear-gradient(180deg, #0d2038 0%, #06213f 100%) !important;
+  box-shadow: none !important;
+  color: #f7f6f3;
+}
+#root .sidebar__brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 8px 6px 22px;
+  border: 0 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
+  justify-content: flex-start;
+}
+#root .sidebar__crest {
+  width: 42px !important;
+  height: 52px !important;
+  min-width: 42px;
+  border-radius: 0;
+  padding: 0;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+#root .sidebar__crest img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 16px rgba(8, 15, 24, 0.18));
+}
+#root .sidebar__brand h1 {
+  margin: 0;
+  color: #f5efe8 !important;
+  font-size: clamp(1.3rem, 1.8vw, 2rem);
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+}
+#root .sidebar__caption {
+  display: block;
+  margin-top: 4px;
+  color: rgba(237, 235, 230, 0.75) !important;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-size: 0.68rem;
+  line-height: 1.6;
+}
+#root .sidebar__eyebrow {
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  color: rgba(231, 238, 244, 0.8) !important;
+}
+#root .sidebar__nav {
+  display: grid;
+  gap: 12px;
+  padding-top: 20px;
+}
+#root .nav-item {
+  min-height: 54px;
+  padding: 12px 14px;
+  border: 0 !important;
+  border-radius: 12px;
+  background: transparent !important;
+  color: rgba(243, 239, 234, 0.8) !important;
+  font-size: 1rem;
+  font-weight: 500;
+}
+#root .nav-item.is-active {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  color: #ffffff !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+#root .nav-item:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #ffffff !important;
+}
+#root .nav-item__icon {
+  width: 22px;
+  height: 22px;
+  color: currentColor;
+}
+#root .sidebar__footer {
+  margin-top: auto;
+  padding: 14px 8px 0;
+  border: 0 !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.12) !important;
+  background: transparent !important;
+  color: rgba(243, 239, 234, 0.8) !important;
+}
+#root .workspace {
+  min-width: 0;
+  padding: 24px 26px 28px;
+  background: transparent;
+}
+#root .workspace__topbar {
+  min-height: 92px;
+  padding: 8px 0 20px;
+  border: 0 !important;
+  border-bottom: 1px solid rgba(47, 69, 88, 0.12) !important;
+  border-radius: 0;
+  background: transparent !important;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+#root .workspace__headline {
+  min-width: 0;
+}
+#root .workspace__eyebrow {
+  margin: 0 0 10px;
+  color: #8a5d18 !important;
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+#root .workspace__topbar h2 {
+  margin: 0;
+  color: #1f2940 !important;
+  font-size: clamp(2.2rem, 3vw, 4rem);
+  line-height: 1.05;
+  letter-spacing: -0.05em;
+}
+#root .profile-pill {
+  min-width: 220px;
+  justify-self: end;
+  border: 1px solid rgba(24, 47, 72, 0.16) !important;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.52) !important;
+  box-shadow: 0 10px 20px rgba(88, 99, 112, 0.08);
+  padding: 10px 14px;
+}
+#root .profile-pill__avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #f3ede2 0%, #e7ded1 100%) !important;
+  color: #1d2f4b !important;
+  border: 1px solid rgba(20, 41, 62, 0.08);
+}
+#root .profile-pill strong {
+  color: #1e2d41 !important;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+#root .profile-pill span {
+  color: #4d5f74 !important;
+  font-size: 0.78rem;
+}
+#root .overview-shell {
+  border: 0 !important;
+  background: transparent !important;
+  border-radius: 0;
+  box-shadow: none !important;
+  padding: 0;
+}
+#root .overview-shell__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 26px 0 18px;
+}
+#root .screen-tag {
+  border: 1px solid rgba(17, 84, 82, 0.15);
+  background: rgba(255, 255, 255, 0.7) !important;
+  color: #1b2c35 !important;
+}
+#root .screen-grid,
+#root .overview-grid {
+  display: grid;
+  gap: 22px;
+}
+#root .glass-card,
+#root .page-card,
+#root .user-home-card,
+#root .user-summary-card {
+  border: 1px solid rgba(32, 53, 70, 0.12) !important;
+  border-radius: 24px;
+  background: rgba(252, 250, 247, 0.94) !important;
+  box-shadow: 0 20px 26px rgba(36, 52, 70, 0.05);
+}
+#root .user-home-hero {
+  min-height: 0;
+  padding: 26px 28px;
+  background: rgba(247, 245, 240, 0.92) !important;
+}
+#root .user-home-hero__copy {
+  max-width: 68%;
+}
+#root .user-home-hero__copy p {
+  margin: 0 0 10px;
+  color: #7a5a26 !important;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+#root .user-home-hero__copy h3 {
+  margin: 0 0 12px;
+  color: #1d2d42 !important;
+  font-size: clamp(2rem, 3vw, 3.3rem);
+}
+#root .user-home-hero__copy span {
+  display: block;
+  color: #516779 !important;
+  font-size: 1.08rem;
+}
+#root .user-home-hero::after {
+  inset: auto 28px 12px auto;
+  width: 220px;
+  height: 130px;
+  background: url('./heaven-church.svg') center bottom / contain no-repeat;
+  opacity: 0.9;
+}
+#root .user-home-actions {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 0;
+}
+#root .user-home-action {
+  display: grid;
+  gap: 10px;
+  padding: 22px 20px;
+  border: 1px solid rgba(32, 53, 70, 0.12) !important;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.7) !important;
+}
+#root .user-home-action__icon {
+  width: 54px;
+  height: 54px;
+  border-radius: 14px;
+  background: #f1e7d5 !important;
+  color: #2f4e5a !important;
+}
+#root .login-shell {
+  width: min(1200px, 100%);
+}
+#root .login-panel {
+  gap: 24px;
+  padding: 0;
+  border: 0 !important;
+  background: transparent !important;
+}
+#root .login-panel__topbar {
+  padding: 0 8px;
+}
+#root .login-panel__brand {
+  gap: 12px;
+}
+#root .login-panel__brand h1 {
+  margin: 0;
+  color: #1d2d42 !important;
+  font-size: clamp(2rem, 3vw, 2.8rem);
+}
+#root .login-panel__brand .sidebar__caption {
+  color: #415b73 !important;
+  letter-spacing: 0.2em;
+}
+#root .login-card--intro {
+  background: rgba(246, 241, 233, 0.95) !important;
+  border-right: 1px solid rgba(32, 53, 70, 0.12);
+}
+#root .login-card--intro h2 {
+  max-width: 420px;
+  color: #1d2d42 !important;
+  font-size: clamp(2.6rem, 4vw, 4.2rem);
+  line-height: 0.95;
+  letter-spacing: -0.06em;
+}
+#root .login-card--intro::after {
+  height: 220px;
+  background: url('./heaven-church.svg') center bottom / contain no-repeat;
+  opacity: 0.9;
+}
+#root .login-card--form {
+  background: rgba(255, 255, 255, 0.72) !important;
+}
+#root .login-card--form h3 {
+  color: #1d2d42 !important;
+  font-size: clamp(2rem, 2.6vw, 3rem);
+}
+#root .login-role-tabs {
+  grid-template-columns: 1fr 1fr !important;
+  gap: 6px;
+  padding: 6px;
+  border: 1px solid rgba(32, 53, 70, 0.12);
+  border-radius: 15px;
+  background: rgba(244, 242, 238, 0.9);
+}
+#root .login-role-tab {
+  min-height: 52px;
+  border: 1px solid transparent !important;
+  border-radius: 11px;
+  background: transparent !important;
+  text-align: center;
+  color: #4a5c70 !important;
+}
+#root .login-role-tab.is-active {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-color: rgba(32, 53, 70, 0.12) !important;
+  box-shadow: 0 10px 16px rgba(30, 45, 64, 0.04);
+}
+#root .login-role-tab span {
+  color: inherit !important;
+  font-weight: 600;
+}
+#root .login-submit {
+  width: 100%;
+  min-height: 52px;
+  border-radius: 12px;
+  font-weight: 700;
+}
+#root .login-field input,
+#root .login-field select,
+#root .login-field textarea {
+  min-height: 52px;
+  border: 1px solid rgba(32, 53, 70, 0.12) !important;
+  border-radius: 12px !important;
+  background: rgba(255, 255, 255, 0.9) !important;
+  color: #1d2d42 !important;
+}
+#root .login-field span {
+  color: #26405b !important;
+  font-weight: 600;
+}
+#root .login-form-options {
+  justify-content: flex-end;
+}
+#root .forgot-password-link,
+#root .login-mode-link,
+#root .login-forgot-link {
+  color: #2f5d56 !important;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+@media (max-width: 980px) and (min-width: 901px) {
+  #root .dashboard-frame {
+    grid-template-columns: 218px minmax(0, 1fr);
+  }
+  #root .workspace {
+    padding: 18px 18px 20px;
+  }
+  #root .login-grid {
+    grid-template-columns: 1fr;
+  }
+  #root .login-card--intro {
+    border-right: 0;
+    border-bottom: 1px solid rgba(32, 53, 70, 0.12);
+  }
+}
+@media (max-width: 640px) {
+  #root .dashboard-frame {
+    width: min(100vw - 12px, 100%);
+  }
+  #root .workspace__topbar {
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+  #root .workspace__topbar h2 {
+    font-size: 2.2rem;
+  }
+  #root .profile-pill {
+    min-width: 0;
+    width: 100%;
+  }
+  #root .user-home-actions {
+    grid-template-columns: 1fr;
+  }
+  #root .login-card {
+    padding: 24px;
+  }
+  #root .login-card--intro h2 {
+    font-size: 2.2rem;
+  }
+}
+/* The agreement dialog lives outside #root and needs explicit text colors. */
+#login-terms-dialog {
+  width: min(42rem, 94vw);
+  max-width: 94vw;
+  max-height: 90dvh;
+  background: #fff !important;
+  color: #111827 !important;
+  -webkit-text-fill-color: #111827 !important;
+  color-scheme: light;
+}
+#login-terms-dialog .login-terms-dialog__inner,
+#login-terms-dialog .login-terms-dialog__body,
+#login-terms-dialog :is(h2,h3,p) {
+  background: #fff !important;
+  color: #111827 !important;
+  -webkit-text-fill-color: #111827 !important;
+  font-family: 'DM Sans', 'Segoe UI', sans-serif;
+  opacity: 1;
+}
+#login-terms-dialog .login-terms-dialog__body {
+  max-height: 60dvh;
+  overflow-y: auto;
+  font-size: 1rem;
+  line-height: 1.75;
+}
+#login-terms-dialog h2 { font-size: 1.35rem; line-height: 1.4; }
+#login-terms-dialog h3 { font-size: 1.1rem; line-height: 1.5; }
+#login-terms-dialog .primary-action {
+  min-height: 44px;
+  background: #28513c !important;
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+}
+#root .sidebar .sidebar__brand { flex-direction: row; align-items: center; text-align: left; min-height: 82px; padding: 0 0 20px; justify-content: flex-start; }
+#root .sidebar .sidebar__brand > div:not(.sidebar__crest) { display: block; }
+#root .sidebar .sidebar__crest { background: transparent !important; box-shadow: none !important; border: 0 !important; border-radius: 0; padding: 0; }
+#root .sidebar .sidebar__crest img { width: 100%; height: 100%; object-fit: contain; transform: none !important; }
+#root .user-home-dashboard { gap: 24px; background: transparent !important; }
+#root .user-home-hero { min-height: 240px; padding: 36px; border: 1px solid var(--heaven-line); border-radius: 18px; background: var(--heaven-soft) !important; align-items: center; }
+#root .user-home-hero::after { inset: 18px 26px 0 auto; width: 220px; background: url('./heaven-church.svg') bottom / contain no-repeat; opacity: .85; }
+#root .user-home-hero__copy { max-width: 65%; gap: 10px; }
+#root .user-home-hero__copy p { font-size: .7rem; letter-spacing: .15em; font-weight: 600; color: var(--heaven-accent); }
+#root .user-home-hero__copy h3 { font-size: 2.5rem; }
+#root .user-home-hero__copy span { font-weight: 400; font-size: .9rem; color: var(--heaven-muted); }
+#root .user-home-actions { grid-template-columns: repeat(3,minmax(0,1fr)); margin: 0; gap: 16px; }
+#root .user-home-action { padding: 22px; display: grid; gap: 10px; text-align: left; }
+#root .user-home-action strong { font-size: 1rem; color: var(--heaven-ink); }
+#root .user-home-action span { color: var(--heaven-muted); line-height: 1.6; }
+#root .user-home-action__arrow { display: none; }
+#root .user-home-action__icon { width: 46px; height: 46px; border-radius: 12px; }
+#root :is(.user-home-grid,.user-home-announcement,.user-chat-card) { margin: 0; gap: 18px; }
+#root .user-home-card { padding: 24px; }
+#root .parish-hero__chips { display: none; }
+#root .empty-state { box-shadow: none !important; }
+#root .scene--user-workspace,#root .dashboard-frame--user { background: var(--heaven-bg) !important; }
+@media(max-width:600px) {
+  #root .user-home-actions { grid-template-columns: 1fr; }
+  #root .user-home-hero { min-height: 220px; padding: 24px; }
+  #root .user-home-hero::after { width: 100px; right: 8px; opacity: .35; }
+  #root .user-home-hero__copy { max-width: 100%; }
+  #root .user-home-hero__copy h3 { font-size: 2rem; }
+}
+@media print { html[data-design=heaven] body { background: #fff !important; } #root .sidebar,#root .workspace__topbar { display: none !important; } #root .dashboard-frame { display: block; } }
+/* Compact mobile administration header. */
+@media (max-width: 900px) {
+  #root .workspace__topbar--parish { display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; min-height: 64px; gap: 8px; padding: 0 0 12px; }
+  #root .workspace__topbar--parish .workspace__headline { gap: 0; }
+  #root .workspace__topbar--parish :is(.workspace__eyebrow,.workspace__subtitle) { display: none; }
+  #root .workspace__topbar--parish h2 { margin: 0; font-family: 'DM Sans', 'Segoe UI', sans-serif !important; font-size: 1rem; font-weight: 500 !important; letter-spacing: -.02em; white-space: nowrap; }
+  #root .workspace__topbar--parish .workspace__actions { width: auto; margin: 0; gap: 4px; flex-wrap: nowrap; justify-content: flex-end; }
+  #root .workspace__topbar--parish .topbar-action { flex: 0 0 auto; width: auto; min-width: 0; }
+  #root .workspace__topbar--parish :is(.user-topbar-menu,.icon-button,.profile-pill) { width: 44px; min-width: 44px; height: 44px; min-height: 44px; padding: 0; display: inline-flex; align-items: center; justify-content: center; border: 0 !important; border-radius: 50%; background: transparent !important; transform: none; }
+  #root .workspace__topbar--parish :is(.user-topbar-menu,.icon-button) svg { width: 20px; height: 20px; }
+  #root .workspace__topbar--parish .profile-pill__avatar { width: 32px; height: 32px; flex: 0 0 32px; border: 0; box-shadow: none; font-size: .7rem; font-weight: 500; }
+  #root .workspace__topbar--parish .profile-pill__chevron { display: none; }
+  #root .workspace__topbar--parish button:focus:not(:focus-visible) { outline: none; }
+}
+/* Parish baptism register. */
+#root .baptism-records { min-width: 0; overflow: visible; }
+#root .baptism-records .glass-card__header { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 16px; }
+#root .baptism-records__tools { display: flex; flex-wrap: wrap; align-items: end; gap: 12px; min-width: 0; }
+#root .baptism-records__type { display: grid; gap: 6px; min-width: min(100%, 220px); }
+#root .baptism-records__type span { color: var(--heaven-muted); font-size: .85rem; font-weight: 500; }
+#root .baptism-records__search { display: flex; align-items: end; gap: 12px; flex-wrap: wrap; }
+#root .baptism-records__search .login-field { flex: 1 1 220px; min-width: 0; }
+#root .baptism-records__list { display: grid; gap: 0; min-width: 0; }
+#root .baptism-records__record { min-width: 0; padding: 20px 0; border-top: 1px solid var(--heaven-line); }
+#root .baptism-records__record:first-child { border-top: 0; padding-top: 8px; }
+#root .baptism-records__record h3 { margin: 0 0 16px; font-size: clamp(1.05rem, 2.4vw, 1.35rem); overflow-wrap: anywhere; line-height: 1.35; }
+#root .baptism-records__fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr)); gap: 14px 20px; margin: 0 0 12px; }
+#root .baptism-records__fields dt { color: var(--heaven-muted); font-size: .85rem; }
+#root .baptism-records__fields dd { margin: 4px 0 0; overflow-wrap: anywhere; white-space: pre-wrap; }
+#root .baptism-records__record summary { cursor: pointer; color: var(--heaven-accent); padding: 10px 0; }
+#root .baptism-records__pagination { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+#root .archive-record-list { min-width: 0; overflow-x: auto; }
+#root .archive-record-table { min-width: 0; }
+#root .archive-record-row { min-width: 0; grid-template-columns: minmax(0, 1fr); }
+#root .archive-record-row__cells { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
+@media (min-width: 1100px) {
+  #root .archive-record-row { grid-template-columns: 260px minmax(0, 1fr); }
+}
+@media (max-width: 900px) {
+  #root .dashboard-frame { display: block; width: 100%; }
+  #root .sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 1001;
+    width: min(280px, calc(100vw - 48px));
+    height: 100dvh;
+    transform: translateX(-105%);
+    transition: transform .2s ease;
+    border-right: 1px solid rgba(255,255,255,0.12) !important;
+    border-bottom: 0 !important;
+  }
+  #root .sidebar.is-open,
+  #root .sidebar.sidebar--mobile-drawer.is-open { transform: translateX(0); }
+  #root .baptism-records .glass-card__header { flex-direction: column; }
+  #root .baptism-records__tools,
+  #root .baptism-records__search,
+  #root .baptism-records__pagination { width: 100%; }
+  #root .baptism-records__search .primary-action,
+  #root .baptism-records__tools .secondary-action { width: 100%; }
+  #root .baptism-records__fields { grid-template-columns: 1fr; }
+  #root :is(.glass-card, .page-card, .baptism-records) { padding: 18px; overflow: visible; }
+}
+@media (max-width: 640px) {
+  #root .baptism-records__record { padding: 16px 0; }
+  #root .baptism-records__pagination .secondary-action { flex: 1 1 140px; }
+}

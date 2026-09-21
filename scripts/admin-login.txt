@@ -1,0 +1,25 @@
+function vg({theme:e,onToggleTheme:t,onNavigate:r,onSession:Ns}) {
+  const [email,setEmail]=N.useState(""), [password,setPassword]=N.useState(""), [busy,setBusy]=N.useState(false), [message,setMessage]=N.useState("");
+  async function login(event) {
+    event.preventDefault(); setBusy(true); setMessage("");
+    try {
+      const result=await $f({email:email.trim().toLowerCase(),password});
+      const user=result.user;
+      const session={role:"parish",email:user.email,displayName:user.user_metadata?.display_name||Gt(user.email),accessToken:result.access_token,refreshToken:result.refresh_token,expiresAt:result.expires_at||Math.floor(Date.now()/1000)+(result.expires_in||3600),userId:user.id};
+      const rows=await Tt("/rest/v1/rpc/get_parish_id_by_email",{method:"POST",body:{p_email:user.email},accessToken:result.access_token});
+      if(Array.isArray(rows)&&rows[0]) {session.parish_id=rows[0].id;session.parish_name=rows[0].parish_name;}
+      ln(session); Ns(session); r("parish-catbalogan");
+    } catch(error) { ln(null); Ns(null); setMessage(V(error)); }
+    finally {setBusy(false);}
+  }
+  async function reset() {
+    if(!Df(email)) {setMessage("Enter your admin email first.");return;}
+    setBusy(true);
+    try {await zf(email.trim().toLowerCase());setMessage("If this email is registered, a password reset email will be sent.");}
+    catch(error) {setMessage(V(error));} finally {setBusy(false);}
+  }
+  return n.jsx("div",{className:"login-shell",children:n.jsxs("section",{className:"login-panel",children:[
+    n.jsx("div",{className:"login-panel__topbar",children:n.jsxs("div",{className:"login-panel__brand",children:[n.jsx("div",{className:"login-panel__crest",children:n.jsx("img",{src:lh,alt:"DioLink"})}),n.jsxs("div",{children:[n.jsx("h1",{children:"DioLink"}),n.jsx("span",{className:"sidebar__caption",children:"Administration"})]})]})}),
+    n.jsxs("div",{className:"login-grid",children:[n.jsxs("article",{className:"login-card login-card--intro",children:[n.jsx("p",{className:"workspace__eyebrow",children:"ADMIN PORTAL"}),n.jsx("h2",{children:"A peaceful space to serve."}),n.jsx("p",{className:"login-copy",children:"Manage parish requests, records, and schedules. Access is restricted to parish administrators."})]}),
+    n.jsxs("form",{className:"login-card login-card--form",onSubmit:login,children:[n.jsx("h3",{children:"Admin login"}),n.jsx("p",{children:"Sign in with your parish administrator account."}),message&&n.jsx("p",{role:"alert",children:message}),n.jsxs("label",{className:"login-field",children:["Email",n.jsx("input",{type:"email",name:"email",autoComplete:"username",required:true,value:email,onChange:event=>setEmail(event.target.value),disabled:busy})]}),n.jsxs("label",{className:"login-field",children:["Password",n.jsx("input",{type:"password",name:"password",autoComplete:"current-password",required:true,value:password,onChange:event=>setPassword(event.target.value),disabled:busy})]}),n.jsx("button",{type:"submit",className:"primary-action",disabled:busy,children:busy?"Signing in…":"Sign in as admin"}),n.jsx("button",{type:"button",className:"login-mode-link",disabled:busy,onClick:reset,children:"Forgot password?"})]})]})]})});
+}

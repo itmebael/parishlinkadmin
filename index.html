@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en" data-design="heaven">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ParishLink | Admin Portal</title>
+    <link rel="icon" type="image/png" href="/logo.png" />
+  </head>
+  <body style="margin: 0; padding: 0; overflow: hidden; background: #f6f7f3;">
+    <!--
+      Production + Vercel: static shell only (no /src/*.jsx — static hosts serve .jsx as text/jsx and modules fail).
+      Local dev: run `npm run dev` — Vite serves this file; the iframe loads /dist/index.html.
+    -->
+    <iframe
+      title="ParishLink Admin Portal"
+      src="/dist/index.html"
+      style="width: 100vw; height: 100vh; border: none; display: block; background: transparent;"
+    ></iframe>
+  </body>
+</html>

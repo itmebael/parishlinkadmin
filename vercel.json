@@ -1,0 +1,7 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "installCommand": "echo 'Skipping install — site is prebuilt under dist/'",
+  "buildCommand": "node scripts/build-site.mjs",
+  "outputDirectory": "site-build"
+}

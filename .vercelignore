@@ -1,0 +1,10 @@
+node_modules
+.git
+.vercel
+.design-browser
+.design-preview
+.admin-browser*
+*.log
+vite-dev*.log
+Animated_Transparent_Video_Creation.mp4
+dio - Copy.gif

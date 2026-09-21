@@ -1,0 +1,112 @@
+-- Debug helpers for parish appointment slot booking.
+--
+-- Use these in Supabase SQL Editor when a booking fails "even though the
+-- time looks free". They answer three questions:
+--
+--   A) What rows in diocese_service_bookings currently look like conflicts?
+--   B) Is the slot actually free according to the RPC the app uses?
+--   C) How do I temporarily disable the slot check so bookings go through?
+
+-- ---------------------------------------------------------------------------
+-- A) Show every ACTIVE booking for a parish on a given date.
+--    Replace the literals with the parish/date you are trying to book.
+-- ---------------------------------------------------------------------------
+-- select
+--   id,
+--   parish_name,
+--   booking_date,
+--   booking_time,
+--   booking_status,
+--   client_name,
+--   service_name,
+--   created_at
+-- from public.diocese_service_bookings
+-- where lower(parish_name) = lower('Parish of Catbalogan')
+--   and booking_date = date '2026-04-22'
+-- order by booking_time nulls last, created_at desc;
+
+-- A2) Show every duplicate slot in the whole table (rows that the unique
+--     index considers conflicting):
+-- select
+--   lower(parish_name) as parish,
+--   booking_date,
+--   booking_time,
+--   count(*) as active_bookings,
+--   array_agg(id order by created_at) as booking_ids,
+--   array_agg(booking_status order by created_at) as statuses
+-- from public.diocese_service_bookings
+-- where booking_time is not null
+--   and lower(coalesce(booking_status, 'booked')) not in (
+--     'cancelled', 'canceled', 'rejected', 'declined', 'void'
+--   )
+-- group by lower(parish_name), booking_date, booking_time
+-- having count(*) > 1
+-- order by booking_date, booking_time;
+
+-- ---------------------------------------------------------------------------
+-- B) Ask the RPC directly: is the slot you want actually free?
+-- ---------------------------------------------------------------------------
+-- select public.is_parish_slot_available(
+--   'Parish of Catbalogan',
+--   date '2026-04-22',
+--   time '09:30'
+-- ) as is_free;
+
+-- List the taken times for a parish/date the same way the UI should:
+-- select *
+-- from public.get_parish_booked_times('Parish of Catbalogan', date '2026-04-22');
+
+-- ---------------------------------------------------------------------------
+-- C) EMERGENCY: disable the slot-conflict trigger so bookings go through
+--    while you investigate. The unique index stays in place, so true
+--    duplicates are still rejected but with a raw Postgres error.
+-- ---------------------------------------------------------------------------
+-- alter table public.diocese_service_bookings
+--   disable trigger diocese_service_bookings_check_slot_trg;
+
+-- Re-enable it when you're done:
+-- alter table public.diocese_service_bookings
+--   enable trigger diocese_service_bookings_check_slot_trg;
+
+-- C2) FULL ROLLBACK of the slot-availability migration. Use this only if
+--     you want to go back to "anyone can book any time, even duplicates":
+-- drop trigger if exists diocese_service_bookings_check_slot_trg
+--   on public.diocese_service_bookings;
+-- drop function if exists public.diocese_service_bookings_check_slot();
+-- drop index if exists public.diocese_service_bookings_parish_slot_unique;
+
+-- ---------------------------------------------------------------------------
+-- D) Common fixes (uncomment the one that matches your A / A2 output)
+-- ---------------------------------------------------------------------------
+
+-- D1) An old "failed test" booking is squatting on the slot. Mark it cancelled
+--     (keeps history, frees the slot):
+-- update public.diocese_service_bookings
+--    set booking_status = 'Cancelled'
+--  where id = '<paste id from A here>';
+
+-- D2) Two rows truly are duplicates (e.g. double-click submit). Keep the
+--     first, cancel the rest:
+-- with dupes as (
+--   select id,
+--          row_number() over (
+--            partition by lower(parish_name), booking_date, booking_time
+--            order by created_at
+--          ) as rn
+--   from public.diocese_service_bookings
+--   where booking_time is not null
+--     and lower(coalesce(booking_status, 'booked')) not in (
+--       'cancelled', 'canceled', 'rejected', 'declined', 'void'
+--     )
+-- )
+-- update public.diocese_service_bookings b
+--    set booking_status = 'Cancelled'
+--   from dupes
+--  where b.id = dupes.id
+--    and dupes.rn > 1;
+
+-- D3) Legacy rows have booking_time = '00:00:00' representing "no time set".
+--     Convert them to null so they stop blocking real time slots:
+-- update public.diocese_service_bookings
+--    set booking_time = null
+--  where booking_time = time '00:00:00';

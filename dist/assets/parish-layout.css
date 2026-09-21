@@ -1,0 +1,87 @@
+/* Keep the parish workspace inside the column that remains after its sidebar. */
+html[data-design="heaven"] #root,
+html[data-design="heaven"] #root .scene {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+html[data-design="heaven"] #root .scene {
+  overflow-x: clip;
+  background:
+    linear-gradient(rgba(246, 244, 237, 0.72), rgba(246, 244, 237, 0.78)),
+    url("./backgrounddioses-Dcg_TSm2.jpg") center / cover fixed !important;
+}
+
+/* The same church image is visible behind both the sign-in experience and every dashboard route. */
+html[data-design="heaven"] #root .login-panel {
+  background: rgba(255, 255, 255, 0.72) !important;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+
+html[data-design="heaven"] #root .dashboard-frame,
+html[data-design="heaven"] #root .workspace {
+  background: transparent !important;
+}
+
+html[data-design="heaven"] #root .dashboard-frame--parish .sidebar__crest img {
+  object-fit: contain;
+}
+
+@media (max-width: 900px) {
+  html[data-design="heaven"] #root .scene {
+    background-attachment: scroll !important;
+  }
+}
+
+html[data-design="heaven"] #root .dashboard-frame {
+  min-width: 0;
+}
+
+/*
+ * All desktop Parish screens share this frame.  The rail remains in the
+ * screenshot's 320px position while the grid reserves that same space for
+ * the workspace, preventing the right edge of pages and forms from clipping.
+ */
+@media (min-width: 1041px) {
+  html[data-design="heaven"] #root .dashboard-frame:not(.dashboard-frame--user) {
+    --parish-sidebar-width: 320px;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    grid-template-columns: var(--parish-sidebar-width) minmax(0, 1fr);
+  }
+
+  html[data-design="heaven"] #root .dashboard-frame:not(.dashboard-frame--user) > .sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 80;
+    width: var(--parish-sidebar-width);
+    min-width: var(--parish-sidebar-width);
+    max-width: var(--parish-sidebar-width);
+    height: 100dvh;
+  }
+
+  html[data-design="heaven"] #root .dashboard-frame:not(.dashboard-frame--user) > .workspace {
+    grid-column: 2;
+    width: 100%;
+  }
+}
+
+/* Grid and flex children otherwise default to their content's minimum width. */
+html[data-design="heaven"] #root .dashboard-frame > .workspace,
+html[data-design="heaven"] #root .workspace,
+html[data-design="heaven"] #root .overview-shell,
+html[data-design="heaven"] #root .screen-grid,
+html[data-design="heaven"] #root :is(.glass-card, .page-card),
+html[data-design="heaven"] #root .workspace__topbar > * {
+  min-width: 0;
+  max-width: 100%;
+}
+
+html[data-design="heaven"] #root :is(input, select, textarea) {
+  max-width: 100%;
+}
