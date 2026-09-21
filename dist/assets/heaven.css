@@ -116,8 +116,9 @@ html[data-design=heaven] dialog::backdrop { background: #172c2566; backdrop-filt
 #root .login-field input { min-height: 50px; }
 #root :is(.login-mode-link,.login-forgot-link) { padding: 0; border: 0 !important; border-radius: 0; background: transparent !important; color: var(--heaven-accent) !important; font-size: .8rem; text-decoration: underline; text-underline-offset: 4px; box-shadow: none !important; }
 #root .heaven-password { position: relative; }
-#root .heaven-password input { width: 100%; padding-right: 64px; }
-#root .heaven-password__toggle { position: absolute; right: 6px; top: 4px; min-width: 52px; min-height: 42px; background: transparent !important; border: 0; color: var(--heaven-accent) !important; font-size: .8rem; }
+#root .heaven-password input { width: 100%; padding-right: 52px; }
+#root .heaven-password__toggle { position: absolute; right: 6px; top: 4px; width: 42px; min-width: 42px; min-height: 42px; display: grid; place-items: center; background: transparent !important; border: 0; color: var(--heaven-accent) !important; cursor: pointer; }
+#root .heaven-password__toggle svg { width: 20px; height: 20px; }
 #root .login-submit { width: 100%; }
 #root .auth-notice { border-radius: 9px; background: var(--heaven-soft) !important; box-shadow: none !important; font-size: .85rem; }
 #root .login-card--form .auth-notice--info { display: none; }

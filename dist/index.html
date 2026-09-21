@@ -11,8 +11,12 @@
     <title>ParishLink | Admin Portal</title>
     <!-- User dashboard: light (white) theme only — runs before React reads localStorage. -->
     
-    <script type="module" crossorigin src="/dist/assets/index-v20260422157000.js?v=admin-parish-logo-20260921"></script>
+    <script type="module" crossorigin src="/dist/assets/index-v20260422157000.js?v=parish-reports-20260921"></script>
     <link rel="stylesheet" crossorigin href="/dist/assets/index-yReDnWMe.css">
+    <link rel="stylesheet" href="/dist/assets/parish-reports.css?v=20260921-1">
+    <link rel="stylesheet" href="/dist/assets/chapel-information-menu.css?v=20260921-1">
+    <link rel="stylesheet" href="/dist/assets/parish-settings-toggles.css?v=20260921-1">
+    <link rel="stylesheet" href="/dist/assets/password-eye-toggle.css?v=20260921-1">
     <link rel="stylesheet" href="/dist/assets/sidebar-brand-responsive.css?v=notification-dark-1">
     <style id="dio-user-management-style">
       .dio-user-mgmt {
@@ -491,7 +495,8 @@
           }).catch(function (err) {
             state.rows = [];
             state.loading = false;
-            state.error = "Could not load users: " + (err && err.message ? err.message : err);
+            var detail = err && err.message ? err.message : err;
+            state.error = "Could not load users: " + detail + (/permission|policy|row-level|403/i.test(String(detail)) ? ". Run sql/fix_user_management_fetch.sql in Supabase, then refresh." : "");
             renderRows(wrap);
           });
         }
@@ -6515,4 +6520,7 @@
       })();
     </script>
   </body>
+  <script src="/dist/assets/chapel-information-menu.js?v=20260921-1"></script>
+  <script src="/dist/assets/parish-settings-toggles.js?v=20260921-1"></script>
+  <script src="/dist/assets/password-eye-toggle.js?v=20260921-1"></script>
 </html>
