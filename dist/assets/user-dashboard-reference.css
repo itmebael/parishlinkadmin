@@ -1,0 +1,164 @@
+html[data-design="heaven"] #root .dashboard-frame--user {
+  --heaven-bg: #f5f8fd;
+  --heaven-surface: #fff;
+  --heaven-soft: #eaf2ff;
+  --heaven-ink: #26364b;
+  --heaven-muted: #657b9d;
+  --heaven-line: #e8eef8;
+  --heaven-accent: #1681ee;
+  grid-template-columns: 208px minmax(0, 1fr);
+  background: linear-gradient(135deg, #f7f9fe, #eef5ff) !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--user .sidebar {
+  padding: 22px 16px 16px;
+  border-right: 1px solid #e9eff7 !important;
+  background: rgba(255, 255, 255, .96) !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--user .sidebar__brand {
+  min-height: 58px;
+  margin-bottom: 16px;
+  padding: 0 9px 18px;
+  border-bottom-color: #edf1f7;
+}
+html[data-design="heaven"] #root .dashboard-frame--user .sidebar__nav { gap: 3px; }
+html[data-design="heaven"] #root .dashboard-frame--user .nav-item {
+  min-height: 40px;
+  padding: 0 12px;
+  border-radius: 13px;
+  color: #536b91 !important;
+  font-size: .78rem;
+}
+html[data-design="heaven"] #root .dashboard-frame--user .nav-item:is(:hover, .is-active) {
+  background: #e1efff !important;
+  color: #1265cd !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--user .nav-item.is-active { border-color: transparent !important; }
+html[data-design="heaven"] #root .dashboard-frame--user .sidebar__footer {
+  border-top-color: #edf1f7 !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--user .workspace {
+  min-width: 0;
+  padding: 0 clamp(16px, 2.6vw, 32px) 32px;
+  gap: 0;
+}
+html[data-design="heaven"] #root .dashboard-frame--user .workspace__topbar {
+  min-height: 62px;
+  margin-bottom: 0;
+  padding: 0;
+  border-bottom: 1px solid #e9eff7 !important;
+  background: rgba(255, 255, 255, .86) !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--user .overview-shell {
+  width: min(1450px, 100%);
+  margin: 0 auto;
+  padding-top: 16px;
+}
+html[data-design="heaven"] #root .dashboard-frame--user .user-home-dashboard { gap: 15px; }
+html[data-design="heaven"] #root .dashboard-frame--user .user-home-hero {
+  position: relative;
+  min-height: 181px;
+  padding: 25px 36px;
+  overflow: hidden;
+  align-items: center;
+  border: 1px solid #e3ecf8 !important;
+  border-radius: 20px !important;
+  background-image: linear-gradient(90deg, rgba(237, 246, 255, .98) 0%, rgba(237, 246, 255, .9) 43%, rgba(237, 246, 255, .08) 72%), url('/dist/assets/virgen-maria-anunciacion.png') !important;
+  background-position: center, right 39% !important;
+  background-size: auto, cover !important;
+  background-repeat: no-repeat, no-repeat !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--user .user-home-hero::after { display: none; }
+html[data-design="heaven"] #root .dashboard-frame--user .user-home-hero__copy { position: relative; z-index: 1; max-width: 68%; gap: 7px; }
+html[data-design="heaven"] #root .dashboard-frame--user .user-home-hero__copy p {
+  margin: 0 0 3px;
+  color: #4884b8 !important;
+  font-family: 'DM Sans', sans-serif !important;
+  font-size: .72rem !important;
+  font-weight: 700 !important;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+}
+html[data-design="heaven"] #root .dashboard-frame--user .user-home-hero__copy h3 {
+  max-width: 700px;
+  margin: 4px 0;
+  color: #1048a2 !important;
+  font-family: 'DM Sans', sans-serif !important;
+  font-size: clamp(1.8rem, 3vw, 2.65rem) !important;
+  font-weight: 800 !important;
+  line-height: 1.08;
+  letter-spacing: -.055em;
+}
+html[data-design="heaven"] #root .dashboard-frame--user .user-home-hero__copy span {
+  color: #36557d !important;
+  font-size: .82rem !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--user .user-home-actions {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 13px;
+  margin: 0;
+}
+html[data-design="heaven"] #root .dashboard-frame--user .user-home-action {
+  position: relative;
+  display: grid;
+  align-content: start;
+  justify-items: start;
+  gap: 8px;
+  min-height: 143px;
+  padding: 16px;
+  border: 1px solid #eaf0f8 !important;
+  border-radius: 16px !important;
+  background: #fff !important;
+  text-align: left;
+  box-shadow: 0 8px 24px #31598308 !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--user .user-home-action__icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #e1f0ff !important;
+  color: #1681ee !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--user .user-home-action--green .user-home-action__icon { background: #efe4ff !important; color: #8849db !important; }
+html[data-design="heaven"] #root .dashboard-frame--user .user-home-action--gold .user-home-action__icon { background: #ffe7dd !important; color: #ef6347 !important; }
+html[data-design="heaven"] #root .dashboard-frame--user .user-home-action strong {
+  color: #223b66 !important;
+  font-family: 'DM Sans', sans-serif !important;
+  font-size: .82rem !important;
+  font-weight: 700 !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--user .user-home-action > span:not(.user-home-action__icon):not(.user-home-action__arrow) {
+  color: #607493 !important;
+  font-size: .68rem !important;
+  line-height: 1.5;
+}
+html[data-design="heaven"] #root .dashboard-frame--user .user-home-action__arrow { display: none; }
+html[data-design="heaven"] #root .dashboard-frame--user :is(.user-home-grid, .user-home-announcement, .user-chat-card) { margin: 0; gap: 14px; }
+html[data-design="heaven"] #root .dashboard-frame--user :is(.user-home-card, .user-summary-card) {
+  padding: 17px 18px;
+  border: 1px solid #e8eef7 !important;
+  border-radius: 17px !important;
+  background: rgba(255, 255, 255, .92) !important;
+  box-shadow: 0 7px 24px #31598306 !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--user :is(.user-home-card, .user-summary-card) h3 {
+  color: #263f67 !important;
+  font-family: 'DM Sans', sans-serif !important;
+  font-size: .9rem !important;
+  font-weight: 700 !important;
+}
+@media (max-width: 900px) {
+  html[data-design="heaven"] #root .dashboard-frame--user { grid-template-columns: minmax(0, 1fr); }
+  html[data-design="heaven"] #root .dashboard-frame--user .sidebar { width: min(280px, 84vw); }
+}
+@media (max-width: 700px) {
+  html[data-design="heaven"] #root .dashboard-frame--user .workspace { padding: 0 13px 24px; }
+  html[data-design="heaven"] #root .dashboard-frame--user .overview-shell { padding-top: 12px; }
+  html[data-design="heaven"] #root .dashboard-frame--user .user-home-hero { min-height: 165px; padding: 20px 19px; background-position: center, right 40% !important; }
+  html[data-design="heaven"] #root .dashboard-frame--user .user-home-hero__copy { max-width: 92%; }
+  html[data-design="heaven"] #root .dashboard-frame--user .user-home-hero__copy h3 { max-width: 270px; font-size: 1.55rem !important; }
+  html[data-design="heaven"] #root .dashboard-frame--user .user-home-actions { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+  html[data-design="heaven"] #root .dashboard-frame--user .user-home-action { min-height: 130px; padding: 12px; }
+}
+@media (max-width: 420px) {
+  html[data-design="heaven"] #root .dashboard-frame--user .user-home-actions { grid-template-columns: 1fr; }
+}

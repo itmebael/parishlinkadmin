@@ -88,15 +88,15 @@ button {
 html[data-design="heaven"] {
   --heaven-paper: #f7f8f4;
   --heaven-surface: #ffffff;
-  --heaven-soft: #eff3ed;
+  --heaven-soft: #eef4ff;
   --heaven-sky: #edf3f6;
   --heaven-ink: #293f37;
   --heaven-muted: #63746d;
   --heaven-line: #dfe6df;
-  --heaven-accent: #426c58;
-  --heaven-accent-hover: #335543;
+  --heaven-accent: #2563eb;
+  --heaven-accent-hover: #1d4ed8;
   --heaven-gold: #816b38;
-  --heaven-shadow: 0 6px 26px #29433506;
+  --heaven-shadow: 0 6px 26px rgba(37, 99, 235, 0.08);
   --page-bg: var(--heaven-paper);
   --panel-bg: var(--heaven-surface);
   --panel-bg-strong: var(--heaven-soft);
@@ -224,6 +224,12 @@ html[data-design="heaven"] #root .profile-pill span { font-size: .68rem !importa
 html[data-design="heaven"] #root .profile-pill__avatar { width: 38px; height: 38px; min-width: 38px; background: var(--heaven-soft) !important; color: var(--heaven-accent) !important; border: 1px solid var(--heaven-line); box-shadow: none; }
 html[data-design="heaven"] #root .overview-shell { padding: 30px 38px 50px; gap: 25px; border: 0 !important; border-radius: 0; box-shadow: none !important; background: transparent !important; backdrop-filter: none !important; overflow: visible; }
 html[data-design="heaven"] #root .overview-shell__header { gap: 18px; margin-bottom: 0; padding-bottom: 0; border: 0; }
+html[data-design="heaven"] #root .dashboard-frame--parish .overview-shell__header {
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
 html[data-design="heaven"] #root .screen-title-block h3 { font-size: 1.85rem !important; margin-bottom: 6px; }
 html[data-design="heaven"] #root .screen-subtitle { font-size: .86rem !important; color: var(--heaven-muted) !important; max-width: 65ch; }
 html[data-design="heaven"] #root .screen-tag { display: none; }
@@ -235,6 +241,17 @@ html[data-design="heaven"] #root :is(.glass-card, .user-home-card, .user-home-an
   box-shadow: var(--heaven-shadow) !important; backdrop-filter: none !important;
 }
 html[data-design="heaven"] #root :is(.glass-card, .user-home-card, .page-card) { padding: 24px; }
+html[data-design="heaven"] #root .overview-shell--parish-catbalogan .page-card,
+html[data-design="heaven"] #root .overview-shell--parish-catbalogan .glass-card {
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+html[data-design="heaven"] #root .overview-shell--parish-reports .parish-report-details {
+  display: none !important;
+}
 html[data-design="heaven"] #root :is(.glass-card, .overview-shell, .sidebar, .workspace__topbar, .profile-pill, .login-card, .login-panel, .dashboard-frame)::before { display: none !important; }
 html[data-design="heaven"] #root :is(.glass-card__header, .user-home-card__header) { margin-bottom: 20px; align-items: center; }
 html[data-design="heaven"] #root :is(.detail-list__item, .activity-row, .user-request-row, .queue-list__item, .parish-agenda__item) { border-color: var(--heaven-line) !important; box-shadow: none !important; }
@@ -245,8 +262,8 @@ html[data-design="heaven"] #root :is(.primary-action, .secondary-action, .filter
   font-size: .86rem !important; font-weight: 600 !important;
   box-shadow: none !important; line-height: 1.45 !important;
 }
-html[data-design="heaven"] #root :is(.primary-action, .user-chat-card button, .certificate-service-action, .ucs-send) { color: #fff !important; background: #426c58 !important; border: 1px solid #426c58 !important; }
-html[data-design="heaven"] #root :is(.primary-action, .user-chat-card button, .certificate-service-action):hover:not(:disabled) { background: #335543 !important; transform: none; }
+html[data-design="heaven"] #root :is(.primary-action, .login-submit, .user-chat-card button, .certificate-service-action, .ucs-send) { color: #fff !important; background: #2563eb !important; border: 1px solid #2563eb !important; }
+html[data-design="heaven"] #root :is(.primary-action, .login-submit, .user-chat-card button, .certificate-service-action):hover:not(:disabled) { background: #1d4ed8 !important; transform: none; }
 html[data-design="heaven"] #root :is(.secondary-action, .filter-button, .live-button, .pch-btn, .plh-refresh) { background: var(--heaven-surface) !important; color: var(--heaven-accent) !important; border: 1px solid var(--heaven-line) !important; }
 html[data-design="heaven"] #root :is(.secondary-action, .filter-button):hover { background: var(--heaven-soft) !important; }
 html[data-design="heaven"] #root :is(.icon-button, .mini-dots, .user-topbar-menu) { width: 42px; height: 42px; min-height: 42px; border: 1px solid var(--heaven-line) !important; border-radius: 10px; background: var(--heaven-surface) !important; color: var(--heaven-muted) !important; box-shadow: none !important; }
@@ -258,7 +275,7 @@ html[data-design="heaven"] #root :is(input:not([type="checkbox"]):not([type="rad
 }
 html[data-design="heaven"] #root :is(input, textarea)::placeholder { color: #79877e !important; opacity: 1; }
 html[data-design="heaven"] #root :is(input, select, textarea):focus { border-color: var(--heaven-accent) !important; outline: 2px solid #7c9d7d30; outline-offset: 1px; }
-html[data-design="heaven"] #root :is(input[type="checkbox"], input[type="radio"]) { width: 18px; height: 18px; min-height: 18px; accent-color: #426c58; flex-shrink: 0; }
+html[data-design="heaven"] #root :is(input[type="checkbox"], input[type="radio"]) { width: 18px; height: 18px; min-height: 18px; accent-color: #2563eb; flex-shrink: 0; }
 html[data-design="heaven"] #root :is(.form-grid, .login-register-grid, .certificate-booking-modal__fields) { gap: 18px; }
 html[data-design="heaven"] #root :is(.login-field, .form-field) > span { font-size: .82rem !important; font-weight: 550 !important; color: var(--heaven-ink); }
 html[data-design="heaven"] #root :is(.table-wrap, .table-scroll, [class*="table-wrapper"], [class*="table-container"]) { overflow-x: auto; border-radius: 12px; border-color: var(--heaven-line); }
@@ -387,7 +404,7 @@ html[data-design="heaven"] #root .ucs-remind__icon { color: #8a7546 !important; 
 html[data-design="heaven"] #root .ucs-remind__title { color: #74613a !important; font-size: .85rem !important; font-weight: 600 !important; text-transform: none !important; }
 html[data-design="heaven"] #root .ucs-remind__tag { display: none; }
 html[data-design="heaven"] #root .ucs-remind__slot { background: #fffdf8 !important; color: #74613a !important; border: 1px solid #e7dfc8 !important; border-radius: 6px; box-shadow: none !important; }
-html[data-design="heaven"] #root .ucs-remind__cta { color: #fff !important; background: #426c58 !important; border-radius: 7px; box-shadow: none !important; min-height: 38px; }
+html[data-design="heaven"] #root .ucs-remind__cta { color: #fff !important; background: #2563eb !important; border-radius: 7px; box-shadow: none !important; min-height: 38px; }
 html[data-design="heaven"] #root .ucs-remind__list { color: var(--heaven-muted) !important; }
 html[data-design="heaven"] #root :is(.certificate-service-layout, .service-booking-layout) { gap: 24px; }
 html[data-design="heaven"] #root :is(.certificate-service-item, .service-card, .certificate-service-option, .parish-calendar-tab, .pch-card, .plh-card) { background: var(--heaven-surface) !important; border: 1px solid var(--heaven-line) !important; border-radius: 12px !important; padding: 18px; box-shadow: none !important; }
@@ -1591,7 +1608,7 @@ html[data-theme="dark"] .login-mode-link {
 }
 
 .login-spotlight--green {
-  box-shadow: 0 18px 36px rgba(53, 208, 161, 0.14);
+  box-shadow: 0 18px 36px rgba(93, 199, 255, 0.14);
 }
 
 html[data-theme="dark"] .login-spotlight {
@@ -1679,7 +1696,7 @@ html[data-theme="dark"] .login-spotlight__stat {
 }
 
 .login-shortcut--green {
-  background: linear-gradient(135deg, rgba(124, 255, 212, 0.95), rgba(212, 255, 237, 0.9));
+  background: linear-gradient(135deg, rgba(111, 247, 255, 0.92), rgba(187, 234, 255, 0.86));
 }
 
 html[data-theme="dark"] .login-shortcut {
@@ -1747,10 +1764,10 @@ html[data-theme="dark"] .login-role-tab {
 }
 
 .login-role-tab--green.is-active {
-  border-color: rgba(53, 208, 161, 0.32);
-  background: linear-gradient(135deg, rgba(124, 255, 212, 0.34), rgba(230, 255, 245, 0.98));
+  border-color: rgba(93, 199, 255, 0.34);
+  background: linear-gradient(135deg, rgba(111, 247, 255, 0.3), rgba(207, 239, 255, 0.98));
   background: transparent;
-  box-shadow: 0 14px 28px rgba(53, 208, 161, 0.18);
+  box-shadow: 0 14px 28px rgba(93, 199, 255, 0.18);
 }
 
 html[data-theme="dark"] .login-role-tab--blue.is-active {
@@ -1766,8 +1783,8 @@ html[data-theme="dark"] .login-role-tab--gold.is-active {
 }
 
 html[data-theme="dark"] .login-role-tab--green.is-active {
-  border-color: rgba(77, 255, 184, 0.24);
-  background: linear-gradient(135deg, rgba(77, 255, 184, 0.16), rgba(33, 177, 136, 0.08));
+  border-color: rgba(146, 224, 255, 0.28);
+  background: linear-gradient(135deg, rgba(87, 227, 255, 0.2), rgba(93, 153, 255, 0.1));
   background: transparent;
 }
 
@@ -5095,14 +5112,7 @@ html[data-theme="dark"] .parish-calendar-side {
 }
 
 .mini-dots {
-  width: 28px;
-  height: 28px;
-  display: grid;
-  place-items: center;
-  border: 0;
-  border-radius: 999px;
-  color: var(--text-dim);
-  background: transparent;
+  display: none !important;
 }
 
 .metric-card {
@@ -5945,10 +5955,10 @@ html[data-theme="dark"] .logout-panel__icon {
 }
 
 .primary-action {
-  color: #0f2942;
-  border: 1px solid rgba(103, 232, 255, 0.3);
-  background: linear-gradient(135deg, rgba(111, 247, 255, 0.92), rgba(187, 234, 255, 0.84));
-  box-shadow: 0 0 18px rgba(93, 199, 255, 0.14);
+  color: #f8fbff;
+  border: 1px solid rgba(59, 130, 246, 0.35);
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.96), rgba(96, 165, 250, 0.9));
+  box-shadow: 0 0 18px rgba(59, 130, 246, 0.18);
 }
 
 .primary-action:disabled {
@@ -5970,8 +5980,8 @@ html[data-theme="dark"] .logout-panel__icon {
 
 html[data-theme="dark"] .primary-action {
   color: #f7fbff;
-  background: linear-gradient(135deg, rgba(87, 227, 255, 0.28), rgba(100, 137, 255, 0.16));
-  border-color: rgba(146, 224, 255, 0.16);
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.42), rgba(37, 99, 235, 0.32));
+  border-color: rgba(147, 197, 253, 0.28);
 }
 
 html[data-theme="dark"] .secondary-action {
@@ -6319,10 +6329,18 @@ html[data-theme="dark"] .summary-pill {
   overflow: hidden;
 }
 
+.announcement-board-panel > .glass-card__header {
+  margin-bottom: 18px;
+}
+
 .announcement-board {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px;
+}
+
+.announcement-board--staff {
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .announcement-card {
@@ -6426,6 +6444,74 @@ html[data-theme="dark"] .summary-pill {
   font-weight: 650;
   line-height: 1.5;
   overflow-wrap: anywhere;
+}
+
+.announcement-card__view {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+}
+
+.announcement-card__foot {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-top: 10px;
+  border-top: 1px solid #dbe6ef;
+}
+
+.announcement-card__foot small {
+  margin-right: auto;
+  color: #526274;
+  font-size: 0.72rem;
+  font-weight: 750;
+}
+
+.announcement-card__edit-btn,
+.announcement-card__delete {
+  min-height: 34px;
+  padding: 6px 12px;
+  border: 1px solid #cbd9e4;
+  border-radius: 7px;
+  background: #fff;
+  color: #24445d;
+  font-size: 0.78rem;
+  font-weight: 800;
+  line-height: 1;
+  transition: background-color 140ms ease, border-color 140ms ease, transform 140ms ease;
+}
+
+.announcement-card__edit-btn:hover,
+.announcement-card__delete:hover {
+  transform: translateY(-1px);
+}
+
+.announcement-card__edit-btn:hover {
+  border-color: #2f78a1;
+  background: #eff7fb;
+}
+
+.announcement-card__delete {
+  border-color: #efd1d1;
+  color: #a33d3d;
+}
+
+.announcement-card__delete:hover {
+  border-color: #d99191;
+  background: #fff4f4;
+}
+
+@media (max-width: 600px) {
+  .announcement-board {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .announcement-card {
+    grid-template-columns: 58px minmax(0, 1fr);
+    gap: 10px;
+    padding: 12px;
+  }
 }
 
 .announcement-composer {

@@ -51,7 +51,7 @@ export default defineConfig(({ mode }) => {
     plugins: [react(), serveFaviconIco()],
     server: {
       // Browser verification artifacts are not application sources.
-      watch: { ignored: ["**/.design-browser*/**", "**/.admin-browser*/**", "**/.design-preview/**", "**/site-build/**"] },
+      watch: { ignored: ["**/.design-browser*/**", "**/.admin-browser*/**", "**/.admin-theme-browser/**", "**/.design-preview/**", "**/site-build/**"] },
       port,
       strictPort,
       host: "0.0.0.0",

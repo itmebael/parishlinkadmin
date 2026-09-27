@@ -1,0 +1,168 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
+
+/* Shared admin styling based on the blue ParishLink portal reference. */
+html[data-design="heaven"]:has(.dashboard-frame--parish) {
+  --heaven-bg: #f3f7ff;
+  --heaven-surface: #ffffff;
+  --heaven-soft: #e7f1ff;
+  --heaven-ink: #193e75;
+  --heaven-muted: #637fa6;
+  --heaven-line: #e5edf8;
+  --heaven-accent: #086be6;
+  --heaven-gold: #c58110;
+  color-scheme: light;
+}
+
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish {
+  --portal-blue: #086be6;
+  --portal-ink: #193e75;
+  --portal-muted: #637fa6;
+  font-family: Manrope, "Segoe UI", Arial, sans-serif !important;
+  color: var(--portal-ink) !important;
+}
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish :is(h1,h2,h3,h4,h5,p,span,div,strong,label,small,a,button,input,select,textarea,td,th) {
+  font-family: Manrope, "Segoe UI", Arial, sans-serif !important;
+}
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish :is(h1,h2,h3,h4,h5) {
+  color: var(--portal-ink) !important;
+  font-weight: 800 !important;
+  letter-spacing: -.035em;
+}
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish :is(p,small,.screen-subtitle,.workspace__subtitle) {
+  color: var(--portal-muted) !important;
+}
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish .overview-shell:not(:has(.parish-portal__hero)) .screen-title-block h3 {
+  font-size: clamp(1.9rem, 3.5vw, 2.6rem) !important;
+  line-height: 1.16 !important;
+  color: #193e75 !important;
+}
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish .overview-shell:not(:has(.parish-portal__hero)) .screen-subtitle {
+  font-size: 1rem !important;
+  font-weight: 400 !important;
+  color: #637fa6 !important;
+}
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish .overview-shell:not(:has(.parish-portal__hero)) .screen-title-block::before {
+  font-weight: 600;
+  font-size: .78rem;
+  letter-spacing: .14em;
+  color: #327ed6;
+}
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish > .workspace {
+  padding: 0 !important;
+  background: #f3f7ff !important;
+}
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish .overview-shell {
+  padding: 36px 26px !important;
+  gap: 24px !important;
+}
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish .overview-shell:not(:has(.parish-portal__hero)) > .overview-shell__header {
+  display: flex !important;
+  align-items: flex-start;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+}
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish .overview-shell:not(:has(.parish-portal__hero)) > .overview-shell__header .screen-tag {
+  display: none !important;
+}
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish .workspace__topbar--parish {
+  min-height: 80px !important;
+  background: #fff !important;
+  border-bottom: 1px solid #e5edf8 !important;
+}
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish :is(.glass-card,.page-card,.parish-kpi-card,.parish-dashboard-card,.dio-user-mgmt) {
+  border: 1px solid #e5edf8 !important;
+  border-radius: 22px !important;
+  background: #fff !important;
+  box-shadow: none !important;
+  color: var(--portal-ink) !important;
+}
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish :is(.glass-card,.page-card) {
+  padding: 24px !important;
+}
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish .nav-item {
+  min-height: 48px !important;
+  font-size: .875rem !important;
+  font-weight: 700 !important;
+  color: #4f6c9a !important;
+  border-radius: 16px !important;
+}
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish .nav-item:hover {
+  background: #edf4ff !important;
+  color: #086be6 !important;
+}
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish .nav-item.is-active {
+  background: #e1efff !important;
+  color: #086be6 !important;
+  border: 2px solid #e99a00 !important;
+}
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish :is(.primary-action,.primary-button,.login-submit,.certificate-request-button) {
+  background: #086be6 !important;
+  border-color: #086be6 !important;
+  color: #fff !important;
+  border-radius: 10px !important;
+}
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish :is(.secondary-action,.secondary-button,.filter-button) {
+  background: #fff !important;
+  border-color: #dce7f7 !important;
+  color: #086be6 !important;
+}
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish :is(input,select,textarea) {
+  color: #193e75 !important;
+  border-color: #dce7f7 !important;
+  accent-color: #086be6;
+}
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish :focus-visible {
+  outline: 3px solid #e99a00 !important;
+  outline-offset: 3px;
+}
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish .overview-shell :is(th,thead td) {
+  background: #fff !important;
+  color: #7189aa !important;
+  font-size: .75rem !important;
+  font-weight: 600 !important;
+  letter-spacing: .07em !important;
+  padding: 12px 14px !important;
+}
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish .overview-shell td {
+  color: #4f6c9a !important;
+  font-size: .875rem !important;
+  padding: 14px !important;
+  border-bottom: 1px solid #e8eef7 !important;
+}
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish .status-badge--green {
+  background: #e1f8f1 !important;
+  color: #008573 !important;
+}
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish .status-badge--gold {
+  background: #fff4dc !important;
+  color: #a96a0b !important;
+}
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish .status-badge--blue {
+  background: #e7f1ff !important;
+  color: #086be6 !important;
+}
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish .empty-state {
+  background: #f8faff !important;
+  border-color: #dce7f7 !important;
+}
+@media (min-width: 1041px) {
+  html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish {
+    grid-template-columns: 234px minmax(0,1fr) !important;
+  }
+  html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish > .sidebar {
+    width: 234px !important;
+    min-width: 234px !important;
+    max-width: 234px !important;
+    padding-inline: 12px !important;
+  }
+}
+@media (max-width: 640px) {
+  html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish .overview-shell {
+    padding: 24px 16px !important;
+    gap: 18px !important;
+  }
+  html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish :is(.glass-card,.page-card) {
+    padding: 18px !important;
+  }
+}

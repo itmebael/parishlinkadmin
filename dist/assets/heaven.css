@@ -68,9 +68,9 @@ html[data-design=heaven] :is(input,textarea)::placeholder { color: var(--heaven-
 html[data-design=heaven] select { appearance: auto !important; }
 html[data-design=heaven] option { color: var(--heaven-ink) !important; background: var(--heaven-surface) !important; }
 html[data-design=heaven] :is(input[type=checkbox],input[type=radio]) { accent-color: #376851; width: 18px; height: 18px; }
-html[data-design=heaven] :focus-visible { outline: 3px solid #86af91 !important; outline-offset: 3px; }
+html[data-design=heaven] :focus-visible { outline: 3px solid #2563eb !important; outline-offset: 3px; }
 html[data-design=heaven] :is(button,a) { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
-#root :is(.primary-action,.login-submit,.primary-button,.user-primary-button,.certificate-request-button) { min-height: 46px; padding: 12px 20px; color: #fff !important; background: #376851 !important; border: 1px solid #376851 !important; border-radius: 8px; box-shadow: none !important; font-weight: 600; }
+#root :is(.primary-action,.login-submit,.primary-button,.user-primary-button,.certificate-request-button) { min-height: 46px; padding: 12px 20px; color: #fff !important; background: #2563eb !important; border: 1px solid #2563eb !important; border-radius: 8px; box-shadow: none !important; font-weight: 600; }
 #root :is(.secondary-action,.secondary-button,.filter-button) { min-height: 44px; padding: 10px 16px; border: 1px solid var(--heaven-line) !important; border-radius: 8px; color: var(--heaven-accent) !important; background: var(--heaven-surface) !important; box-shadow: none !important; }
 #root button:disabled { cursor: not-allowed; opacity: .5; }
 #root :is(.table-wrap,.data-table-wrap,.table-scroll) { max-width: 100%; overflow-x: auto; border: 1px solid var(--heaven-line); border-radius: 10px; }
@@ -709,4 +709,165 @@ html[data-design="heaven"] body {
 @media (max-width: 640px) {
   #root .baptism-records__record { padding: 16px 0; }
   #root .baptism-records__pagination .secondary-action { flex: 1 1 140px; }
+}
+
+/* Login refresh inspired by the provided Marian artwork. */
+html[data-design=heaven] #root .scene--login {
+  min-height: 100dvh;
+  padding: clamp(18px, 4vw, 56px) !important;
+  display: grid;
+  place-items: center;
+  background: #f7f8fb !important;
+}
+html[data-design=heaven] #root .login-shell { width: min(1220px, 100%); }
+html[data-design=heaven] #root .login-panel { gap: 0; padding: 0; }
+html[data-design=heaven] #root .login-panel__topbar { display: none !important; }
+html[data-design=heaven] #root .login-grid {
+  grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr);
+  gap: 0;
+  padding: 10px;
+  overflow: hidden;
+  border: 1px solid #e2def5;
+  border-radius: 30px;
+  background: #fff;
+  box-shadow: 0 24px 70px #30336518;
+}
+html[data-design=heaven] #root .login-card { min-width: 0; padding: clamp(26px, 3.2vw, 46px); }
+html[data-design=heaven] #root .login-card--intro {
+  min-height: 650px;
+  justify-content: flex-end;
+  padding: 42px;
+  overflow: hidden;
+  isolation: isolate;
+  border-radius: 24px;
+  color: #fff;
+  background: #267ac5 url('/dist/assets/virgen-maria-anunciacion.png') 76% center / cover no-repeat !important;
+}
+html[data-design=heaven] #root .login-card--intro::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 34%, #063d826b 100%);
+}
+html[data-design=heaven] #root .login-card--intro::after {
+  content: '';
+  display: block;
+  position: absolute;
+  z-index: 2;
+  top: 28px;
+  left: 30px;
+  width: 120px;
+  height: 82px;
+  margin: 0;
+  border: 1px solid #ffffffb8;
+  border-radius: 15px;
+  background: #fff url('/logo.png') center / 92% auto no-repeat;
+  box-shadow: 0 4px 14px #102b4926;
+  pointer-events: none;
+}
+html[data-design=heaven] #root .login-card--intro > * { position: relative; z-index: 1; }
+html[data-design=heaven] #root .login-card--intro > .workspace__eyebrow {
+  order: 0; margin: 0 0 22px; color: #fff !important; font-size: .76rem !important;
+  letter-spacing: .12em; text-shadow: 0 1px 8px #12365b !important;
+}
+html[data-design=heaven] #root .login-card--intro h2 {
+  order: 1; max-width: 430px; margin: 0 0 18px; color: #fff !important;
+  font: 700 clamp(2.4rem, 4vw, 3.5rem)/1.12 'DM Sans','Segoe UI',sans-serif !important;
+  letter-spacing: -.045em;
+}
+html[data-design=heaven] #root .login-copy {
+  order: 2; max-width: 430px; margin: 0; color: #fff !important;
+  font-size: .96rem !important; line-height: 1.75; text-shadow: 0 1px 8px #12365b !important;
+}
+html[data-design=heaven] #root .login-spotlight { order: 3; margin: 28px 0 0; color: #fff; }
+html[data-design=heaven] #root .login-spotlight .status-badge { color: #fff !important; }
+html[data-design=heaven] #root .login-card--form { padding: clamp(30px, 4vw, 56px); gap: 19px; }
+html[data-design=heaven] #root .login-card__header h3 {
+  font: 700 clamp(1.8rem, 2.5vw, 2.2rem)/1.2 'DM Sans','Segoe UI',sans-serif !important;
+  letter-spacing: -.04em;
+}
+html[data-design=heaven] #root .login-field input { background: #eef3ff !important; border-color: #dce3f5 !important; border-radius: 13px !important; }
+html[data-design=heaven] #root .login-submit { background: #2563eb !important; border-color: #2563eb !important; border-radius: 12px; }
+html[data-design=heaven] #root .login-submit:not(:disabled) { background: #2563eb !important; border-color: #2563eb !important; }
+html[data-design=heaven] #root .login-mode-link { color: #6d3ee8 !important; }
+@media (max-width: 760px) {
+  html[data-design=heaven] #root .scene--login { padding: 14px !important; }
+  html[data-design=heaven] #root .login-grid { grid-template-columns: 1fr; padding: 7px; border-radius: 23px; }
+  html[data-design=heaven] #root .login-card--intro { min-height: 390px; padding: 28px; background-position: 76% center; }
+  html[data-design=heaven] #root .login-card--intro::after { top: 20px; left: 20px; width: 100px; height: 68px; }
+  html[data-design=heaven] #root .login-card--intro h2 { font-size: 2.35rem !important; }
+  html[data-design=heaven] #root .login-card--form { padding: 28px 22px; }
+}
+
+/* Admin login cleanup: plain page canvas, clear logo/text spacing, outlined terms. */
+html[data-design=heaven] #root .scene--login {
+  width: 100%;
+  background: #fff !important;
+  min-height: 100dvh !important;
+  padding: 10px !important;
+  align-items: center !important;
+}
+html[data-design=heaven]:has(.scene--login) body,
+html[data-design=heaven] body:has(.scene--login) {
+  background: #fff !important;
+  background-image: none !important;
+}
+html[data-design=heaven] #root .scene--login > :is(.scene__watermark, .scene__glow) {
+  display: none !important;
+}
+html[data-design=heaven] #root .login-card--intro > .workspace__eyebrow {
+  position: absolute !important;
+  top: 40px !important;
+  left: 154px !important;
+  z-index: 3 !important;
+  margin: 0 !important;
+}
+html[data-design=heaven] #root .login-grid {
+  height: calc(100dvh - 20px) !important;
+  max-height: 900px !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+html[data-design=heaven] #root .login-card {
+  min-height: 0 !important;
+  padding: clamp(18px, 3vh, 38px) !important;
+}
+html[data-design=heaven] #root .login-card--intro {
+  display: flex !important;
+  min-height: 0 !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: flex-start !important;
+  padding-top: 150px !important;
+}
+html[data-design=heaven] #root .login-card--intro h2 {
+  max-width: 100% !important;
+  font-size: clamp(1.85rem, 3.4vw, 3rem) !important;
+  margin-bottom: 18px !important;
+  line-height: 1.14 !important;
+  letter-spacing: -.035em !important;
+}
+html[data-design=heaven] #root .login-copy {
+  max-width: 100% !important;
+  font-size: clamp(.82rem, 1.2vw, .96rem) !important;
+  line-height: 1.65 !important;
+}
+html[data-design=heaven] #root .login-terms-card {
+  background: #fff !important;
+  border: 1px solid #000 !important;
+}
+@media (max-width: 760px) {
+  html[data-design=heaven] #root .login-grid {
+    height: auto !important;
+    max-height: none !important;
+  }
+  html[data-design=heaven] #root .login-card--intro {
+    min-height: min(46dvh, 390px) !important;
+    padding-top: 120px !important;
+  }
+  html[data-design=heaven] #root .login-card--intro > .workspace__eyebrow {
+    top: 34px !important;
+    left: 132px !important;
+  }
 }

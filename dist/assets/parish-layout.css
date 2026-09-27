@@ -13,6 +13,506 @@ html[data-design="heaven"] #root .scene {
     url("./backgrounddioses-Dcg_TSm2.jpg") center / cover fixed !important;
 }
 
+/* Keep the admin sign-in canvas completely white, including over global scene art. */
+html[data-design="heaven"] #root .scene.scene--login {
+  background: #fff !important;
+  background-image: none !important;
+}
+html[data-design="heaven"] #root .scene.scene--login > .scene__watermark,
+html[data-design="heaven"] #root .scene.scene--login > .scene__glow {
+  display: none !important;
+}
+html[data-design="heaven"] #root .scene.scene--login .login-mode-link {
+  display: none !important;
+}
+
+/* Parish administrator workspace styled to match the member portal. */
+html[data-design="heaven"] #root .scene:has(.dashboard-frame--parish) {
+  min-height: 100dvh !important;
+  padding: 0 !important;
+  background: #f3f7ff !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--parish {
+  width: 100% !important;
+  max-width: none !important;
+  min-height: 100dvh !important;
+  grid-template-columns: 208px minmax(0, 1fr) !important;
+  gap: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: #f3f7ff !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--parish > .sidebar {
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+  min-height: 100dvh;
+  padding: 20px 14px 16px !important;
+  gap: 12px !important;
+  border: 0 !important;
+  border-right: 1px solid #e5ebf5 !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--parish .sidebar__brand {
+  min-height: 58px !important;
+  padding: 0 4px 16px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  gap: 3px !important;
+  border-bottom: 1px solid #edf1f7 !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--parish .sidebar__crest {
+  width: 142px !important;
+  height: 44px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--parish .sidebar__crest img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: left center;
+  filter: none !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--parish .sidebar__brand .sidebar__eyebrow,
+html[data-design="heaven"] #root .dashboard-frame--parish .sidebar__brand h1 {
+  display: none !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--parish .sidebar__brand .sidebar__caption {
+  margin: 0 0 0 3px !important;
+  color: #64748b !important;
+  font-size: .66rem !important;
+  line-height: 1.2 !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--parish .sidebar__nav {
+  align-content: start;
+  gap: 5px !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--parish .nav-item {
+  min-height: 40px !important;
+  padding: 0 11px !important;
+  gap: 10px !important;
+  border: 1px solid transparent !important;
+  border-radius: 12px !important;
+  color: #52627a !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  font-size: .77rem !important;
+  font-weight: 600 !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--parish .nav-item:hover,
+html[data-design="heaven"] #root .dashboard-frame--parish .nav-item.is-active {
+  color: #1d4ed8 !important;
+  border-color: transparent !important;
+  background: #e6f0ff !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--parish .nav-item__icon {
+  width: 17px !important;
+  height: 17px !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--parish .nav-item--logout {
+  margin-top: auto !important;
+  border-top: 1px solid #edf1f7 !important;
+  border-radius: 0 !important;
+  padding-top: 10px !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--parish > .workspace {
+  min-width: 0;
+  min-height: 100dvh;
+  gap: 0 !important;
+  align-content: start;
+  background: #f3f7ff !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--parish .workspace__topbar--parish {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  min-height: 62px;
+  padding: 8px 26px !important;
+  border: 0 !important;
+  border-bottom: 1px solid #e7edf7 !important;
+  border-radius: 0 !important;
+  background: rgba(255, 255, 255, .97) !important;
+  box-shadow: none !important;
+  backdrop-filter: blur(14px) !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--parish .workspace__topbar--parish .workspace__headline {
+  gap: 0 !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--parish .workspace__topbar--parish .workspace__eyebrow {
+  color: #64748b !important;
+  font-size: .62rem !important;
+  letter-spacing: .08em !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--parish .workspace__topbar--parish h2 {
+  color: #172554 !important;
+  font-size: 1rem !important;
+  line-height: 1.25 !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--parish .workspace__topbar--parish .workspace__subtitle {
+  margin-top: 0 !important;
+  color: #64748b !important;
+  font-size: .68rem !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--parish .overview-shell {
+  min-width: 0;
+  padding: 24px 28px 38px !important;
+  gap: 20px !important;
+  background: transparent !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--parish .overview-shell__header {
+  padding: 0 0 2px !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--parish .screen-title-block h3 {
+  color: #172554 !important;
+  font-size: 1.35rem !important;
+  letter-spacing: -.025em !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--parish .screen-subtitle {
+  color: #64748b !important;
+  font-size: .8rem !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--parish .overview-shell > .screen-grid {
+  gap: 16px !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--parish :is(.glass-card, .page-card, .overview-shell__header, .parish-portal__hero, .parish-kpi-card, .parish-dashboard-card) {
+  border-color: #e5ebf5 !important;
+  border-radius: 18px !important;
+  box-shadow: 0 5px 18px rgba(41, 72, 124, .055) !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--parish :is(.glass-card, .page-card) {
+  background: #fff !important;
+  backdrop-filter: none !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--parish .parish-portal__hero {
+  min-height: 180px !important;
+  padding: 28px 32px !important;
+  overflow: hidden;
+  color: #173a78 !important;
+  background: linear-gradient(90deg, rgba(233, 243, 255, .98) 0%, rgba(233, 243, 255, .9) 38%, rgba(233, 243, 255, .06) 72%), url('/HEADER.png?v=20260927-1') right center / cover no-repeat !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--parish .overview-shell__header {
+  display: none !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--parish .parish-portal__hero :is(h1, h2, h3, p, span) {
+  color: #173a78 !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--parish .parish-portal__hero h1,
+html[data-design="heaven"] #root .dashboard-frame--parish .parish-portal__hero h2,
+html[data-design="heaven"] #root .dashboard-frame--parish .parish-portal__hero h4 {
+  max-width: 620px;
+  font-size: clamp(1.8rem, 3vw, 2.4rem) !important;
+  line-height: 1.1 !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--parish .parish-portal__hero::before,
+html[data-design="heaven"] #root .dashboard-frame--parish .parish-portal__hero::after {
+  display: none !important;
+}
+@media (max-width: 1040px) {
+  html[data-design="heaven"] #root .dashboard-frame--parish {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+  html[data-design="heaven"] #root .dashboard-frame--parish > .sidebar {
+    position: fixed;
+    z-index: 60;
+    width: min(280px, calc(100vw - 40px));
+    height: 100dvh;
+    transform: translateX(calc(-100% - 20px));
+    transition: transform .2s ease;
+  }
+  html[data-design="heaven"] #root .dashboard-frame--parish > .sidebar.is-open {
+    transform: translateX(0);
+  }
+  html[data-design="heaven"] #root .dashboard-frame--parish .overview-shell {
+    padding: 20px 18px 32px !important;
+  }
+}
+@media (max-width: 640px) {
+  html[data-design="heaven"] #root .dashboard-frame--parish .workspace__topbar--parish {
+    min-height: 58px;
+    padding: 6px 12px !important;
+  }
+  html[data-design="heaven"] #root .dashboard-frame--parish .parish-portal__hero {
+    min-height: 210px !important;
+    padding: 22px !important;
+    background-position: 68% center !important;
+  }
+}
+
+/* Keep the section title row on dashboard screens only. */
+html[data-design="heaven"] #root .overview-shell:not(.overview-shell--dashboard):not(.overview-shell--parish-catbalogan):not(.overview-shell--user-dashboard) > .overview-shell__header {
+  display: none !important;
+}
+
+/* Give the sign-in layout a consistent desktop footprint and a clean mobile stack. */
+html[data-design="heaven"] #root .scene.scene--login .login-shell {
+  width: min(1120px, 100%);
+}
+html[data-design="heaven"] #root .scene.scene--login .login-panel {
+  width: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+html[data-design="heaven"] #root .scene.scene--login .login-grid {
+  width: 100%;
+  grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr) !important;
+  gap: 0;
+  padding: 8px;
+  border: 1px solid #dfe6df !important;
+  border-radius: 24px;
+  background: #fff !important;
+  box-shadow: 0 16px 48px rgba(25, 42, 34, .10) !important;
+}
+html[data-design="heaven"] #root .scene.scene--login .login-grid > .login-card {
+  min-width: 0;
+  padding: clamp(24px, 3vw, 42px) !important;
+}
+html[data-design="heaven"] #root .scene.scene--login .login-card--intro {
+  min-height: clamp(500px, 76dvh, 680px) !important;
+  justify-content: center !important;
+  border-radius: 18px;
+}
+html[data-design="heaven"] #root .scene.scene--login .login-card--form {
+  align-content: center;
+  gap: clamp(12px, 1.8vh, 19px);
+  background: #fff !important;
+}
+@media (max-width: 760px) {
+  html[data-design="heaven"] #root .scene.scene--login .login-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+  html[data-design="heaven"] #root .scene.scene--login .login-card--intro {
+    min-height: 320px !important;
+  }
+}
+
+html[data-design="heaven"] #root .baptism-records__search {
+  display: grid;
+  grid-template-columns: minmax(200px, 1.5fr) minmax(120px, .65fr) minmax(100px, .5fr) auto auto;
+  align-items: end;
+  gap: 14px;
+}
+html[data-design="heaven"] #root .baptism-records__search .login-field {
+  min-width: 0;
+  margin: 0;
+}
+html[data-design="heaven"] #root .baptism-records__search select,
+html[data-design="heaven"] #root .baptism-records__search input {
+  width: 100%;
+  min-height: 46px;
+}
+@media (max-width: 760px) {
+  html[data-design="heaven"] #root .baptism-records__search {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  html[data-design="heaven"] #root .baptism-records__search button {
+    width: 100%;
+  }
+}
+
+html[data-design="heaven"] #root .baptism-records__record--expandable {
+  overflow: hidden;
+  padding: 0 !important;
+}
+html[data-design="heaven"] #root .baptism-records__record--expandable > summary {
+  display: grid;
+  grid-template-columns: minmax(150px, 1.2fr) minmax(150px, 1fr) minmax(150px, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  min-height: 58px;
+  padding: 12px 16px;
+  cursor: pointer;
+  list-style: none;
+}
+html[data-design="heaven"] #root .baptism-records__record--expandable > summary::-webkit-details-marker {
+  display: none;
+}
+html[data-design="heaven"] #root .baptism-records__row strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+html[data-design="heaven"] #root .baptism-records__row span {
+  overflow: hidden;
+  color: var(--heaven-muted);
+  font-size: .82rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+html[data-design="heaven"] #root .baptism-records__row .baptism-records__row-hint {
+  color: inherit;
+  font-weight: 400;
+}
+html[data-design="heaven"] #root .baptism-records__record--expandable[open] > summary {
+  border-bottom: 1px solid var(--heaven-line);
+  background: #f8faf8;
+}
+html[data-design="heaven"] #root .baptism-records__record--expandable > .baptism-records__fields {
+  margin: 0;
+  padding: 16px;
+}
+html[data-design="heaven"] #root button.baptism-records__row {
+  width: 100%;
+  border: 1px solid var(--heaven-line);
+  border-radius: 12px;
+  color: var(--heaven-ink);
+  background: #fff;
+  text-align: left;
+  transition: background .15s ease, border-color .15s ease, box-shadow .15s ease;
+}
+html[data-design="heaven"] #root button.baptism-records__row:hover,
+html[data-design="heaven"] #root button.baptism-records__row:focus-visible {
+  border-color: var(--heaven-accent);
+  background: #f8faf8;
+  box-shadow: 0 4px 16px rgba(25, 42, 34, .08);
+}
+html[data-design="heaven"] #root .baptism-records__list {
+  border-top: 1px solid var(--heaven-line);
+}
+html[data-design="heaven"] #root button.baptism-records__row {
+  display: grid;
+  grid-template-columns: minmax(180px, 1.35fr) minmax(180px, 1fr) minmax(160px, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  min-height: 58px;
+  padding: 12px 14px;
+  border: 0;
+  border-bottom: 1px solid var(--heaven-line);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+html[data-design="heaven"] #root button.baptism-records__row:first-child {
+  border-top: 0;
+}
+html[data-design="heaven"] #root button.baptism-records__row:hover,
+html[data-design="heaven"] #root button.baptism-records__row:focus-visible {
+  border-color: var(--heaven-line);
+  background: #f4f7fc;
+  box-shadow: none;
+}
+html[data-design="heaven"] #root .baptism-records__row strong {
+  color: var(--heaven-ink);
+}
+@media (max-width: 700px) {
+  html[data-design="heaven"] #root button.baptism-records__row {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 6px 12px;
+  }
+  html[data-design="heaven"] #root .baptism-records__row strong {
+    grid-column: 1 / -1;
+  }
+  html[data-design="heaven"] #root .baptism-records__row .baptism-records__row-hint {
+    grid-column: 1 / -1;
+  }
+}
+html[data-design="heaven"] #root .archive-sacramental-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+html[data-design="heaven"] #root .archive-sacramental-form__field { min-width: 0; margin: 0; }
+html[data-design="heaven"] #root .archive-sacramental-form__field--wide,
+html[data-design="heaven"] #root .archive-sacramental-form__actions { grid-column: 1 / -1; }
+html[data-design="heaven"] #root .archive-sacramental-form__actions { display: flex; flex-wrap: wrap; gap: 10px; }
+html[data-design="heaven"] #root .archive-sacramental-records__list-header { margin-top: 28px; }
+html[data-design="heaven"] #root .archive-sacramental-records .archive-record-row {
+  grid-template-columns: minmax(190px, .8fr) minmax(0, 2fr) auto;
+  align-items: start;
+}
+html[data-design="heaven"] #root .archive-sacramental-records .archive-record-row__identity { min-height: 0; }
+html[data-design="heaven"] #root .archive-sacramental-records .archive-record-row__cells {
+  grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+}
+@media (max-width: 760px) {
+  html[data-design="heaven"] #root .archive-sacramental-form { grid-template-columns: minmax(0, 1fr); }
+  html[data-design="heaven"] #root .archive-sacramental-form__field--wide,
+  html[data-design="heaven"] #root .archive-sacramental-form__actions { grid-column: auto; }
+  html[data-design="heaven"] #root .archive-sacramental-records .archive-record-row { grid-template-columns: minmax(0, 1fr); }
+}
+html[data-design="heaven"] #root .baptism-records__modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(15, 23, 20, .48);
+}
+html[data-design="heaven"] #root .baptism-records__modal {
+  width: min(720px, 100%);
+  max-height: min(82dvh, 760px);
+  overflow: auto;
+  padding: 24px;
+  border: 1px solid var(--heaven-line);
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, .24);
+}
+html[data-design="heaven"] #root .baptism-records__modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+html[data-design="heaven"] #root .baptism-records__modal-header h3 {
+  margin: 0;
+}
+html[data-design="heaven"] #root .baptism-records__modal-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+html[data-design="heaven"] #root .baptism-records__modal .baptism-records__fields {
+  margin: 0;
+}
+html[data-design="heaven"] #root .baptism-records__filtered-preview-list {
+  display: grid;
+  gap: 0;
+}
+html[data-design="heaven"] #root .baptism-records__filtered-preview-list article {
+  display: grid;
+  grid-template-columns: minmax(140px, 1fr) repeat(2, minmax(120px, 1fr));
+  gap: 8px 16px;
+  padding: 12px 0;
+  border-top: 1px solid var(--heaven-line);
+}
+html[data-design="heaven"] #root .baptism-records__filtered-preview-list span {
+  color: var(--heaven-muted);
+  overflow-wrap: anywhere;
+}
+@media (max-width: 1100px) {
+  html[data-design="heaven"] #root .baptism-records__search {
+    grid-template-columns: minmax(150px, 1fr) minmax(220px, 2fr) minmax(130px, 1fr);
+  }
+}
+@media (max-width: 760px) {
+  html[data-design="heaven"] #root .baptism-records__record--expandable > summary {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  html[data-design="heaven"] #root .baptism-records__row span:not(.baptism-records__row-hint) {
+    grid-column: 1;
+  }
+}
+
 /* The same church image is visible behind both the sign-in experience and every dashboard route. */
 html[data-design="heaven"] #root .login-panel {
   background: rgba(255, 255, 255, 0.72) !important;
@@ -71,6 +571,35 @@ html[data-design="heaven"] #root .dashboard-frame {
   }
 }
 
+/* Keep the stacked ParishLink logo clear of the parish caption in the rail. */
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish .sidebar__brand {
+  min-height: 112px !important;
+  height: auto !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  gap: 0 !important;
+  padding: 4px 2px 14px !important;
+}
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish .sidebar__crest {
+  width: 150px !important;
+  min-width: 150px !important;
+  height: 100px !important;
+  min-height: 100px !important;
+  flex: 0 0 100px !important;
+  overflow: visible !important;
+}
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish .sidebar__crest img {
+  display: block !important;
+  width: 150px !important;
+  height: 100px !important;
+  object-fit: contain !important;
+  object-position: left center !important;
+}
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish .sidebar__brand .sidebar__caption {
+  display: none !important;
+}
+
 /* Grid and flex children otherwise default to their content's minimum width. */
 html[data-design="heaven"] #root .dashboard-frame > .workspace,
 html[data-design="heaven"] #root .workspace,
@@ -84,4 +613,277 @@ html[data-design="heaven"] #root .workspace__topbar > * {
 
 html[data-design="heaven"] #root :is(input, select, textarea) {
   max-width: 100%;
+}
+
+/* Align the parish admin type, icons, and surfaces with the member dashboard. */
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish {
+  --portal-blue: #1672e8;
+  --portal-ink: #12346b;
+  --portal-muted: #536d98;
+  font-family: Manrope, "Segoe UI", sans-serif !important;
+  color: var(--portal-ink) !important;
+  -webkit-font-smoothing: antialiased;
+}
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish :is(button, input, select, textarea) {
+  font-family: Manrope, "Segoe UI", sans-serif !important;
+}
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish :is(h1, h2, h3, h4, .nav-item, .screen-tag) {
+  font-family: Manrope, "Segoe UI", sans-serif !important;
+  letter-spacing: -.025em;
+}
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish .nav-item {
+  min-height: 42px !important;
+  border-radius: 15px !important;
+  font-size: .79rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0 !important;
+}
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish .nav-item__icon {
+  display: inline-flex;
+  width: 19px !important;
+  height: 19px !important;
+  color: #5476ad !important;
+}
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish .nav-item__icon svg,
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish .icon-button svg {
+  width: 100%;
+  height: 100%;
+  stroke-width: 1.8;
+}
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish .nav-item.is-active .nav-item__icon,
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish .nav-item:hover .nav-item__icon {
+  color: var(--portal-blue) !important;
+}
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish .workspace__topbar--parish {
+  min-height: 72px !important;
+  padding-inline: 28px !important;
+}
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish .workspace__topbar--parish h2 {
+  color: var(--portal-ink) !important;
+  font-size: 1.05rem !important;
+  font-weight: 800 !important;
+}
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish .overview-shell {
+  gap: 17px !important;
+}
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish :is(.glass-card, .page-card, .parish-kpi-card, .parish-dashboard-card) {
+  border: 1px solid #e5edf9 !important;
+  border-radius: 22px !important;
+  box-shadow: 0 8px 24px rgba(38, 86, 158, .055) !important;
+}
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish :is(.glass-card, .page-card) {
+  padding: clamp(16px, 2vw, 24px) !important;
+}
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish :is(.icon-button, .profile-pill, .user-topbar-menu) {
+  border-color: #e6edf8 !important;
+  color: #416799 !important;
+}
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish :is(input, select, textarea) {
+  border-color: #dbe7f8 !important;
+  border-radius: 12px !important;
+}
+
+/* Remove redundant dashboard account chips and quick links, plus the Live/theme controls. */
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish .parish-portal__chips,
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish .parish-portal__actions,
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish .overview-shell__tools {
+  display: none !important;
+}
+
+/* Give every parish admin screen the same restrained, modern type scale. */
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish .overview-shell {
+  font-family: Manrope, "Segoe UI", sans-serif !important;
+  color: #243b5d !important;
+}
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish .overview-shell :is(p, span, label, th, td, a, small, button, input, select, textarea) {
+  font-family: Manrope, "Segoe UI", sans-serif !important;
+  letter-spacing: 0 !important;
+}
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish .overview-shell:not(:has(.parish-portal__hero)) .screen-title-block h3 {
+  margin: 0 !important;
+  color: #16396f !important;
+  font-size: clamp(1.8rem, 3vw, 2.45rem) !important;
+  font-weight: 800 !important;
+  line-height: 1.12 !important;
+  letter-spacing: -.045em !important;
+}
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish .overview-shell:not(:has(.parish-portal__hero)) .screen-subtitle {
+  display: block;
+  margin-top: 7px !important;
+  color: #657b9d !important;
+  font-size: .9rem !important;
+  font-weight: 500 !important;
+  line-height: 1.5 !important;
+}
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish .overview-shell:not(:has(.parish-portal__hero)) .screen-title-block::before {
+  display: block;
+  margin-bottom: 12px;
+  color: #3880d5;
+  content: "PARISH SERVICES";
+  font-size: .72rem;
+  font-weight: 800;
+  letter-spacing: .13em;
+}
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish .overview-shell :is(table, .data-table) {
+  border-color: #e5edf8 !important;
+  color: #405b83 !important;
+  font-size: .84rem !important;
+}
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish .overview-shell :is(th, thead td) {
+  color: #7389a8 !important;
+  font-size: .72rem !important;
+  font-weight: 700 !important;
+  letter-spacing: .07em !important;
+  text-transform: uppercase;
+}
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish .overview-shell :is(td, th) {
+  border-color: #e8eef7 !important;
+}
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish .overview-shell :is(.screen-grid, .table-wrap, .table-container) {
+  min-width: 0;
+}
+
+/* Final shell sizing overrides the legacy parish fixed-width layout. */
+@media (min-width: 1041px) {
+  html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish {
+    grid-template-columns: 208px minmax(0, 1fr) !important;
+    background: #f3f7ff !important;
+  }
+  html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish > .sidebar {
+    left: 0 !important;
+    width: 208px !important;
+    min-width: 208px !important;
+    max-width: 208px !important;
+  }
+  html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish > .workspace {
+    grid-column: 2 !important;
+    width: 100% !important;
+    background: #f3f7ff !important;
+  }
+}
+/* Notice Board card layout and action buttons */
+html[data-design="heaven"] #root .archive-record-row--marriage {
+  grid-template-columns: minmax(0, 1fr);
+}
+html[data-design="heaven"] #root .archive-marriage-parties {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  min-width: 0;
+}
+html[data-design="heaven"] #root .archive-marriage-party {
+  min-width: 0;
+  padding: 14px;
+  border: 1px solid var(--heaven-line);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, .72);
+}
+html[data-design="heaven"] #root .archive-marriage-party > header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+html[data-design="heaven"] #root .archive-marriage-party > header > div {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+html[data-design="heaven"] #root .archive-marriage-party > header span {
+  color: var(--heaven-accent);
+  font-size: .68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+html[data-design="heaven"] #root .archive-marriage-party > header strong {
+  overflow-wrap: anywhere;
+}
+html[data-design="heaven"] #root .archive-marriage-party .archive-record-row__cells {
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+}
+@media (max-width: 700px) {
+  html[data-design="heaven"] #root .archive-marriage-parties {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Notice Board card layout and action buttons */
+html[data-design="heaven"] #root .announcement-board-panel > .glass-card__header > .mini-dots {
+  display: none !important;
+}
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish .parish-portal__hero.glass-card.page-card {
+  background-image: linear-gradient(90deg, rgba(233, 243, 255, .98) 0%, rgba(233, 243, 255, .9) 38%, rgba(233, 243, 255, .06) 72%), url('/HEADER.png?v=20260928-2') !important;
+  background-position: right center !important;
+  background-size: cover !important;
+  background-repeat: no-repeat !important;
+}
+html[data-design="heaven"] #root .announcement-board-panel > .glass-card__header {
+  margin-bottom: 18px;
+}
+html[data-design="heaven"] #root .announcement-board--staff {
+  grid-template-columns: minmax(0, 1fr);
+}
+html[data-design="heaven"] #root .announcement-card__body {
+  min-width: 0;
+  display: grid;
+  align-content: start;
+  gap: 10px;
+}
+html[data-design="heaven"] #root .announcement-card__view {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+html[data-design="heaven"] #root .announcement-card__foot {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 2px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(35, 74, 112, .12);
+}
+html[data-design="heaven"] #root .announcement-card__foot small {
+  margin-right: auto;
+}
+html[data-design="heaven"] #root button.announcement-card__edit-btn,
+html[data-design="heaven"] #root button.announcement-card__delete {
+  min-height: 36px;
+  padding: 0 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #c9d9eb;
+  border-radius: 9px;
+  background: #fff;
+  color: #17466e;
+  box-shadow: 0 2px 5px rgba(26, 63, 97, .06);
+  font: 700 .8rem/1 system-ui, sans-serif;
+  transition: background .15s ease, border-color .15s ease, transform .15s ease;
+}
+html[data-design="heaven"] #root button.announcement-card__edit-btn:hover {
+  border-color: #79a9d5;
+  background: #eef6ff;
+  transform: translateY(-1px);
+}
+html[data-design="heaven"] #root button.announcement-card__delete {
+  border-color: #ebcaca;
+  color: #a33e4c;
+}
+html[data-design="heaven"] #root button.announcement-card__delete:hover {
+  border-color: #d99199;
+  background: #fff2f3;
+  transform: translateY(-1px);
+}
+@media (max-width: 600px) {
+  html[data-design="heaven"] #root .announcement-card {
+    grid-template-columns: 58px minmax(0, 1fr);
+    gap: 10px;
+    padding: 12px;
+  }
+  html[data-design="heaven"] #root .announcement-card__foot small {
+    width: 100%;
+    margin-right: 0;
+  }
 }

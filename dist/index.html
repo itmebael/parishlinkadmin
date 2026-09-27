@@ -11,13 +11,18 @@
     <title>ParishLink | Admin Portal</title>
     <!-- User dashboard: light (white) theme only — runs before React reads localStorage. -->
     
-    <script type="module" crossorigin src="/dist/assets/index-v20260422157000.js?v=parish-reports-20260921"></script>
+    <script type="module" crossorigin src="/dist/assets/index-v20260422157000.js?v=certificate-parish-name-20260928"></script>
     <link rel="stylesheet" crossorigin href="/dist/assets/index-yReDnWMe.css">
     <link rel="stylesheet" href="/dist/assets/parish-reports.css?v=20260921-1">
     <link rel="stylesheet" href="/dist/assets/chapel-information-menu.css?v=20260921-1">
     <link rel="stylesheet" href="/dist/assets/parish-settings-toggles.css?v=20260921-1">
     <link rel="stylesheet" href="/dist/assets/password-eye-toggle.css?v=20260921-1">
     <link rel="stylesheet" href="/dist/assets/sidebar-brand-responsive.css?v=notification-dark-1">
+    <style>
+      html[data-design="heaven"] #root .overview-shell--parish-reports .parish-report-details {
+        display: none !important;
+      }
+    </style>
     <style id="dio-user-management-style">
       .dio-user-mgmt {
         margin: 0 0 16px;
@@ -155,6 +160,13 @@
         border: 1px solid rgba(148, 163, 184, .18);
         border-radius: 16px;
         background: #ffffff;
+        cursor: pointer;
+      }
+      .dio-user-mgmt__row:hover,
+      .dio-user-mgmt__row:focus-visible {
+        border-color: rgba(37, 99, 235, .42);
+        outline: none;
+        box-shadow: 0 8px 22px rgba(30, 64, 175, .10);
       }
       .dio-user-mgmt__avatar {
         width: 48px;
@@ -211,6 +223,53 @@
         color: #64748b;
         background: rgba(248,250,252,.72);
         font: 800 13px/1.45 system-ui, Segoe UI, sans-serif;
+      }
+      .dio-user-mgmt__modal-backdrop {
+        position: fixed;
+        inset: 0;
+        z-index: 10050;
+        display: grid;
+        place-items: center;
+        padding: 20px;
+        background: rgba(15, 23, 42, .54);
+      }
+      .dio-user-mgmt__modal {
+        width: min(620px, 100%);
+        max-height: min(84vh, 760px);
+        overflow: auto;
+        padding: 24px;
+        border: 1px solid rgba(148, 163, 184, .28);
+        border-radius: 20px;
+        background: #fff;
+        color: #0f172a;
+        box-shadow: 0 28px 90px rgba(2, 6, 23, .34);
+      }
+      .dio-user-mgmt__modal > header,
+      .dio-user-mgmt__modal > footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+      }
+      .dio-user-mgmt__modal > header { margin-bottom: 18px; }
+      .dio-user-mgmt__modal h3 { margin: 0 0 4px; font-size: 1.2rem; }
+      .dio-user-mgmt__modal p { margin: 0; color: #64748b; }
+      .dio-user-mgmt__modal dl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 0 0 22px; }
+      .dio-user-mgmt__modal dl > div { min-width: 0; padding: 12px; border: 1px solid #e2e8f0; border-radius: 12px; }
+      .dio-user-mgmt__modal dt { margin-bottom: 4px; color: #64748b; font-size: .72rem; font-weight: 700; }
+      .dio-user-mgmt__modal dd { margin: 0; overflow-wrap: anywhere; font-size: .9rem; font-weight: 650; }
+      .dio-user-mgmt__action { min-height: 42px; padding: 0 14px; border: 1px solid #cbd5e1; border-radius: 10px; background: #fff; color: #0f172a; font-weight: 750; }
+      .dio-user-mgmt__action:disabled { opacity: .6; cursor: wait; }
+      .dio-user-mgmt__action--deactivate { color: #92400e; border-color: #fbbf24; background: #fffbeb; }
+      .dio-user-mgmt__action--delete { color: #b91c1c; border-color: #fca5a5; background: #fef2f2; }
+      html[data-theme="dark"] .dio-user-mgmt__modal { color: #f8fafc; background: #0f172a; border-color: #334155; }
+      html[data-theme="dark"] .dio-user-mgmt__modal dl > div { border-color: #334155; }
+      html[data-theme="dark"] .dio-user-mgmt__modal p,
+      html[data-theme="dark"] .dio-user-mgmt__modal dt { color: #94a3b8; }
+      @media (max-width: 560px) {
+        .dio-user-mgmt__modal { padding: 18px; }
+        .dio-user-mgmt__modal dl { grid-template-columns: 1fr; }
+        .dio-user-mgmt__modal > footer { align-items: stretch; flex-direction: column; }
       }
       html[data-theme="dark"] .dio-user-mgmt {
         border-color: rgba(148, 163, 184, .18);
@@ -316,6 +375,15 @@
             });
           });
         }
+        function restWrite(table, params, method, payload) {
+          var qs = new URLSearchParams();
+          Object.keys(params || {}).forEach(function (k) { if (params[k] !== undefined && params[k] !== null) qs.set(k, params[k]); });
+          var options = { method: method, headers: { Accept: "application/json", apikey: SUPABASE_KEY, Authorization: "Bearer " + accessToken(), Prefer: "return=minimal" } };
+          if (payload) { options.headers["Content-Type"] = "application/json"; options.body = JSON.stringify(payload); }
+          return fetch(SUPABASE_URL + "/rest/v1/" + table + "?" + qs.toString(), options).then(function (r) {
+            return r.text().then(function (t) { if (!r.ok) { var d = null; try { d = t ? JSON.parse(t) : null; } catch (e) {} throw new Error((d && d.message) || t || ("HTTP " + r.status)); } });
+          });
+        }
         function resolveParishId() {
           var pid = sessionParishId();
           if (pid) return Promise.resolve(pid);
@@ -402,7 +470,7 @@
             }
             var name = u.full_name || u.email || "Unnamed user";
             var parish = u.parish_name || state.parishMap[u.parish_id] || "No parish linked";
-            return '<div class="dio-user-mgmt__row">' +
+            return '<div class="dio-user-mgmt__row" role="button" tabindex="0" data-dio-user-row data-dio-user-id="' + esc(u.id) + '">' +
               '<div class="dio-user-mgmt__avatar" aria-hidden="true">' + esc(initials(name)) + '</div>' +
               '<div class="dio-user-mgmt__main">' +
                 '<strong>' + esc(name) + '</strong>' +
@@ -415,6 +483,34 @@
               '<div class="dio-user-mgmt__meta">Joined ' + esc(dateText(u.created_at)) + '</div>' +
             '</div>';
           }).join("");
+        }
+        function openUserPopup(wrap, user) {
+          var previous = wrap.querySelector(".dio-user-mgmt__modal-backdrop");
+          if (previous) previous.remove();
+          var name = user.full_name || user.email || "Unnamed user";
+          var parish = user.parish_name || state.parishMap[user.parish_id] || "No parish linked";
+          var modal = document.createElement("div");
+          modal.className = "dio-user-mgmt__modal-backdrop";
+          modal.innerHTML = '<section class="dio-user-mgmt__modal" role="dialog" aria-modal="true" aria-labelledby="dio-user-mgmt__modal-title">' +
+            '<header><div><h3 id="dio-user-mgmt__modal-title">' + esc(name) + '</h3><p>' + esc(user.email || "No email saved") + '</p></div><button type="button" class="dio-user-mgmt__btn" data-user-close>Close</button></header>' +
+            '<dl><div><dt>Parish</dt><dd>' + esc(parish) + '</dd></div><div><dt>Phone</dt><dd>' + esc(user.phone_number || "Not recorded") + '</dd></div><div><dt>Date of birth</dt><dd>' + esc(user.birthdate || "Not recorded") + '</dd></div><div><dt>Address</dt><dd>' + esc(user.address || "Not recorded") + '</dd></div><div><dt>Joined</dt><dd>' + esc(dateText(user.created_at)) + '</dd></div><div><dt>Account</dt><dd>' + (user.is_active === false ? 'Deactivated' : 'Active') + '</dd></div></dl>' +
+            '<footer>' + (user.is_active === false ? '' : '<button type="button" class="dio-user-mgmt__action dio-user-mgmt__action--deactivate" data-user-action="deactivate">Deactivate user</button>') +
+            '<button type="button" class="dio-user-mgmt__action dio-user-mgmt__action--delete" data-user-action="delete">Delete user</button></footer></section>';
+          wrap.appendChild(modal);
+          modal.addEventListener("click", function (event) { if (event.target === modal || event.target.closest("[data-user-close]")) { modal.remove(); return; }
+            var action = event.target.closest("[data-user-action]"); if (!action) return;
+            var kind = action.getAttribute("data-user-action");
+            var prompt = kind === "delete" ? "Delete " + name + " from User Management? This removes the user's parish profile." : "Deactivate " + name + "? They will no longer be able to use the portal.";
+            if (!window.confirm(prompt)) return;
+            action.disabled = true;
+            action.textContent = kind === "delete" ? "Deleting…" : "Deactivating…";
+            restWrite("registered_users", { id: "eq." + user.id }, kind === "delete" ? "DELETE" : "PATCH", kind === "delete" ? null : { is_active: false })
+              .then(function () { modal.remove(); if (kind === "delete") state.rows = state.rows.filter(function (row) { return String(row.id) !== String(user.id); }); else { user.is_active = false; } renderRows(wrap); if (kind === "deactivate") openUserPopup(wrap, user); })
+              .catch(function (error) { window.alert("Could not " + kind + " user: " + (error.message || error) + ". Check sql/user_management_actions.sql and database permissions."); action.disabled = false; action.textContent = kind === "delete" ? "Delete user" : "Deactivate user"; });
+          });
+          var closeOnEscape = function (event) { if (event.key === "Escape") { modal.remove(); document.removeEventListener("keydown", closeOnEscape); } };
+          document.addEventListener("keydown", closeOnEscape);
+          modal.querySelector("[data-user-close]").focus();
         }
         function renderShell(wrap) {
           var r = state.role;
@@ -441,6 +537,9 @@
             '<div class="dio-user-mgmt__body"><div class="dio-user-mgmt__list" data-dio-user-list></div></div>';
           wrap.querySelector("[data-dio-user-search]").addEventListener("input", function () { renderRows(wrap); });
           wrap.querySelector("[data-dio-user-refresh]").addEventListener("click", function () { loadUsers(wrap, true); });
+          var userList = wrap.querySelector("[data-dio-user-list]");
+          userList.addEventListener("click", function (event) { var row = event.target.closest("[data-dio-user-row]"); if (!row) return; var user = state.rows.find(function (item) { return String(item.id) === row.getAttribute("data-dio-user-id"); }); if (user) openUserPopup(wrap, user); });
+          userList.addEventListener("keydown", function (event) { if (event.key !== "Enter" && event.key !== " ") return; var row = event.target.closest("[data-dio-user-row]"); if (!row) return; event.preventDefault(); var user = state.rows.find(function (item) { return String(item.id) === row.getAttribute("data-dio-user-id"); }); if (user) openUserPopup(wrap, user); });
           wrap.querySelector("[data-dio-user-scope]").addEventListener("change", function (e) {
             state.scope = e.target.value === "parishes" ? "parishes" : "users";
             renderShell(wrap);
@@ -477,7 +576,7 @@
               return Promise.all([loadParishMap(), restGet("parishes", parishParams)]);
             } else {
               var params = {
-                select: "id,parish_id,parish_name,full_name,email,phone_number,birthdate,address,civil_status,profile_picture_url,created_at,updated_at",
+                select: "id,parish_id,parish_name,full_name,email,phone_number,birthdate,address,civil_status,profile_picture_url,created_at,updated_at,is_active",
                 order: "created_at.desc",
                 limit: 500
               };
@@ -826,8 +925,11 @@
         }
       }
     </style>
-    <link rel="stylesheet" href="/dist/assets/heaven.css?v=20260921-responsive-1">
-    <link rel="stylesheet" href="/dist/assets/parish-layout.css?v=20260921-layout-3">
+    <link rel="stylesheet" href="/dist/assets/heaven.css?v=20260927-login-blue-2">
+    <link rel="stylesheet" href="/dist/assets/parish-layout.css?v=20260928-header-3">
+    <link rel="stylesheet" href="/dist/assets/admin-reference-theme.css?v=20260927-1">
+    <link rel="stylesheet" href="/dist/assets/responsive-navigation.css?v=20260927-1">
+    <link rel="stylesheet" href="/dist/assets/user-dashboard-reference.css?v=2">
   </head>
   <body>
     <dialog id="login-terms-dialog" class="login-terms-dialog" aria-labelledby="login-terms-title">
@@ -5313,14 +5415,14 @@
       })();
     </script>
     <style>
-      .dio-archive-csv{margin:14px 0 0;padding:14px 14px 16px;border:1px solid rgba(148,163,184,.20);border-radius:16px;background:linear-gradient(180deg,rgba(255,255,255,.92),rgba(248,250,252,.86));box-shadow:0 14px 40px rgba(2,6,23,.08);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
-      html[data-theme="dark"] .dio-archive-csv{background:linear-gradient(180deg,rgba(15,23,42,.82),rgba(11,18,32,.74));border-color:rgba(148,163,184,.14);box-shadow:0 18px 65px rgba(0,0,0,.45)}
-      .dio-archive-csv__head{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:10px}
+      .dio-archive-csv{display:none!important;margin:14px 0 0;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none}
+      html[data-theme="dark"] .dio-archive-csv{background:transparent;border-color:transparent;box-shadow:none}
+      .dio-archive-csv__head{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:10px;padding:0;border:0;background:transparent}
       .dio-archive-csv__head h4{margin:0;font:950 12px/1 system-ui;letter-spacing:.14em;text-transform:uppercase;color:#1d4ed8}
       html[data-theme="dark"] .dio-archive-csv__head h4{color:#93c5fd}
-      .dio-archive-csv__btn{appearance:none;border:1px solid rgba(37,99,235,.35);background:rgba(37,99,235,.10);color:#1d4ed8;border-radius:12px;padding:10px 12px;font:900 12px/1 system-ui;cursor:pointer}
-      .dio-archive-csv__btn:hover{background:rgba(37,99,235,.14);border-color:rgba(37,99,235,.55)}
-      html[data-theme="dark"] .dio-archive-csv__btn{color:#bfdbfe;border-color:rgba(96,165,250,.28);background:rgba(37,99,235,.14)}
+      .dio-archive-csv__btn{appearance:none;border:0;background:transparent;color:#1d4ed8;border-radius:0;padding:10px 12px;font:900 12px/1 system-ui;cursor:pointer;box-shadow:none}
+      .dio-archive-csv__btn:hover{background:transparent;border-color:transparent}
+      html[data-theme="dark"] .dio-archive-csv__btn{color:#bfdbfe;border-color:transparent;background:transparent}
       .dio-archive-csv__meta{color:#475569;font:700 12px/1.4 system-ui}
       html[data-theme="dark"] .dio-archive-csv__meta{color:#94a3b8}
     </style>
