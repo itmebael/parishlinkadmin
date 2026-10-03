@@ -1,0 +1,123 @@
+.pc-toolbar,.pc-toolbar__actions,.pc-dialog__header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.pc-toolbar{padding:16px 0}.pc-toolbar h4{margin:0}.pc-toolbar__actions{justify-content:flex-end;flex-wrap:wrap}
+.pc-icon{display:grid;place-items:center;width:36px;height:36px;border:1px solid #cbd5e1;background:#fff;color:#193e75;border-radius:6px;font-size:24px;cursor:pointer}
+.pc-weekdays,.pc-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr))}.pc-weekdays span{padding:12px 6px;text-align:center;font-size:12px;font-weight:700;color:#52647b}
+.pc-grid{border-top:1px solid #d7e0ec;border-left:1px solid #d7e0ec}
+.pc-day{min-width:0;min-height:118px;padding:10px 7px;border:0;border-right:1px solid #d7e0ec;border-bottom:1px solid #d7e0ec;background:#fff;display:flex;flex-direction:column;align-items:stretch;gap:5px;text-align:left;color:#193e75;cursor:pointer;overflow:hidden}
+.pc-day strong{font-size:13px}.pc-day:hover{background:#f0f5ff}.pc-day.is-selected{box-shadow:inset 0 0 0 2px #4169e1}.pc-day--blank{background:#f6f8fb;cursor:default}
+.pc-event{display:block;padding:4px 5px;background:#e6f3ec;border-left:3px solid #25835c;color:#19543c;border-radius:3px;font-size:11px;line-height:1.35;overflow-wrap:anywhere;white-space:normal}.pc-event--gold{background:#fff2d8;border-color:#ba8518;color:#73520d}
+.pc-dialog{width:min(640px,calc(100% - 24px));max-height:calc(100dvh - 40px);padding:0;border:1px solid #d7e0ec;border-radius:8px;background:#fff;color:#243b5d;box-shadow:0 24px 80px #162b4933;overflow:auto}.pc-dialog::backdrop{background:#12213866}
+.pc-dialog__header{position:sticky;top:0;padding:18px 22px;background:#fff;border-bottom:1px solid #e2e8f0;z-index:1}.pc-dialog__header h4{margin:0;font-size:20px}.pc-dialog__body{padding:22px}.pc-dialog__body>.glass-card{padding:0!important;border:0!important;box-shadow:none!important;background:transparent!important}.pc-dialog__body .event-form{grid-template-columns:repeat(2,minmax(0,1fr))}.pc-dialog__body input,.pc-dialog__body select,.pc-dialog__body textarea{max-width:100%;min-width:0}.pc-dialog__footer{display:flex;justify-content:flex-end;padding-top:18px}.pc-event-detail{padding:16px 0;border-bottom:1px solid #e2e8f0}.pc-event-detail h4{margin:6px 0;font-size:18px}.pc-event-detail p{margin:6px 0;overflow-wrap:anywhere}.pc-event-detail small{color:#25835c}.pc-calendar button:focus-visible,.pc-dialog button:focus-visible{outline:3px solid #4169e1;outline-offset:2px}
+@media(max-width:600px){.pc-toolbar{align-items:flex-start;flex-direction:column}.pc-toolbar__actions{width:100%;justify-content:flex-start}.pc-day{min-height:95px;padding:7px 3px}.pc-event{font-size:10px;padding:3px 2px}.pc-dialog__body{padding:16px}.pc-dialog__body .event-form{grid-template-columns:1fr}}
+.pc-dialog__body>.glass-card>.glass-card__header h4{display:none}
+
+html[data-design="heaven"] #root .parish-events-manage {
+  padding: 24px 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  min-width: 0;
+}
+.parish-events-manage > .glass-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 18px;
+  margin-bottom: 0;
+  border-bottom: 1px solid #d7e0ec;
+}
+html[data-design="heaven"] #root .parish-events-manage h4 {
+  margin: 0 0 6px !important;
+  font-size: 20px !important;
+  line-height: 1.3 !important;
+  letter-spacing: 0 !important;
+}
+.parish-events-manage .page-card__lead {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #52647b;
+}
+.parish-events-manage > .glass-card__header > .status-badge {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+.parish-events-list__item {
+  min-width: 0;
+  padding: 20px 0;
+  border-bottom: 1px solid #d7e0ec;
+}
+.parish-events-list__view {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+.parish-events-list__meta {
+  display: grid;
+  gap: 7px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.parish-events-list__meta strong { font-size: 16px; line-height: 1.4; }
+.parish-events-list__meta span { font-size: 14px; line-height: 1.6; color: #52647b; }
+.parish-events-list__meta small { font-size: 13px; line-height: 1.5; color: #52647b; }
+.parish-events-list__actions {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+html[data-design="heaven"] #root .parish-events-list__actions button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: static !important;
+  min-width: 78px;
+  min-height: 40px;
+  padding: 8px 16px !important;
+  border: 1px solid #c3d1e5 !important;
+  border-radius: 6px !important;
+  background: #fff !important;
+  color: #2446c5 !important;
+  font-size: 14px !important;
+  font-weight: 600;
+  line-height: 1.4;
+  box-shadow: none !important;
+  cursor: pointer;
+}
+html[data-design="heaven"] #root .parish-events-list__actions .announcement-card__delete {
+  color: #b42334 !important;
+  border-color: #edc3c9 !important;
+  background: #fff5f6 !important;
+}
+html[data-design="heaven"] #root .parish-events-list__actions .primary-action {
+  color: #fff !important;
+  background: #2446c5 !important;
+  border-color: #2446c5 !important;
+}
+.parish-events-list__actions button:hover:not(:disabled) { filter: brightness(.96); }
+.parish-events-list__actions button:disabled { opacity: .55; cursor: wait; }
+.parish-events-list__actions button:focus-visible { outline: 3px solid #4169e1; outline-offset: 3px; }
+.parish-events-list__edit { display: grid; gap: 18px; }
+.parish-events-list__edit .event-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.parish-events-list__edit .login-field { min-width: 0; }
+.parish-events-list__edit .login-field--wide { grid-column: 1 / -1; }
+.parish-events-list__edit :is(input, select, textarea) { width: 100%; min-width: 0; }
+.parish-events-list__edit > .parish-events-list__actions { justify-content: flex-end; }
+@media (max-width: 600px) {
+  .parish-events-manage > .glass-card__header { align-items: flex-start; gap: 10px; }
+  .parish-events-list__view { flex-direction: column; align-items: stretch; gap: 16px; }
+  .parish-events-list__actions { justify-content: flex-end; }
+  .parish-events-list__edit .event-form { grid-template-columns: minmax(0, 1fr); }
+  html[data-design="heaven"] #root .parish-events-manage h4 { font-size: 18px !important; }
+}
+.pc-confirm-message{margin:0;line-height:1.6;overflow-wrap:anywhere}
+.pc-confirm-actions{gap:10px;flex-wrap:wrap}
+.pc-confirm-actions button{min-height:42px;padding:10px 18px;border-radius:6px;font-size:14px;cursor:pointer}
+.pc-confirm-actions .secondary-action{border:1px solid #c3d1e5;background:#fff;color:#243b5d}
+.pc-confirm-actions .pc-danger{border:1px solid #b42334;background:#b42334;color:#fff}
+.pc-confirm-actions .pc-danger:hover{background:#921b2a}

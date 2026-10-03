@@ -12,8 +12,11 @@ _gg_extract.txt
 
 .vercel
 .design-browser/
+.design-browser-dark/
+.design-browser-navigation/
 .design-preview/
 .design-browser-new/
+.codex/
 site-build/
 .admin-browser/
 .admin-browser-check/

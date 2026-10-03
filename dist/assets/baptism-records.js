@@ -95,15 +95,45 @@ function groupMarriageRecords(rows) {
 }
 
 function downloadRecord(record, config) {
-  const headers = config.fields;
-  const escape = value => `"${String(value ?? '').replace(/"/g, '""')}"`;
-  const csv = [headers.map(key => escape(LABELS[key] || key)).join(','), ...[record].map(item => headers.map(key => escape(item[key])).join(','))].join('\r\n');
-  const url = URL.createObjectURL(new Blob(['\ufeff', csv], { type: 'text/csv;charset=utf-8' }));
+  const escape = value => String(value ?? '').replace(/[&<>"']/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[character]);
+  const recordedAt = record.created_at ? new Date(record.created_at) : null;
+  const formattedRecordedAt = recordedAt && !Number.isNaN(recordedAt.getTime())
+    ? new Intl.DateTimeFormat('en-PH', { dateStyle: 'long', timeStyle: 'short' }).format(recordedAt)
+    : '';
+  const rows = config.fields.map(key => {
+    const value = key === 'created_at' ? formattedRecordedAt : record[key];
+    return `<tr><th>${escape(LABELS[key] || key)}</th><td>${escape(value) || '<span class="empty">Not recorded</span>'}</td></tr>`;
+  }).join('');
+  const title = escape(config.title.replace(/ records$/i, ' record'));
+  const name = escape(record[config.name] || record.name_family_name || 'Sacramental Record');
+  const workbookHtml = `<!doctype html><html><head><meta charset="utf-8"><style>
+    body{font-family:Calibri,Arial,sans-serif;color:#202b3c;margin:28px}
+    .sheet{width:100%;border-collapse:collapse}
+    .brand{background:#17365d;color:#fff;font-size:11pt;font-weight:bold;letter-spacing:1px;padding:10px 12px}
+    .title{background:#dbe5f1;color:#17365d;font-size:18pt;font-weight:bold;padding:14px 12px}
+    .person{background:#f2f6fa;color:#34445a;font-size:12pt;font-weight:bold;padding:10px 12px;border-bottom:2px solid #7890ad}
+    .section{background:#e9eff6;color:#17365d;font-size:10pt;font-weight:bold;padding:8px 10px;text-transform:uppercase}
+    th,td{border:1px solid #c8d2df;padding:7px 10px;text-align:left;vertical-align:top}
+    th{width:28%;background:#f7f9fc;color:#43536a;font-weight:bold}
+    td{width:72%;mso-number-format:"\\@"}
+    .empty{color:#8994a3;font-style:italic}
+    .footer{color:#66758a;font-size:9pt;padding:10px 0;border:0}
+  </style></head><body><table class="sheet">
+    <tr><td class="brand" colspan="2">DIOCESE OF CALBAYOG · PARISH RECORDS</td></tr>
+    <tr><td class="title" colspan="2">${title}</td></tr>
+    <tr><td class="person" colspan="2">${name}</td></tr>
+    <tr><td class="section" colspan="2">Record details</td></tr>
+    ${rows}
+    <tr><td class="footer" colspan="2">Official parish record · Generated ${escape(new Intl.DateTimeFormat('en-PH', { dateStyle: 'long' }).format(new Date()))}</td></tr>
+  </table></body></html>`;
+  const url = URL.createObjectURL(new Blob(['\ufeff', workbookHtml], { type: 'application/vnd.ms-excel;charset=utf-8' }));
   const anchor = document.createElement('a');
   anchor.href = url;
-  anchor.download = `${config.title.toLowerCase().replace(/\s+/g, '-')}-${record.id || 'record'}.csv`;
+  anchor.download = `${config.title.toLowerCase().replace(/\s+/g, '-')}-${record.id || 'record'}.xls`;
+  document.body.appendChild(anchor);
   anchor.click();
-  URL.revokeObjectURL(url);
+  anchor.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
 function downloadRecords(records, config) {

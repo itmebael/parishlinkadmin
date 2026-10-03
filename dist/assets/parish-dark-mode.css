@@ -1,0 +1,108 @@
+/* Loaded after the parish layout so fixed light surfaces respect the theme. */
+html[data-design="heaven"][data-theme="dark"]:has(.dashboard-frame--parish) {
+  --heaven-bg: #151819;
+  --heaven-surface: #202526;
+  --heaven-soft: #2c3335;
+  --heaven-ink: #edf2f4;
+  --heaven-muted: #b1bec5;
+  --heaven-line: #414b50;
+  --heaven-accent: #99c3ff;
+  --heaven-gold: #edce82;
+  color-scheme: dark;
+}
+@media screen {
+  html[data-design="heaven"][data-theme="dark"] #root .dashboard-frame.dashboard-frame--parish {
+    --portal-blue: #99c3ff;
+    --portal-ink: var(--heaven-ink);
+    --portal-muted: var(--heaven-muted);
+  }
+  html[data-design="heaven"][data-theme="dark"] #root .dashboard-frame.dashboard-frame--parish :is(.nav-item__icon,.user-topbar-menu,.profile-pill__role,.profile-pill__chevron) { color:var(--heaven-muted) !important; }
+  html[data-design="heaven"][data-theme="dark"] body,
+  html[data-design="heaven"][data-theme="dark"] #root .scene:has(.dashboard-frame--parish),
+  html[data-design="heaven"][data-theme="dark"] #root .dashboard-frame.dashboard-frame--parish,
+  html[data-design="heaven"][data-theme="dark"] #root .dashboard-frame.dashboard-frame--parish > .workspace {
+    background: var(--heaven-bg) !important;
+    color: var(--heaven-ink) !important;
+  }
+  html[data-design="heaven"][data-theme="dark"] #root .dashboard-frame.dashboard-frame--parish :is(
+    .sidebar, .sidebar__close, .workspace__topbar, .glass-card, .page-card, .parish-dashboard-card,
+    .parish-kpi-card, .parish-reports-card, .parish-report-metric, .announcement-card,
+    .announcement-hero__eyebrow, .announcement-hero__stats, .announcement-hero__stats > *, .announcement-hero__chips > span,
+    .topbar-menu, .profile-menu, .notification-menu, .profile-pill, .icon-button,
+    .baptism-records__modal, .archive-record-row, .pc-day, .pc-icon, .plh-stat,
+    .plh-refresh, .diocese-calendar__day, .calendar-day, .empty-state,
+    .table-wrap, .data-table-wrap, table, td, .logout-confirm__dialog, .auth-notice, .plh-empty,
+    .dio-user-mgmt, .dio-user-mgmt__head, .dio-user-mgmt__stat, .dio-user-mgmt__row
+  ) {
+    background: var(--heaven-surface) !important;
+    color: var(--heaven-ink) !important;
+    border-color: var(--heaven-line) !important;
+    box-shadow: none !important;
+  }
+  html[data-design="heaven"][data-theme="dark"] #root .dashboard-frame.dashboard-frame--parish :is(
+    h1,h2,h3,h4,h5,h6,strong,b,dd,.plh-head__title,.plh-stat__value,.plh-item__top,
+    .settings-item,.profile-pill__name,.notification-item__title
+  ) { color: var(--heaven-ink) !important; }
+  html[data-design="heaven"][data-theme="dark"] #root .dashboard-frame.dashboard-frame--parish .overview-shell:not(:has(.parish-portal__hero)) .screen-title-block h3 { color: var(--heaven-ink) !important; }
+  html[data-design="heaven"][data-theme="dark"] #root .dashboard-frame.dashboard-frame--parish :is(
+    p,small,label,dt,label > span,.login-field > span,.baptism-records__type > span,
+    .screen-subtitle,.workspace__subtitle,.workspace__eyebrow,
+    .sidebar__caption,.parish-events-list__meta span,.pc-weekdays span,
+    .plh-head__subtitle,.plh-stat__label,.plh-item__bottom,
+    .parish-report-metric__label,.parish-reports-card__footer,.settings-item > div > span
+  ) { color: var(--heaven-muted) !important; }
+  html[data-design="heaven"][data-theme="dark"] #root .dashboard-frame.dashboard-frame--parish .overview-shell:not(:has(.parish-portal__hero)) .screen-subtitle { color: var(--heaven-muted) !important; }
+  html[data-design="heaven"][data-theme="dark"] #root .dashboard-frame.dashboard-frame--parish .screen-title-block::before { color:var(--heaven-accent) !important; }
+  html[data-design="heaven"][data-theme="dark"] #root .dashboard-frame.dashboard-frame--parish :is(
+    .sidebar__brand,.sidebar__footer,.nav-item--logout,.settings-item,
+    .glass-card__header,.plh-wrap,.plh-item,.parish-events-list__item,
+    .parish-reports-card__header,.parish-reports-card__footer,.announcement-card__foot
+  ) { border-color: var(--heaven-line) !important; }
+  html[data-design="heaven"][data-theme="dark"] #root .dashboard-frame.dashboard-frame--parish .nav-item {
+    color: var(--heaven-muted) !important;
+  }
+  html[data-design="heaven"][data-theme="dark"] #root .dashboard-frame.dashboard-frame--parish .nav-item:is(:hover,.is-active),
+  html[data-design="heaven"][data-theme="dark"] #root .dashboard-frame.dashboard-frame--parish button.baptism-records__row:hover {
+    color: #b9d7ff !important;
+    background: #263d56 !important;
+  }
+  html[data-design="heaven"][data-theme="dark"] #root .dashboard-frame.dashboard-frame--parish :is(
+    input:not([type="checkbox"]):not([type="radio"]),select,textarea,.secondary-action,
+    .filter-button,.mini-dots,.announcement-card__edit-btn,.announcement-card__delete
+  ) {
+    background: var(--heaven-soft) !important;
+    color: var(--heaven-ink) !important;
+    border-color: var(--heaven-line) !important;
+  }
+  html[data-design="heaven"][data-theme="dark"] #root .dashboard-frame.dashboard-frame--parish :is(input,textarea)::placeholder { color: var(--heaven-muted) !important; }
+  html[data-design="heaven"][data-theme="dark"] #root .dashboard-frame.dashboard-frame--parish :is(
+    th,.pc-day--blank,.parish-reports-filters,.plh-item__badge,
+    .baptism-records__record--expandable[open] > summary,
+    .baptism-records__filtered-preview-list article:nth-child(even)
+  ) { background: var(--heaven-soft) !important; color: var(--heaven-muted) !important; }
+  html[data-design="heaven"][data-theme="dark"] #root .dashboard-frame.dashboard-frame--parish .parish-portal__hero.glass-card.page-card {
+    background-image: linear-gradient(90deg, #202526fa 0%, #202526dc 38%, #20252630 100%), url('/HEADER.png?v=20261003-1') !important;
+  }
+  html[data-design="heaven"][data-theme="dark"] #root .dashboard-frame.dashboard-frame--parish .parish-portal__hero :is(p,span) { color: var(--heaven-ink) !important; }
+  html[data-design="heaven"][data-theme="dark"] #root .dashboard-frame.dashboard-frame--parish :is(.pc-grid,.pc-day,.diocese-calendar__day) { border-color: var(--heaven-line) !important; }
+  html[data-design="heaven"][data-theme="dark"] #root .dashboard-frame.dashboard-frame--parish :is(.pc-event,.status-badge--green) { background:#234538 !important; color:#b5e8c9 !important; }
+  html[data-design="heaven"][data-theme="dark"] #root .dashboard-frame.dashboard-frame--parish :is(.pc-event--gold,.status-badge--gold) { background:#493e26 !important; color:#f4d58d !important; }
+  html[data-design="heaven"][data-theme="dark"] #root .dashboard-frame.dashboard-frame--parish .status-badge--blue { background:#293d55 !important; color:#bad9ff !important; }
+  html[data-design="heaven"][data-theme="dark"] #root .dashboard-frame.dashboard-frame--parish :is(.status-badge--red,.plh-item--live) { background:#482b31 !important; color:#ffc0c6 !important; }
+  html[data-design="heaven"][data-theme="dark"] #root .dashboard-frame.dashboard-frame--parish :is(.primary-action,.login-submit) { color:#fff !important; }
+  /* Printed documents retain their paper appearance in the preview. */
+  html[data-design="heaven"][data-theme="dark"] #root .dashboard-frame.dashboard-frame--parish .certificate-template,
+  html[data-design="heaven"][data-theme="dark"] #root .dashboard-frame.dashboard-frame--parish .certificate-template * { color:#182020 !important; }
+  /* Calendar dialogs are mounted outside the dashboard frame. */
+  html[data-design="heaven"][data-theme="dark"] :is(.pc-dialog,.pc-dialog__header,.pc-dialog__body,.pc-confirm-dialog) {
+    background:var(--heaven-surface) !important;
+    color:var(--heaven-ink) !important;
+    border-color:var(--heaven-line) !important;
+  }
+  html[data-design="heaven"][data-theme="dark"] .pc-dialog :is(h4,strong,label,p,small) { color:var(--heaven-ink) !important; }
+  html[data-design="heaven"][data-theme="dark"] .pc-dialog :is(input,select,textarea,.secondary-action,.pc-icon) {
+    background:var(--heaven-soft) !important;
+    color:var(--heaven-ink) !important;
+    border-color:var(--heaven-line) !important;
+  }
+}

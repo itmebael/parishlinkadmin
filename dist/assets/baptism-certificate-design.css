@@ -1,0 +1,120 @@
+/* Paper colors are independent of workspace appearance. */
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish .certificate-template[data-certificate-type="baptism"] {
+  position:relative; isolation:isolate; width:min(100%,700px); aspect-ratio:210 / 297;
+  min-height:990px; padding:44px 46px 40px; gap:24px;
+  display:grid; grid-template-rows:auto auto 1fr auto; align-content:stretch;
+  border:1px solid #c8d2cd; border-top:6px solid #345c4b; border-radius:0;
+  background:#fff !important; color:#27362f !important;
+  box-shadow:0 8px 28px #00000014;
+}
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish .certificate-template[data-certificate-type="baptism"] * {
+  font-family:Georgia,'Times New Roman',serif !important; color:#27362f !important;
+  text-shadow:none !important; letter-spacing:0 !important;
+}
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="baptism"]::after { content:''; position:absolute; inset:14px; border:1px solid #dce3df; border-radius:0; pointer-events:none; }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="baptism"] .certificate-template__watermark { opacity:.035; filter:grayscale(1); width:48%; height:40%; top:35%; }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="baptism"] .certificate-template__masthead { grid-template-columns:60px minmax(0,1fr); gap:18px; padding-bottom:22px; border-bottom:1px solid #c8d2cd; }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="baptism"] .certificate-template__masthead > img { width:60px; height:76px; border:0; border-radius:0; padding:0; background:transparent; }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="baptism"] .certificate-template__parish { gap:6px; text-align:center; }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="baptism"] .certificate-template__parish span { font-size:11px; font-weight:400; }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="baptism"] .certificate-template__parish strong { font-size:18px; font-weight:700; line-height:1.35; text-transform:uppercase; overflow-wrap:normal; }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="baptism"] .certificate-template__parish small { font-size:11px; font-weight:400; line-height:1.4; }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="baptism"] .certificate-template__title { padding:8px 0 20px; border-bottom:1px solid #c8d2cd; }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="baptism"] .certificate-template__title span { font-size:15px; font-weight:400; line-height:1.6; text-transform:uppercase; }
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish .certificate-template[data-certificate-type="baptism"] .certificate-template__title h3 { margin:4px 0 0; font-size:36px !important; line-height:1.2; font-weight:700 !important; }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="baptism"] .certificate-template__body { display:grid; align-content:start; gap:17px; font-size:14px; font-weight:400; line-height:1.5; }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="baptism"] .certificate-template__body > p { text-align:center; font-size:12px; font-weight:400; margin:0 0 6px; }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="baptism"] :is(.certificate-line,.certificate-register-line) { gap:10px; align-items:end; }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="baptism"] :is(.certificate-line,.certificate-register-line) span { white-space:normal; font-size:13px; font-weight:400; line-height:1.4; }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="baptism"] :is(.certificate-line,.certificate-register-line) strong { min-height:25px; padding:0 4px 4px; font-size:15px; font-weight:600; line-height:1.4; border-bottom:1px solid #a2b1a9; }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="baptism"] .certificate-line:first-of-type { grid-template-columns:1fr; text-align:center; margin-bottom:8px; }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="baptism"] .certificate-line:first-of-type strong { min-height:35px; font-size:23px; }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="baptism"] .certificate-line--split { grid-template-columns:auto minmax(0,1fr) auto minmax(0,.65fr); }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="baptism"] .certificate-line--baptized { grid-template-columns:auto minmax(0,1fr); }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="baptism"] .certificate-line--baptized em { grid-column:1 / -1; grid-row:1; padding:8px 0; font-size:14px; font-style:italic; font-weight:400; text-align:center; white-space:normal; }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="baptism"] .certificate-blank-lines { gap:15px; margin:0; }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="baptism"] .certificate-blank-lines i { border-color:#c8d2cd; }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="baptism"] .certificate-register-line { grid-template-columns:minmax(0,2.2fr) minmax(0,.6fr) auto minmax(0,.5fr) auto minmax(0,.5fr); margin-top:8px; }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="baptism"] .certificate-line--short { grid-template-columns:90px minmax(0,1fr); }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="baptism"] .certificate-line--short::after { content:none; }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="baptism"] .certificate-template__footer { padding-top:20px; padding-bottom:0; margin-top:12px; border-top:1px solid #c8d2cd; gap:24px; }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="baptism"] .certificate-template__seal { min-height:90px; padding:0; align-content:end; text-align:center; }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="baptism"] .certificate-template__seal span { font-size:12px; font-weight:400; }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="baptism"] .certificate-template__signature strong { min-width:0; width:100%; font-size:14px; line-height:1.5; padding-top:8px; border-color:#a2b1a9; }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="baptism"] .certificate-template__signature > span { font-size:12px; font-weight:400; margin-top:4px; }
+@media screen and (max-width:600px) {
+  html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish .certificate-template[data-certificate-type="baptism"] { min-height:0; aspect-ratio:auto; padding:28px 24px; gap:20px; }
+  html[data-design="heaven"] #root .certificate-template[data-certificate-type="baptism"] .certificate-template__masthead { grid-template-columns:1fr; justify-items:center; }
+  html[data-design="heaven"] #root .certificate-template[data-certificate-type="baptism"] .certificate-template__parish strong { font-size:15px; }
+  html[data-design="heaven"] #root .certificate-template[data-certificate-type="baptism"] .certificate-line--split { grid-template-columns:auto minmax(0,1fr); }
+  html[data-design="heaven"] #root .certificate-template[data-certificate-type="baptism"] .certificate-register-line { grid-template-columns:minmax(0,1fr) minmax(0,1fr); }
+  html[data-design="heaven"] #root .certificate-template[data-certificate-type="baptism"] .certificate-template__footer { grid-template-columns:1fr; }
+}
+@media print {
+  html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish .certificate-print-copy .certificate-template[data-certificate-type="baptism"] {
+    width:194mm !important; height:283mm !important; min-height:0 !important; padding:12mm 13mm !important;
+    gap:6mm !important; border-top:1.5mm solid #345c4b !important; border-radius:0 !important; background:#fff !important; box-shadow:none !important;
+  }
+}
+
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish .certificate-template[data-certificate-type="marriage"] {
+  position:relative; isolation:isolate; width:min(100%,540px); aspect-ratio:8.5 / 14;
+  min-height:880px; padding:22px 26px 32px; gap:10px;
+  display:grid; grid-template-rows:auto auto 1fr auto; align-content:stretch;
+  border:2px dashed #9fc2df; border-top:2px dashed #9fc2df; border-radius:0;
+  background:#fff !important; color:#111 !important;
+  box-shadow:0 18px 42px rgba(18,50,84,.14);
+}
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish .certificate-template[data-certificate-type="marriage"] * {
+  font-family:"Times New Roman", Georgia, serif !important; color:#111 !important;
+  text-shadow:none !important; letter-spacing:0 !important;
+}
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="marriage"]::after { content:none; }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="marriage"] .certificate-template__watermark { opacity:.025; filter:grayscale(1); width:46%; height:34%; top:34%; }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="marriage"] .certificate-template__masthead { grid-template-columns:58px minmax(0,1fr) 58px; gap:10px; align-items:start; }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="marriage"] .certificate-template__masthead::after { content:""; width:54px; height:54px; justify-self:end; border-radius:6px; background:rgba(18,50,84,.06); }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="marriage"] .certificate-template__masthead > img { width:54px; height:54px; padding:0; border:0; border-radius:0; background:transparent; }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="marriage"] .certificate-template__parish { gap:1px; text-align:center; }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="marriage"] .certificate-template__parish span { font-size:11px; font-style:italic; font-weight:700; text-transform:none; }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="marriage"] .certificate-template__parish strong { font-size:15px; font-weight:900; line-height:1.05; text-transform:uppercase; overflow-wrap:normal; }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="marriage"] .certificate-template__parish small { font-size:10px; font-weight:700; line-height:1.05; }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="marriage"] .certificate-template__title { padding:12px 0 6px; border:0; background:transparent; }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="marriage"] .certificate-template__title span { display:none; }
+html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish .certificate-template[data-certificate-type="marriage"] .certificate-template__title h3 { margin:0; font-size:22px !important; font-weight:900 !important; line-height:1; text-transform:uppercase; color:#111 !important; }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="marriage"] .certificate-template__body { display:grid; align-content:start; gap:8px; font-size:12px; font-weight:900; line-height:1.12; text-transform:uppercase; }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="marriage"] .certificate-template__body > p { margin:0; text-align:center; font-size:13px; font-weight:900; line-height:1.1; }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="marriage"] .certificate-marriage-and { padding:2px 0; }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="marriage"] .certificate-marriage-sacrament { max-width:310px; justify-self:center; padding:0 0 2px; }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="marriage"] :is(.certificate-line,.certificate-register-line) { gap:5px; align-items:end; }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="marriage"] :is(.certificate-line,.certificate-register-line) span { font-size:12px; font-weight:900; line-height:1; white-space:nowrap; }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="marriage"] :is(.certificate-line,.certificate-register-line) strong { min-height:17px; padding:0 4px 1px; border-bottom:2px solid #111; font-size:13px; font-weight:900; line-height:1.05; }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="marriage"] .certificate-line--marriage-name { grid-template-columns:minmax(0,1fr) auto minmax(56px,.18fr); }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="marriage"] .certificate-line--marriage-name > span:first-child { display:none; }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="marriage"] .certificate-line--marriage-wide { grid-template-columns:auto minmax(0,1fr); }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="marriage"] .certificate-blank-lines { gap:11px; margin:0 0 2px; }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="marriage"] .certificate-blank-lines i { border-bottom:2px solid #111; }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="marriage"] .certificate-register-line--marriage { grid-template-columns:auto minmax(60px,.7fr) auto minmax(48px,.45fr) auto minmax(48px,.45fr) auto minmax(70px,.7fr); margin-top:2px; }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="marriage"] .certificate-template__footer { grid-template-columns:1fr 1.15fr; gap:18px; align-self:end; margin-top:10px; padding-bottom:0; border-top:0; }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="marriage"] .certificate-template__seal { min-height:88px; padding-left:16px; align-content:end; text-align:left; }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="marriage"] .certificate-template__seal span { font-size:12px; font-style:normal; font-weight:900; text-transform:none; }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="marriage"] .certificate-template__signature { min-height:92px; }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="marriage"] .certificate-template__esignature { width:150px; height:44px; margin:0 auto -8px; object-fit:contain; }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="marriage"] .certificate-template__signature strong { min-width:min(210px,100%); padding-top:5px; border-top:0; font-size:12px; font-weight:900; line-height:1.05; text-transform:uppercase; }
+html[data-design="heaven"] #root .certificate-template[data-certificate-type="marriage"] .certificate-template__signature > span { margin-top:2px; font-size:10px; font-weight:900; line-height:1.05; }
+
+@media screen and (max-width:600px) {
+  html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish .certificate-template[data-certificate-type="marriage"] { width:100%; min-height:760px; padding:20px 18px 28px; }
+  html[data-design="heaven"] #root .certificate-template[data-certificate-type="marriage"] .certificate-template__masthead { grid-template-columns:48px minmax(0,1fr) 48px; }
+  html[data-design="heaven"] #root .certificate-template[data-certificate-type="marriage"] .certificate-template__masthead > img { width:46px; height:46px; }
+  html[data-design="heaven"] #root .certificate-template[data-certificate-type="marriage"] .certificate-template__parish strong { font-size:12px; }
+  html[data-design="heaven"] #root .certificate-template[data-certificate-type="marriage"] .certificate-register-line--marriage { grid-template-columns:auto minmax(0,1fr); }
+  html[data-design="heaven"] #root .certificate-template[data-certificate-type="marriage"] .certificate-template__footer { grid-template-columns:1fr; }
+}
+
+@media print {
+  html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish .certificate-print-copy .certificate-template[data-certificate-type="marriage"] {
+    width:8.5in !important; min-height:14in !important; padding:.38in .48in .46in !important;
+    border:2px dashed #9fc2df !important; background:#fff !important; box-shadow:none !important;
+    page-break-inside:avoid;
+  }
+}

@@ -3,6 +3,7 @@
   function mount() {
     document.querySelectorAll('input[type="password"]').forEach(input => {
       if (input.closest('.password-eye-field')) return;
+      if (input.closest('.heaven-password')) return;
       const wrap = document.createElement('span'); wrap.className = 'password-eye-field';
       input.parentNode.insertBefore(wrap, input); wrap.append(input);
       const button = document.createElement('button'); button.type = 'button'; button.className = 'password-eye-toggle';

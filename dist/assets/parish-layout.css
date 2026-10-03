@@ -8,14 +8,12 @@ html[data-design="heaven"] #root .scene {
 
 html[data-design="heaven"] #root .scene {
   overflow-x: clip;
-  background:
-    linear-gradient(rgba(246, 244, 237, 0.72), rgba(246, 244, 237, 0.78)),
-    url("./backgrounddioses-Dcg_TSm2.jpg") center / cover fixed !important;
+  background: #eaf4ff !important;
 }
 
-/* Keep the admin sign-in canvas completely white, including over global scene art. */
+/* Use a pale blue canvas behind the admin sign-in. */
 html[data-design="heaven"] #root .scene.scene--login {
-  background: #fff !important;
+  background: #eaf4ff !important;
   background-image: none !important;
 }
 html[data-design="heaven"] #root .scene.scene--login > .scene__watermark,
@@ -202,7 +200,7 @@ html[data-design="heaven"] #root .dashboard-frame--parish .parish-portal__hero {
   padding: 28px 32px !important;
   overflow: hidden;
   color: #173a78 !important;
-  background: linear-gradient(90deg, rgba(233, 243, 255, .98) 0%, rgba(233, 243, 255, .9) 38%, rgba(233, 243, 255, .06) 72%), url('/HEADER.png?v=20260927-1') right center / cover no-repeat !important;
+  background: linear-gradient(90deg, rgba(233, 243, 255, .98) 0%, rgba(233, 243, 255, .9) 38%, rgba(233, 243, 255, .06) 72%), url('/HEADER.png?v=20261003-1') right center / cover no-repeat !important;
 }
 html[data-design="heaven"] #root .dashboard-frame--parish .overview-shell__header {
   display: none !important;
@@ -260,6 +258,10 @@ html[data-design="heaven"] #root .overview-shell:not(.overview-shell--dashboard)
 /* Give the sign-in layout a consistent desktop footprint and a clean mobile stack. */
 html[data-design="heaven"] #root .scene.scene--login .login-shell {
   width: min(1120px, 100%);
+  max-height: 100%;
+}
+html[data-design="heaven"] #root .scene > .scene__watermark {
+  display: none !important;
 }
 html[data-design="heaven"] #root .scene.scene--login .login-panel {
   width: 100%;
@@ -272,6 +274,7 @@ html[data-design="heaven"] #root .scene.scene--login .login-panel {
 }
 html[data-design="heaven"] #root .scene.scene--login .login-grid {
   width: 100%;
+  max-height: calc(100dvh - 48px);
   grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr) !important;
   gap: 0;
   padding: 8px;
@@ -285,7 +288,7 @@ html[data-design="heaven"] #root .scene.scene--login .login-grid > .login-card {
   padding: clamp(24px, 3vw, 42px) !important;
 }
 html[data-design="heaven"] #root .scene.scene--login .login-card--intro {
-  min-height: clamp(500px, 76dvh, 680px) !important;
+  min-height: min(620px, calc(100dvh - 48px)) !important;
   justify-content: center !important;
   border-radius: 18px;
 }
@@ -487,17 +490,77 @@ html[data-design="heaven"] #root .baptism-records__modal .baptism-records__field
 html[data-design="heaven"] #root .baptism-records__filtered-preview-list {
   display: grid;
   gap: 0;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+  border: 1px solid var(--heaven-line);
+  border-radius: 6px;
+}
+html[data-design="heaven"] #root .baptism-records__filtered-preview {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  overflow: hidden;
+  border-radius: 8px;
+}
+html[data-design="heaven"] #root .baptism-records__filtered-preview .baptism-records__modal-header {
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+html[data-design="heaven"] #root .baptism-records__filtered-preview .baptism-records__modal-header h3 {
+  font-size: 1.15rem;
+  line-height: 1.4;
+}
+html[data-design="heaven"] #root .baptism-records__filtered-preview .baptism-records__modal-header p {
+  margin: 4px 0 0;
+  color: var(--heaven-muted);
+  font-size: .85rem;
 }
 html[data-design="heaven"] #root .baptism-records__filtered-preview-list article {
   display: grid;
-  grid-template-columns: minmax(140px, 1fr) repeat(2, minmax(120px, 1fr));
-  gap: 8px 16px;
-  padding: 12px 0;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px 20px;
+  padding: 14px 16px;
   border-top: 1px solid var(--heaven-line);
+}
+html[data-design="heaven"] #root .baptism-records__filtered-preview-list article:first-child {
+  border-top: 0;
+}
+html[data-design="heaven"] #root .baptism-records__filtered-preview-list article:nth-child(even) {
+  background: #f5f8fa;
+}
+html[data-design="heaven"] #root .baptism-records__filtered-preview-list strong {
+  grid-column: 1 / -1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: var(--heaven-ink);
+  font-size: .95rem;
+  line-height: 1.4;
+  margin-bottom: 2px;
 }
 html[data-design="heaven"] #root .baptism-records__filtered-preview-list span {
   color: var(--heaven-muted);
   overflow-wrap: anywhere;
+  min-width: 0;
+  font-size: .82rem;
+  line-height: 1.5;
+}
+html[data-design="heaven"] #root .baptism-records__filtered-preview-list > p {
+  padding: 20px 16px;
+  margin: 0;
+  color: var(--heaven-muted);
+}
+@media (max-width: 480px) {
+  html[data-design="heaven"] #root .baptism-records__filtered-preview {
+    padding: 16px;
+    max-height: calc(100dvh - 40px);
+  }
+  html[data-design="heaven"] #root .baptism-records__filtered-preview-list article {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 12px;
+  }
 }
 @media (max-width: 1100px) {
   html[data-design="heaven"] #root .baptism-records__search {
@@ -823,7 +886,7 @@ html[data-design="heaven"] #root .overview-shell--parish-reports .parish-report-
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish .parish-portal__hero.glass-card.page-card {
-  background-image: linear-gradient(90deg, rgba(233, 243, 255, .98) 0%, rgba(233, 243, 255, .9) 38%, rgba(233, 243, 255, .06) 72%), url('/HEADER.png?v=20260928-2') !important;
+  background-image: linear-gradient(90deg, rgba(233, 243, 255, .98) 0%, rgba(233, 243, 255, .9) 38%, rgba(233, 243, 255, .06) 72%), url('/HEADER.png?v=20261003-1') !important;
   background-position: right center !important;
   background-size: cover !important;
   background-repeat: no-repeat !important;
@@ -897,3 +960,127 @@ html[data-design="heaven"] #root button.announcement-card__delete:hover {
     margin-right: 0;
   }
 }
+
+/* User portal layout and typography aligned with the clean parish calendar reference. */
+html[data-design="heaven"] #root .dashboard-frame--user {
+  grid-template-columns: 252px minmax(0, 1fr) !important;
+  background: #f5f8fc !important;
+  color: #223c60 !important;
+  font-family: "DM Sans", "Segoe UI", sans-serif !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--user > .sidebar {
+  padding: 20px 13px 16px !important;
+  gap: 12px !important;
+  background: #fff !important;
+  border-right: 1px solid #e5ebf5 !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--user .sidebar__brand {
+  min-height: 58px !important;
+  padding: 0 8px 16px !important;
+  border-bottom: 1px solid #edf1f7 !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--user .sidebar__nav { gap: 5px !important; }
+html[data-design="heaven"] #root .dashboard-frame--user .nav-item {
+  min-height: 48px !important;
+  padding: 0 13px !important;
+  gap: 12px !important;
+  border-radius: 16px !important;
+  color: #526b8f !important;
+  font: 600 .88rem/1.2 "DM Sans", "Segoe UI", sans-serif !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--user .nav-item:is(:hover, .is-active) {
+  color: #1262bd !important;
+  background: #e3efff !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--user > .workspace {
+  min-width: 0;
+  padding: 0 !important;
+  gap: 0 !important;
+  background: #f5f8fc !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--user .workspace__topbar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  min-height: 76px !important;
+  padding: 0 32px !important;
+  border-bottom: 1px solid #e6edf6 !important;
+  background: #fff !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--user .workspace__topbar h2,
+html[data-design="heaven"] #root .dashboard-frame--user .overview-shell h3,
+html[data-design="heaven"] #root .dashboard-frame--user .overview-shell h4 {
+  color: #254d7d !important;
+  font-family: "DM Sans", "Segoe UI", sans-serif !important;
+  font-weight: 750 !important;
+  letter-spacing: -.04em !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--user .overview-shell {
+  padding: 40px 36px 48px !important;
+  gap: 24px !important;
+  background: transparent !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--user .overview-shell__header {
+  padding: 0 0 2px !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--user .screen-title-block h3 {
+  margin: 0 0 12px !important;
+  color: #254d7d !important;
+  font-size: clamp(2rem, 2.8vw, 2.65rem) !important;
+  line-height: 1.12 !important;
+  letter-spacing: -.055em !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--user .screen-subtitle {
+  color: #526b8f !important;
+  font-size: 1rem !important;
+  line-height: 1.55 !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--user :is(.glass-card, .page-card, .user-home-card) {
+  border: 1px solid #d9e4f2 !important;
+  border-radius: 17px !important;
+  background: #fff !important;
+  box-shadow: 0 2px 6px rgba(38, 76, 123, .025) !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--user .user-appointment-layout {
+  grid-template-columns: minmax(0, 1.55fr) minmax(320px, .65fr) !important;
+  gap: 20px !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--user .user-appointment-calendar,
+html[data-design="heaven"] #root .dashboard-frame--user .user-appointment-side {
+  padding: 20px !important;
+  border: 1px solid #d9e4f2 !important;
+  border-radius: 17px !important;
+  background: #fff !important;
+  box-shadow: none !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--user .user-appointment-side {
+  gap: 18px !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--user .user-appointment-side__section + .user-appointment-side__section {
+  padding-top: 18px !important;
+  border-top: 1px solid #e5ebf5 !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--user .user-appointment-calendar .diocese-calendar__toolbar {
+  margin-bottom: 18px !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--user .user-appointment-day {
+  min-height: 72px !important;
+  border-radius: 11px !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--user .primary-action {
+  border-radius: 10px !important;
+  background: #216bb7 !important;
+  border-color: #216bb7 !important;
+  font-weight: 650 !important;
+}
+@media (max-width: 900px) {
+  html[data-design="heaven"] #root .dashboard-frame--user { grid-template-columns: minmax(0, 1fr) !important; }
+  html[data-design="heaven"] #root .dashboard-frame--user .overview-shell { padding: 28px 20px 36px !important; }
+  html[data-design="heaven"] #root .dashboard-frame--user .workspace__topbar { padding: 0 20px !important; }
+  html[data-design="heaven"] #root .dashboard-frame--user .user-appointment-layout { grid-template-columns: minmax(0, 1fr) !important; }
+  html[data-design="heaven"] #root .dashboard-frame--user .user-appointment-side { padding: 18px !important; }
+}
+html[data-design="heaven"] #root .overview-shell--parish-live-stream > .overview-shell__header {
+  display: none !important;
+}
+

@@ -1,0 +1,35 @@
+html[data-design="heaven"] #root .overview-shell--parish-bookings .glass-card__header {
+  display:flex; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; gap:16px;
+}
+html[data-design="heaven"] #root .parish-booking-search { display:flex; gap:12px; margin:20px 0 8px; min-width:0; }
+html[data-design="heaven"] #root .parish-booking-search__input { width:100%; min-width:0; min-height:44px; padding:10px 14px; border:1px solid var(--heaven-line); border-radius:6px; background:var(--heaven-surface); color:var(--heaven-ink); }
+html[data-design="heaven"] #root .parish-booking-search__clear { flex:none; border:0; background:transparent; color:var(--heaven-accent); }
+html[data-design="heaven"] #root .parish-booking-list { display:grid; gap:0; }
+html[data-design="heaven"] #root .parish-booking-item.detail-list__item {
+  display:grid; grid-template-columns:minmax(0,1fr); align-items:start; gap:16px;
+  min-width:0; padding:22px 0; border:0; border-bottom:1px solid var(--heaven-line); background:transparent;
+}
+html[data-design="heaven"] #root .parish-booking-item .detail-list__meta { display:flex; flex-direction:column; align-items:flex-start; min-width:0; gap:8px; }
+html[data-design="heaven"] #root .parish-booking-item .detail-list__meta > strong { display:block; font-size:17px; line-height:1.4; color:var(--heaven-ink); }
+html[data-design="heaven"] #root .parish-booking-item .detail-list__meta > :is(span,a) { display:block; max-width:100%; color:var(--heaven-muted); font-size:14px; line-height:1.6; overflow-wrap:anywhere; white-space:normal; }
+html[data-design="heaven"] #root .parish-booking-item .detail-list__meta > a { color:var(--heaven-accent); text-decoration:underline; text-underline-offset:3px; }
+html[data-design="heaven"] #root .parish-booking-actions { display:flex; flex-wrap:wrap; justify-content:flex-start; align-items:center; gap:10px; min-width:0; }
+html[data-design="heaven"] #root .parish-booking-actions > :is(button,a,label) {
+  display:inline-flex; align-items:center; justify-content:center; flex:0 0 auto;
+  min-height:44px; max-width:100%; margin:0; padding:10px 16px; border-radius:6px;
+  font-size:14px; line-height:1.4; white-space:normal; text-align:center; text-decoration:none;
+}
+html[data-design="heaven"] #root .parish-certificate-upload input { width:100%; height:100%; min-height:0; padding:0; }
+html[data-design="heaven"] #root .parish-certificate-upload:focus-within { outline:3px solid #2563eb; outline-offset:3px; }
+html[data-design="heaven"] #root .pab-deleteall-wrap { display:flex; justify-content:flex-end; padding:20px 0 0; margin:0; }
+html[data-design="heaven"] #root .pab-deleteall-btn { min-height:44px; padding:10px 16px; border:1px solid #d69ba3; border-radius:6px; color:#a32d40; background:transparent; font-size:14px; line-height:1.4; white-space:normal; }
+html[data-design="heaven"][data-theme="dark"] #root .pab-deleteall-btn { color:#ffc0c6; border-color:#95616a; }
+html[data-design="heaven"][data-theme="dark"] #root .parish-booking-actions .parish-booking-decline { color:#ffc0c6 !important; border-color:#95616a !important; background:transparent !important; }
+@media(max-width:520px) {
+  html[data-design="heaven"] #root .parish-booking-actions { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); align-items:stretch; }
+  html[data-design="heaven"] #root .parish-booking-actions > :is(button,a,label) { width:100%; padding:10px; }
+  html[data-design="heaven"] #root .parish-booking-confirm,
+  html[data-design="heaven"] #root .parish-certificate-upload { grid-column:1 / -1; }
+  html[data-design="heaven"] #root .pab-deleteall-wrap { justify-content:stretch; }
+  html[data-design="heaven"] #root .pab-deleteall-btn { width:100%; }
+}
