@@ -10649,9 +10649,6 @@ html[data-design="heaven"] #root .scene--login .login-waves { position: absolute
 html[data-design="heaven"] #root .scene--login .login-card--form h3 { font: 700 34px/1.18 Inter, Arial, sans-serif !important; letter-spacing: 0; }
 html[data-design="heaven"] #root .scene--login .login-card--form > .login-eyebrow { font-size: 12px !important; letter-spacing: 0; margin: 0 0 10px; }
 html[data-design="heaven"] #root .scene--login .login-card--form > .login-subtitle { order: 0; text-transform: none; font-size: 15px !important; font-weight: 400 !important; letter-spacing: 0; line-height: 1.6; color: #6f87ae !important; margin: 0 0 30px; }
-html[data-design="heaven"] #root .scene--login .login-agreement { display: flex; align-items: flex-start; gap: 12px; padding: 16px 15px; border: 1px solid #dbe9fc; border-radius: 14px; font-size: 13px; line-height: 1.7; margin-bottom: 18px; color: #10234d; }
-html[data-design="heaven"] #root .scene--login .login-agreement input { width: 19px; height: 19px; flex-shrink: 0; margin: 3px 0 0; accent-color: #1479f3; }
-html[data-design="heaven"] #root .scene--login .login-agreement a { color: #0761e8; text-decoration: underline; text-underline-offset: 2px; }
 html[data-design="heaven"] #root .scene--login .login-card--form > p[role="alert"] { order: 0; text-transform: none; letter-spacing: 0; }
 html[data-design="heaven"] #root .scene--login :is(button,a,input):focus-visible { outline: 3px solid #3493ff; outline-offset: 3px; }
 @media (max-width: 760px) {

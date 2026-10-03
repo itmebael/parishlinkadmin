@@ -1203,7 +1203,6 @@
         function isLoginRegisterForm(form) {
           if (!form || form.getAttribute(ENHANCED) === "1") return false;
           if (!form.closest(".scene--login")) return false;
-          if (form.querySelector(".login-agreement")) return false;
           var heading = (form.querySelector("h3")?.textContent || "").toLowerCase();
           if (heading.includes("sign in as admin")) return false;
           var submit = form.querySelector('button[type="submit"], .login-submit');
