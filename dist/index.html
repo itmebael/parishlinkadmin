@@ -1203,6 +1203,7 @@
         function isLoginRegisterForm(form) {
           if (!form || form.getAttribute(ENHANCED) === "1") return false;
           if (!form.closest(".scene--login")) return false;
+          if (form.querySelector(".login-agreement")) return false;
           var submit = form.querySelector('button[type="submit"], .login-submit');
           if (!submit) return false;
           var text = (submit.textContent || "").toLowerCase();
