@@ -7809,9 +7809,9 @@
           if (grid.dataset.communityLoginReady !== "true") {
             grid.dataset.communityLoginReady = "true";
             intro.classList.remove("login-card--intro--chancery");
-            intro.innerHTML = '<img class="parishlink-login-logo" src="/logo.png" alt="ParishLink">';
+            intro.innerHTML = '<img class="parishlink-login-logo" src="/logologin.png" alt="ParishLink">';
           } else if (!intro.querySelector(".parishlink-login-logo")) {
-            intro.innerHTML = '<img class="parishlink-login-logo" src="/logo.png" alt="ParishLink">';
+            intro.innerHTML = '<img class="parishlink-login-logo" src="/logologin.png" alt="ParishLink">';
           }
           if (!intro.querySelector(".parishlink-login-wave")) {
             intro.insertAdjacentHTML("beforeend", '<div class="parishlink-login-wave parishlink-login-wave--side" aria-hidden="true"></div><div class="parishlink-login-wave parishlink-login-wave--back" aria-hidden="true"></div>');
@@ -7953,6 +7953,9 @@
         new MutationObserver(schedule).observe(document.documentElement, { childList: true, subtree: true });
       })();
     </script>
+    <link rel="stylesheet" href="/dist/assets/login-ui-reference.css?v=20261008-5">
+    <link rel="stylesheet" href="/dist/assets/admin-dashboard-reference.css?v=20261008-4">
+    <link rel="stylesheet" href="/dist/assets/parish-publishing.css?v=20261008-1">
   </body>
   <script src="/dist/assets/chapel-information-menu.js?v=20260921-1"></script>
   <script src="/dist/assets/parish-settings-toggles.js?v=20261003-working-settings"></script>

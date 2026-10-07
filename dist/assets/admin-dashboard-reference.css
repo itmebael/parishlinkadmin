@@ -1,0 +1,228 @@
+/* Adapt the supplied member presentation to the existing admin dashboard. */
+@media screen {
+  html[data-design="heaven"] body #root#root#root#root#root .dashboard-frame--parish {
+    --sidebar-width: clamp(260px, 19.1vw, 340px);
+    --heaven-bg: #eaf3ff;
+    --heaven-surface: #fff;
+    --heaven-soft: #edf5ff;
+    --heaven-ink: #081b68;
+    --heaven-muted: #5374a6;
+    --heaven-line: #d4e3f8;
+    --heaven-accent: #0878ec;
+    --portal-ink: #081b68;
+    --portal-muted: #5374a6;
+    min-width: 0;
+    background: var(--heaven-bg) !important;
+
+    & > .sidebar {
+      box-sizing: border-box;
+      padding: 24px 16px 18px !important;
+      border: 0 !important;
+      background: linear-gradient(180deg, #054bd4 0%, #0068ef 55%, #0783f5f2 68%, #0783f500 88%), url('/church.jpg') center bottom / auto 42% no-repeat, #0868e6 !important;
+      box-shadow: none !important;
+      height: 100dvh !important;
+      min-height: 0 !important;
+      gap: 10px !important;
+      overflow: hidden !important;
+      scrollbar-width: thin;
+      scrollbar-color: #ffffff66 transparent;
+    }
+    & .sidebar__brand {
+      flex: 0 0 auto !important;
+      min-height: 0 !important;
+      height: auto !important;
+      flex-direction: row !important;
+      align-items: center !important;
+      gap: 12px !important;
+      padding: 0 4px 18px !important;
+      border: 0 !important;
+    }
+    & .sidebar__brand > div:last-child { min-width: 0; flex: 1 1 auto; height: auto !important; }
+    & .sidebar__brand :is(h1, .sidebar__caption, .sidebar__eyebrow) { display: block !important; visibility: visible !important; }
+    & .sidebar__brand h1 {
+      font-size: clamp(20px, 1.7vw, 27px) !important;
+      color: #fff !important;
+      letter-spacing: 0 !important;
+    }
+    & :is(.sidebar__caption, .sidebar__eyebrow, .sidebar__footer) { color: #e7f3ff !important; }
+    & .sidebar__crest {
+      width: 64px !important; height: 64px !important; min-width: 64px !important;
+      min-height: 64px !important; max-width: 64px !important; max-height: 64px !important;
+      flex: 0 0 64px !important; padding: 6px !important;
+      background: #fff !important; border-radius: 14px !important;
+    }
+    & .sidebar__crest img { width: 100% !important; height: 100% !important; object-fit: contain !important; filter: none !important; }
+    & .sidebar__nav {
+      display: grid !important;
+      grid-template-columns: minmax(0, 1fr) !important;
+      grid-template-rows: none !important;
+      grid-auto-rows: minmax(26px, 1fr) !important;
+      align-content: stretch !important;
+      gap: clamp(2px, .6dvh, 6px) !important;
+      padding: 2px 0 !important;
+      min-height: 0 !important;
+      max-height: 620px !important;
+      flex: 1 1 0 !important;
+      overflow-y: auto !important;
+      overflow-x: hidden;
+      scrollbar-width: thin;
+      scrollbar-color: #ffffff66 transparent;
+    }
+    & .nav-item {
+      flex: 0 0 auto;
+      min-height: 0 !important;
+      height: auto !important;
+      padding: 4px 14px !important;
+      gap: 12px !important;
+      border: 1px solid transparent !important;
+      border-radius: 18px !important;
+      background: transparent !important;
+      color: #fff !important;
+      font-size: 14px !important;
+      font-weight: 500 !important;
+    }
+    & .nav-item :is(span, svg) { color: inherit !important; }
+    & .nav-item > span:not(.nav-item__icon) { font-size: clamp(12px, min(1.1vw, 2.5dvh), 20px) !important; line-height: 1.2 !important; min-width: 0; overflow-wrap: anywhere; -webkit-text-stroke: 1px #004cc9; paint-order: stroke fill; }
+    & .nav-item__icon { flex: 0 0 22px; width: 22px; height: 22px; }
+    & .nav-item:hover { background: #ffffff22 !important; }
+    & .nav-item.is-active {
+      background: linear-gradient(110deg, #00b2fa, #20b9f2) !important;
+      border-color: #65d6ff !important;
+      box-shadow: 0 4px 14px #003a8c26 !important;
+    }
+    & .nav-item--logout { flex: 0 0 auto !important; min-height: 42px !important; padding: 10px 18px !important; background: #004cc9 !important; border-color: #ffffff60 !important; margin-top: auto !important; }
+    & .sidebar__footer { flex: 0 0 auto; border-color: #ffffff40 !important; background: transparent !important; }
+    & > .workspace { min-width: 0; padding: 0 !important; background: #eaf3ff !important; }
+    & .workspace__topbar--parish {
+      min-height: 72px !important;
+      background: #eaf3ff !important;
+      border: 0 !important;
+      padding-inline: 24px !important;
+    }
+    & .overview-shell { background: #eaf3ff !important; border: 0 !important; box-shadow: none !important; }
+    & .overview-shell:has(.parish-portal) { max-width: none !important; min-height: 0 !important; height: auto !important; align-content: start !important; padding: 10px 24px 24px !important; }
+    & .parish-portal {
+      display: grid !important;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr) !important;
+      gap: 18px !important;
+      align-items: stretch;
+      align-content: start !important;
+      grid-template-rows: auto auto auto !important;
+      grid-auto-rows: auto !important;
+      min-height: 0 !important;
+      height: auto !important;
+    }
+    & .parish-portal > * { min-width: 0; margin: 0; }
+    & .parish-portal > .page-card {
+      min-height: 0 !important;
+      padding: 22px !important;
+      border: 1px solid #d7cbff !important;
+      border-radius: 24px !important;
+      background: linear-gradient(120deg, #fcfaff, #f2eeff) !important;
+      box-shadow: 0 4px 0 #d9e5f5, 0 12px 28px #245db50a !important;
+    }
+    & .parish-portal > .parish-portal__hero {
+      grid-column: 1 / -1 !important;
+      position: relative;
+      padding: 0 !important;
+      min-height: 0;
+      border-color: #c4e4ff !important;
+      background: #fff !important;
+      overflow: hidden;
+      gap: 0 !important;
+    }
+    & .parish-portal__hero::before {
+      content: "" !important;
+      display: block !important;
+      position: relative !important;
+      inset: auto !important;
+      width: 100% !important;
+      height: auto !important;
+      aspect-ratio: 16 / 3;
+      background: url('/HEADER.png') center / 100% 100% no-repeat !important;
+      border-radius: inherit;
+      opacity: 1 !important;
+      transform: none !important;
+      pointer-events: none;
+    }
+    /* The banner contains the same parish heading; retain its accessible text. */
+    & .parish-portal__hero-head {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      padding: 0 !important;
+      margin: -1px !important;
+      overflow: hidden !important;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+    & .parish-portal__hero > :is(.parish-portal__chips, .parish-portal__actions, .auth-notice) {
+      margin: 12px 20px !important;
+    }
+    & .parish-portal__hero h4 { font-size: clamp(24px, 2.5vw, 36px) !important; color: #081b68 !important; margin: 8px 0 !important; }
+    & .parish-portal__lead { color: #5374a6 !important; }
+    & .parish-portal__chips { gap: 8px !important; }
+    & .parish-chip { min-width: 0; overflow-wrap: anywhere; border: 1px solid #cbdff7 !important; background: #ffffffb3 !important; border-radius: 12px !important; color: #385d91 !important; }
+    & .parish-portal__actions { gap: 10px !important; }
+    & .parish-portal > .page-card:has(.metric-card__stats) { grid-column: 1 / -1 !important; background: transparent !important; border: 0 !important; padding: 0 !important; box-shadow: none !important; }
+    & .metric-card__stats { display: grid !important; grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 16px !important; }
+    & .metric-card__stats > div {
+      min-width: 0; min-height: 120px; padding: 22px !important;
+      border: 1px solid #c4e4ff !important; border-radius: 23px !important;
+      background: linear-gradient(120deg, #f8fcff, #f0f8ff) !important;
+      box-shadow: 0 4px 8px #245db510 !important;
+    }
+    & .metric-card__stats > div:nth-child(2) { border-color: #e1ccff !important; background: linear-gradient(120deg, #fcfaff, #f6f0ff) !important; }
+    & .metric-card__stats > div:nth-child(3) { border-color: #ffdac0 !important; background: linear-gradient(120deg, #fff9f0, #fff3e6) !important; }
+    & .metric-card__stats span { font-size: 14px !important; color: #5374a6 !important; }
+    & .metric-card__stats strong { display: block; font-size: 32px !important; font-weight: 800 !important; color: #0087ff !important; }
+    & .metric-card__stats > div:nth-child(2) strong { color: #8524fa !important; }
+    & .metric-card__stats > div:nth-child(3) strong { color: #db520d !important; }
+    & .parish-portal > .page-card:has(.parish-agenda) { background: linear-gradient(120deg, #f4fff9, #ecfaf5) !important; border-color: #cfeee0 !important; }
+    & .parish-portal .glass-card__header { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 16px; }
+    & .parish-portal .glass-card__header h4 { font-size: clamp(18px, 1.6vw, 24px) !important; color: #081b68 !important; }
+    & .parish-portal :is(.queue-list, .parish-agenda) { display: grid; gap: 12px; }
+    & .parish-portal :is(.queue-list__item, .parish-agenda__item) {
+      min-width: 0; padding: 16px !important; border: 1px solid #ffffff !important;
+      border-radius: 16px !important; background: #ffffffce !important;
+    }
+    & .queue-list__avatar { background: #8524fa !important; color: #fff !important; border-radius: 13px !important; }
+    & .parish-agenda__time { color: #008c66 !important; background: #e1f8ee !important; border-radius: 12px !important; }
+    & .parish-portal .empty-state { background: #ffffff80 !important; border: 1px dashed #c9d8ee !important; border-radius: 18px !important; padding: 22px !important; min-height: 145px; }
+    & .parish-portal :is(button, a):focus-visible { outline: 3px solid #0878ec !important; outline-offset: 3px; }
+  }
+}
+body:has(.dashboard-frame--parish) #sf-toggle {
+  left: auto !important;
+  right: 16px !important;
+  bottom: 12px !important;
+  padding: 4px 6px !important;
+  box-shadow: 0 4px 16px #193e7518 !important;
+}
+@media screen and (min-width: 1041px) {
+  html[data-design="heaven"] body #root#root#root#root#root .dashboard-frame--parish {
+    grid-template-columns: var(--sidebar-width) minmax(0, 1fr) !important;
+    & > .sidebar { width: var(--sidebar-width) !important; min-width: 0 !important; max-width: none !important; }
+  }
+}
+/* Preserve the admin drawer's existing 1040px navigation breakpoint. */
+@media screen and (max-width: 1040px) {
+  html[data-design="heaven"] body #root#root#root#root#root .dashboard-frame--parish {
+    display: block !important;
+    & > .sidebar { width: min(300px, calc(100vw - 32px)) !important; min-width: 0 !important; max-width: none !important; }
+    & .parish-portal { grid-template-columns: minmax(0, 1fr) !important; }
+    & .overview-shell:has(.parish-portal) { padding: 12px 16px 24px !important; }
+  }
+}
+@media screen and (max-width: 680px) {
+  html[data-design="heaven"] body #root#root#root#root#root .dashboard-frame--parish {
+    & .workspace__topbar--parish { padding-inline: 12px !important; }
+    & .parish-portal { gap: 16px !important; }
+    & .metric-card__stats { grid-template-columns: minmax(0, 1fr) !important; gap: 12px !important; }
+    & .metric-card__stats > div { min-height: 96px; padding: 18px !important; }
+    & .parish-portal > .page-card { padding: 20px !important; border-radius: 20px !important; }
+    & .parish-portal > .parish-portal__hero { padding: 0 !important; }
+    & .parish-portal__hero-head { flex-wrap: wrap; }
+    & .parish-portal :is(.queue-list__item, .parish-agenda__item) { flex-wrap: wrap; overflow-wrap: anywhere; }
+  }
+}
