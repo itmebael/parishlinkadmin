@@ -1,0 +1,100 @@
+/* Share the sign-in panel's artwork and palette with admin navigation. */
+@media screen {
+  html[data-design="heaven"] body #root#root#root#root#root .dashboard-frame--parish {
+    & > .sidebar {
+      background:
+        linear-gradient(125deg, rgba(16, 31, 77, .89), rgba(36, 73, 183, .88) 65%, rgba(41, 73, 180, .91)),
+        url('/church.jpg') center / cover no-repeat !important;
+      border-right: 1px solid #ffffff26 !important;
+      box-shadow: inset 0 0 0 1px #ffffff18 !important;
+      padding: 24px 16px 18px !important;
+    }
+    & .sidebar__brand {
+      padding: 0 4px 20px !important;
+      border-bottom: 1px solid #ffffff26 !important;
+    }
+    & .sidebar__crest {
+      background: #fff !important;
+      border: 1px solid #dbe6fc !important;
+      border-radius: 12px !important;
+      box-shadow: 0 3px 12px #101f4d26 !important;
+      padding: 6px !important;
+    }
+    & .sidebar__crest img {
+      display: block !important;
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: contain !important;
+      opacity: 1 !important;
+      filter: none !important;
+    }
+    & .sidebar__brand h1 { color: #fff !important; }
+    & .sidebar :is(.sidebar__caption, .sidebar__eyebrow) { color: #dbe6fc !important; }
+    & .sidebar__nav {
+      padding: 10px 0 !important;
+      gap: 5px !important;
+      grid-auto-rows: minmax(40px, auto) !important;
+      align-content: start !important;
+    }
+    & :is(.sidebar, .sidebar__nav) {
+      scrollbar-width: none !important;
+      -ms-overflow-style: none;
+    }
+    & :is(.sidebar, .sidebar__nav)::-webkit-scrollbar {
+      display: none !important;
+      width: 0 !important;
+      height: 0 !important;
+    }
+    & .nav-item {
+      min-height: 40px !important;
+      padding: 10px 14px !important;
+      border-radius: 7px !important;
+      color: #e8effd !important;
+      background: transparent !important;
+      border: 1px solid transparent !important;
+      transform: none !important;
+      box-shadow: none !important;
+      transition: background .15s ease, border-color .15s ease;
+    }
+    & .nav-item > span:not(.nav-item__icon) {
+      font-size: 14px !important;
+      line-height: 1.35 !important;
+      -webkit-text-stroke: 0 !important;
+    }
+    & .nav-item:hover { background: #ffffff18 !important; }
+    & .nav-item.is-active {
+      color: #fff !important;
+      background: #6b9cde !important;
+      border-color: #a9c9f1 !important;
+      font-weight: 650 !important;
+    }
+    & .sidebar :is(.nav-item, .sidebar__close):focus-visible {
+      outline: 2px solid #dbe6fc !important;
+      outline-offset: -3px;
+    }
+    &:has(.workspace.dio-user-mgmt-open) .nav-item.is-active:not(.dio-user-mgmt-nav) {
+      color: #e8effd !important;
+      background: transparent !important;
+      border-color: transparent !important;
+      font-weight: 500 !important;
+    }
+    &:has(.workspace.dio-user-mgmt-open) .nav-item.is-active:not(.dio-user-mgmt-nav):hover {
+      background: #ffffff18 !important;
+    }
+    & .nav-item--logout {
+      background: #ffffff0d !important;
+      border-color: #ffffff40 !important;
+    }
+    & .nav-item--logout:hover { background: #ffffff20 !important; }
+    & .sidebar__footer {
+      border-top: 1px solid #ffffff26 !important;
+      background: transparent !important;
+    }
+    & .sidebar__footer :is(p, span, strong) { color: #dbe6fc !important; }
+    & .sidebar__close {
+      color: #fff !important;
+      background: #ffffff18 !important;
+      border-color: #ffffff40 !important;
+    }
+  }
+}

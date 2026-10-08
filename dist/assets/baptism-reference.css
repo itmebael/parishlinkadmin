@@ -1,0 +1,68 @@
+/* The certificate stays white in both workspace themes. */
+html[data-design="heaven"] body #root#root#root#root#root .dashboard-frame--parish .certificate-baptism-reference {
+  width: min(100%, 700px) !important;
+  min-height: 990px !important;
+  aspect-ratio: 210 / 297;
+  padding: 24px 26px 30px !important;
+  gap: 26px !important;
+  grid-template-rows: auto auto 1fr auto !important;
+  border: 2px dashed #b8cde2 !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+  color: #111 !important;
+  &::before, &::after { display: none !important; }
+  & * { color: #111 !important; font-family: Arial, sans-serif !important; text-shadow: none !important; letter-spacing: 0 !important; }
+  & .certificate-template__masthead { grid-template-columns: 70px minmax(0, 1fr) 70px !important; gap: 12px !important; align-items: start; padding: 0 0 20px !important; border-bottom: 1px dashed #bbb !important; }
+  & .certificate-template__masthead > img { width: 70px !important; height: 80px !important; padding: 0 !important; border: 0 !important; background: transparent !important; object-fit: contain; }
+  & .certificate-template__masthead > img:last-child { height: 70px !important; object-fit: cover; border-radius: 6px !important; }
+  & .certificate-template__parish { gap: 4px !important; text-align: center; }
+  & .certificate-template__parish span { font: bold 14px 'Times New Roman', serif !important; text-transform: none !important; }
+  & .certificate-template__parish strong { font-size: 17px !important; font-weight: 800 !important; line-height: 1.2; text-transform: uppercase; }
+  & .certificate-template__parish small { font: bold 13px 'Times New Roman', serif !important; line-height: 1.4; }
+  & .certificate-template__title { padding: 10px 0 0 !important; border: 0 !important; text-align: center; }
+  & .certificate-template__title h3 { margin: 0 !important; font: bold 26px 'Times New Roman', serif !important; text-transform: uppercase; }
+  & .certificate-template__body { gap: 14px !important; align-content: start; font-size: 14px !important; line-height: 1.25; min-height: 0; }
+  & .certificate-template__body > p { margin: 0 !important; font-size: 14px !important; font-weight: 700 !important; text-align: center; }
+  & .certificate-template__body .certificate-baptism-intro { font-size: 18px !important; margin-bottom: 10px !important; }
+  & .certificate-line { display: grid; grid-template-columns: auto minmax(0, 1fr) !important; align-items: end; gap: 6px !important; margin: 0 !important; text-align: left !important; }
+  & .certificate-line span, & .certificate-register-line span { font-size: 14px !important; font-weight: 700 !important; white-space: normal; line-height: 1.2; }
+  & .certificate-line strong, & .certificate-register-line strong { min-width: 0; min-height: 22px !important; padding: 0 4px 2px !important; border-bottom: 1px dashed #111 !important; font-size: 15px !important; font-weight: 600 !important; line-height: 1.3; overflow-wrap: anywhere; }
+  & .certificate-line--baptism-name { grid-template-columns: minmax(0, 1fr) !important; margin-bottom: 8px !important; }
+  & .certificate-line--baptism-name strong { font-size: 20px !important; text-align: center; min-height: 30px !important; }
+  & .certificate-baptism-rite { max-width: 470px; justify-self: center; padding: 8px 12px !important; }
+  & .certificate-line--baptism-register { margin-top: 18px !important; }
+  & .certificate-register-line--baptism { grid-template-columns: auto minmax(0, .7fr) auto minmax(0, .7fr) auto minmax(0, 1.4fr) !important; gap: 4px !important; margin: -10px 0 0 !important; }
+  & .certificate-template__footer { grid-template-columns: 1fr 1.25fr !important; border: 0 !important; margin: 0 !important; padding: 12px 0 0 !important; gap: 16px !important; align-items: center; }
+  & .certificate-template__seal { min-height: 100px !important; padding: 0 20px !important; text-align: left !important; align-content: center; }
+  & .certificate-template__seal span { font-size: 13px !important; font-weight: 700 !important; }
+  & .certificate-baptism-signatures { display: grid; gap: 38px; }
+  & .certificate-template__signature { min-width: 0; min-height: 42px !important; text-align: center; }
+  & .certificate-template__signature strong { width: 100%; min-width: 0 !important; border: 0 !important; padding-top: 0 !important; font-size: 14px !important; font-weight: 700 !important; text-transform: uppercase; line-height: 1.3; }
+  & .certificate-template__signature > span { margin-top: 2px !important; font-size: 12px !important; font-weight: 700 !important; text-transform: uppercase; }
+  & .certificate-template__esignature { width: 140px; height: 42px; object-fit: contain; }
+}
+@media screen and (max-width: 600px) {
+  html[data-design="heaven"] body #root#root#root#root#root .dashboard-frame--parish .certificate-baptism-reference {
+    min-height: 0 !important; aspect-ratio: auto; padding: 18px 14px !important; gap: 22px !important;
+    & .certificate-template__masthead { grid-template-columns: 40px minmax(0, 1fr) 40px !important; gap: 5px !important; }
+    & .certificate-template__masthead > img { width: 40px !important; height: 50px !important; }
+    & .certificate-template__masthead > img:last-child { height: 40px !important; }
+    & .certificate-template__parish strong { font-size: 11px !important; }
+    & .certificate-template__parish :is(span, small) { font-size: 10px !important; }
+    & .certificate-template__title h3 { font-size: 21px !important; }
+    & .certificate-line--baptism-register { grid-template-columns: minmax(0, 1fr) !important; }
+    & .certificate-register-line--baptism { grid-template-columns: auto minmax(0, 1fr) !important; margin-top: 0 !important; }
+    & .certificate-template__footer { grid-template-columns: minmax(0, .7fr) minmax(0, 1fr) !important; }
+    & .certificate-template__seal { padding: 0 !important; }
+    & .certificate-template__signature strong { font-size: 11px !important; }
+  }
+}
+@media print {
+  html[data-design="heaven"] body #root#root#root#root#root .dashboard-frame--parish .certificate-print-copy .certificate-baptism-reference {
+    width: 194mm !important; height: 283mm !important; min-height: 0 !important;
+    padding: 6mm 7mm 8mm !important; gap: 7mm !important;
+    border: 1px dashed #b8cde2 !important; border-radius: 0 !important;
+    box-shadow: none !important; break-inside: avoid;
+    print-color-adjust: exact; -webkit-print-color-adjust: exact;
+  }
+}
