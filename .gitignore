@@ -23,3 +23,6 @@ site-build/
 .admin-browser-test/
 .admin-browser-test2/
 .admin-theme-browser/
+
+.vercel
+.env*
