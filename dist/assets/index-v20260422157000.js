@@ -1,7 +1,7 @@
 import { ParishPublishing } from "./parish-publishing.js?v=20261008-1";
 import { useResponsiveNavigation } from "./responsive-navigation.js";
 import { loadParishMembers } from "./parish-members.js";
-import { BaptismRecords } from "./baptism-records.js?v=records-filter-preview-download-20260928";
+import { BaptismRecords } from "./baptism-records.js?v=records-table-20261009";
 import { ArchiveSacramentalRecords } from "./archive-sacramental-records.js?v=archive-tables-20260928-marriage";
 (function(){const t=document.createElement("link").relList;if(t&&t.supports&&t.supports("modulepreload"))return;for(const a of document.querySelectorAll('link[rel="modulepreload"]'))s(a);new MutationObserver(a=>{for(const i of a)if(i.type==="childList")for(const l of i.addedNodes)l.tagName==="LINK"&&l.rel==="modulepreload"&&s(l)}).observe(document,{childList:!0,subtree:!0});function r(a){const i={};return a.integrity&&(i.integrity=a.integrity),a.referrerPolicy&&(i.referrerPolicy=a.referrerPolicy),a.crossOrigin==="use-credentials"?i.credentials="include":a.crossOrigin==="anonymous"?i.credentials="omit":i.credentials="same-origin",i}function s(a){if(a.ep)return;a.ep=!0;const i=r(a);fetch(a.href,i)}})();function Lh(e){return e&&e.__esModule&&Object.prototype.hasOwnProperty.call(e,"default")?e.default:e}var Yc={exports:{}},la={},Gc={exports:{}},ae={};/**
  * @license React

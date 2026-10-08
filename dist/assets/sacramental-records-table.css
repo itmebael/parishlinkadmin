@@ -1,0 +1,24 @@
+html[data-design="heaven"] body #root#root#root#root#root .baptism-records {
+  & .baptism-records__table-wrap { width: 100%; overflow-x: auto; border: 1px solid #dbe5f2; border-radius: 12px; background: #fff; }
+  & .baptism-records__table { width: 100%; min-width: 660px; border-collapse: collapse; text-align: left; }
+  & .baptism-records__table-caption { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); }
+  & .baptism-records__table :is(th,td) { padding: 14px 16px !important; border: 0; border-bottom: 1px solid #e6edf6; font-size: 14px !important; line-height: 1.5; color: #435774 !important; vertical-align: middle; }
+  & .baptism-records__table thead th { background: #edf3fc; color: #304866 !important; font-size: 12px !important; font-weight: 700; white-space: nowrap; }
+  & .baptism-records__table tbody th { font-weight: 650; color: #17314b !important; width: 30%; }
+  & .baptism-records__table tbody tr:nth-child(even) { background: #f9fbfe; }
+  & .baptism-records__table tbody tr:hover { background: #edf4ff; }
+  & .baptism-records__table tbody tr:last-child :is(th,td) { border-bottom: 0; }
+  & .baptism-records__table :is(th,td):first-child { width: 56px; color: #71829a !important; }
+  & .baptism-records__table :is(th,td):last-child { width: 110px; text-align: right; }
+  & .baptism-records__table-name { display: block; font-size: 14px !important; }
+  & .baptism-records__table-preview { min-height: 36px !important; padding: 7px 14px !important; border-radius: 7px !important; font-size: 13px !important; white-space: nowrap; }
+  & .baptism-records__table-wrap:focus-visible { outline: 2px solid #356fbb; outline-offset: 2px; }
+}
+html[data-design="heaven"][data-theme="dark"] body #root#root#root#root#root .baptism-records {
+  & .baptism-records__table-wrap { background: #17253a; border-color: #31425a; }
+  & .baptism-records__table :is(th,td) { color: #c5d3e9 !important; border-bottom-color: #31425a; }
+  & .baptism-records__table thead th { background: #22344f; color: #edf3ff !important; }
+  & .baptism-records__table tbody th { color: #edf3ff !important; }
+  & .baptism-records__table tbody tr:nth-child(even) { background: #1a2a40; }
+  & .baptism-records__table tbody tr:hover { background: #28476e; }
+}
