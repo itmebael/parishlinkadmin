@@ -3,6 +3,8 @@ import path from 'node:path';
 
 // dist contains the maintained application, not disposable Vite output.
 const target = path.resolve('site-build');
+// A new module filename prevents previously cached app code from rendering old screens.
+fs.copyFileSync('dist/assets/index-v20260422157000.js', 'dist/assets/admin-services-20261008-2.js');
 fs.mkdirSync(target, { recursive: true });
 fs.copyFileSync('index.html', path.join(target, 'index.html'));
 fs.cpSync('dist', path.join(target, 'dist'), { recursive: true });

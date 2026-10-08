@@ -20,7 +20,7 @@ export default function App() {
     >
       <iframe
         title="DioLink Admin Portal"
-        src="/dist/index.html"
+        src="/dist/index.html?v=20261008-services-screen-2"
         style={{
           width: "100%",
           height: "100%",

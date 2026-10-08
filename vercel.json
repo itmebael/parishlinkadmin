@@ -3,5 +3,15 @@
   "framework": null,
   "installCommand": "echo 'Skipping install — site is prebuilt under dist/'",
   "buildCommand": "node scripts/build-site.mjs",
-  "outputDirectory": "site-build"
+  "outputDirectory": "site-build",
+  "headers": [
+    {
+      "source": "/",
+      "headers": [{ "key": "Cache-Control", "value": "no-cache, must-revalidate" }]
+    },
+    {
+      "source": "/dist/index.html",
+      "headers": [{ "key": "Cache-Control", "value": "no-cache, must-revalidate" }]
+    }
+  ]
 }
