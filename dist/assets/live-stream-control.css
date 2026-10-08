@@ -1,0 +1,38 @@
+@media screen {
+  html[data-design="heaven"] body #root#root#root#root#root .dashboard-frame--parish {
+    & .page-card:has(.live-preview) { padding: 24px !important; gap: 16px !important; border-radius: 18px !important; align-content: start !important; }
+    & .page-card:has(.live-preview) .glass-card__header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0 !important; }
+    & .page-card:has(.live-preview) h4 { margin: 0 !important; font-size: 22px !important; }
+    & .page-card:has(.live-preview) > .page-card__lead { margin: 0 !important; font-size: 14px !important; line-height: 1.6; max-width: 760px; }
+    & .live-button { display: inline-flex !important; align-items: center; gap: 8px; min-height: 36px !important; padding: 7px 14px !important; border: 1px solid #d8e1ec !important; border-radius: 999px !important; background: #f1f5fa !important; color: #56677d !important; box-shadow: none !important; font-size: 13px !important; cursor: default; }
+    & .live-button__dot { width: 9px !important; height: 9px !important; background: #8998ab !important; box-shadow: none !important; border-radius: 50%; }
+    & .live-button.is-live { background: #e2f7ed !important; color: #15754e !important; border-color: #b6e7cf !important; }
+    & .live-button.is-live .live-button__dot { background: #20a66c !important; }
+    & .live-preview { position: relative; display: grid !important; place-items: center; min-height: 240px !important; height: auto !important; max-height: none !important; padding: 24px !important; border: 1px solid #dbe5f2 !important; border-radius: 12px !important; background: #f5f8fd !important; overflow: hidden; }
+    & .live-preview:not(.is-live) .live-preview__video { display: none !important; }
+    & .live-preview__placeholder { position: static !important; display: flex !important; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 16px !important; text-align: center; }
+    & .live-preview__placeholder::before { content: ''; display: block; width: 38px; height: 28px; border: 2px solid #91a5c1; border-radius: 7px; margin-bottom: 8px; background: radial-gradient(circle at center, transparent 6px, #91a5c1 6px, #91a5c1 8px, transparent 8px); }
+    & .live-preview__placeholder strong { display: block !important; font-size: 18px !important; color: #344c6c !important; }
+    & .live-preview__placeholder span { display: block !important; max-width: 360px; font-size: 14px !important; line-height: 1.6; color: #71829a !important; }
+    & .live-preview.is-live { padding: 0 !important; background: #101827 !important; }
+    & .live-preview.is-live .live-preview__video { display: block; width: 100%; height: auto; max-height: 480px; object-fit: contain; }
+    & .live-controls { display: flex !important; justify-content: flex-end; align-items: center; gap: 12px; padding-top: 4px; }
+    & .live-controls button { min-height: 44px !important; padding: 11px 20px !important; font-size: 14px !important; border-radius: 8px !important; }
+    & .live-status-error { padding: 12px 16px; border: 1px solid #f0c5c5; border-radius: 8px; background: #fff4f4; color: #a33333; font-size: 14px; }
+  }
+  html[data-design="heaven"][data-theme="dark"] body #root#root#root#root#root .dashboard-frame--parish {
+    & .live-preview:not(.is-live) { background: #152238 !important; border-color: #31425a !important; }
+    & .live-preview__placeholder strong { color: #e6efff !important; }
+    & .live-preview__placeholder span { color: #afbed3 !important; }
+    & .live-button:not(.is-live) { background: #233249 !important; color: #c3cfe1 !important; border-color: #40516b !important; }
+  }
+  @media (max-width: 600px) {
+    html[data-design="heaven"] body #root#root#root#root#root .dashboard-frame--parish {
+      & .page-card:has(.live-preview) { padding: 16px !important; }
+      & .page-card:has(.live-preview) .glass-card__header { flex-direction: row !important; }
+      & .page-card:has(.live-preview) h4 { font-size: 18px !important; }
+      & .live-preview { padding: 12px !important; min-height: 220px !important; }
+      & .live-controls button { width: 100%; }
+    }
+  }
+}
