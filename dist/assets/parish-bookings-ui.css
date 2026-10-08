@@ -33,3 +33,16 @@ html[data-design="heaven"][data-theme="dark"] #root .parish-booking-actions .par
   html[data-design="heaven"] #root .pab-deleteall-wrap { justify-content:stretch; }
   html[data-design="heaven"] #root .pab-deleteall-btn { width:100%; }
 }
+/* Keep the booking total beside the manual refresh action. */
+.parish-booking-refresh {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.parish-booking-refresh button {
+  min-height: 40px;
+  padding: 8px 16px;
+  font-size: 14px;
+}
