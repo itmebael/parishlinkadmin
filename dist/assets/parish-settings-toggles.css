@@ -9,3 +9,12 @@
 #root .parish-setting-toggle.is-on .parish-setting-toggle__dot::after { transform:translateX(16px); }
 @media (max-width:520px) { #root .settings-item { align-items:flex-start; gap:12px; } #root .parish-setting-toggle { width:120px; padding:0 4px; } }
 @media (prefers-reduced-motion:reduce) { #root .parish-setting-toggle__dot::after { transition:none; } }
+#root .parish-font-setting { padding: 16px; border: 1px solid #d5e1f3; border-radius: 10px; background: #f0f6ff; }
+#root .parish-font-setting [data-font-preview] { margin-top: 6px; color: #344e73; }
+#root .parish-font-controls { display: flex !important; flex-direction: row; align-items: center; gap: 8px; flex-wrap: wrap; }
+#root .parish-font-controls button { min-width: 42px; min-height: 40px; padding: 8px 12px; border: 1px solid #849bbd; border-radius: 8px; background: #fff; color: #2446a8; font-weight: 700; cursor: pointer; }
+#root .parish-font-controls button:disabled { opacity: .4; cursor: not-allowed; }
+#root .parish-font-controls button:focus-visible { outline: 2px solid #7ba4f0; outline-offset: 2px; }
+#root .parish-font-controls output { min-width: 44px; color: #52647b; }
+@media (max-width: 600px) { #root .parish-font-setting { flex-direction: column; align-items: stretch; } }
+#sf-toggle, #root button[aria-label="Switch to dark mode"], #root button[aria-label="Switch to light mode"] { display: none !important; }

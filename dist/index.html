@@ -11,13 +11,13 @@
     <title>ParishLink | Admin Portal</title>
     <!-- User dashboard: light (white) theme only — runs before React reads localStorage. -->
     
-    <script type="module" crossorigin src="/dist/assets/admin-services-20261009-3.js?v=records-table-20261009"></script>
+    <script type="module" crossorigin src="/dist/assets/index-v20260422157000.js?v=booking-details-20261009-5"></script>
     <link rel="stylesheet" href="/dist/assets/parish-calendar-ui.css?v=20261003-confirm-dialog-3">
-    <link rel="stylesheet" href="/dist/assets/broadcast-history.css?v=20261003-full-width">
+    <link rel="stylesheet" href="/dist/assets/broadcast-history.css?v=20261009-table">
     <link rel="stylesheet" crossorigin href="/dist/assets/index-yReDnWMe.css">
-    <link rel="stylesheet" href="/dist/assets/parish-reports.css?v=20260921-1">
+    <link rel="stylesheet" href="/dist/assets/parish-reports.css?v=20261009-header-colors">
     <link rel="stylesheet" href="/dist/assets/chapel-information-menu.css?v=20260921-1">
-    <link rel="stylesheet" href="/dist/assets/parish-settings-toggles.css?v=20261003-working-settings">
+    <link rel="stylesheet" href="/dist/assets/parish-settings-toggles.css?v=20261009-no-dark-floating">
     <link rel="stylesheet" href="/dist/assets/password-eye-toggle.css?v=20260921-1">
     <link rel="stylesheet" href="/dist/assets/sidebar-brand-responsive.css?v=notification-dark-1">
     <link rel="stylesheet" href="/dist/assets/admin-login-redesign.css?v=20261003-2">
@@ -725,6 +725,7 @@
           if (!screen) {
             screen = document.createElement("section");
             screen.className = "dio-user-mgmt-screen";
+            screen.innerHTML = '<header class="dio-user-mgmt__page-header"><span>PARISH SERVICES</span><h3>User Management</h3><p>View and manage members registered to your parish.</p></header>';
             var topbar = workspace.querySelector(".workspace__topbar");
             if (topbar && topbar.parentElement === workspace) workspace.insertBefore(screen, topbar.nextSibling);
             else workspace.appendChild(screen);
@@ -1136,7 +1137,7 @@
     <link rel="stylesheet" href="/dist/assets/user-dashboard-reference.css?v=2">
     <link rel="stylesheet" href="/dist/assets/global-typography.css?v=20260928-1">
     <link rel="stylesheet" href="/dist/assets/parish-dark-mode.css?v=20261003-dashboard-dark-9">
-    <link rel="stylesheet" href="/dist/assets/parish-bookings-ui.css?v=20261008-booking-refresh-1">
+    <link rel="stylesheet" href="/dist/assets/parish-bookings-ui.css?v=20261009-details-popup-3">
     <link rel="stylesheet" href="/dist/assets/baptism-certificate-design.css?v=20261003-marriage-longpaper-1">
   </head>
   <body>
@@ -1540,7 +1541,7 @@
               '</button>' +
             '</div>' +
             '<div class="plh-stats" id="plh-stats"></div>' +
-            '<ul class="plh-list" id="plh-list"><li class="plh-loading"><span class="plh-spinner"></span>Loading history...</li></ul>';
+            '<div class="plh-table-scroll" id="plh-list" aria-live="polite"><div class="plh-loading"><span class="plh-spinner"></span>Loading history...</div></div>';
 
           // Insert right after the live stream card so it flows in the
           // same column on the page.
@@ -1578,34 +1579,26 @@
           var list = wrap.querySelector("#plh-list");
           if (!list) return;
           if (err) {
-            list.innerHTML = '<li><div class="plh-error">Couldn&rsquo;t load history: ' + escHtml(err.message || err) + '</div></li>';
+            list.innerHTML = '<div class="plh-error">Couldn&rsquo;t load history: ' + escHtml(err.message || err) + '</div>';
             return;
           }
           if (!rows || rows.length === 0) {
-            list.innerHTML = '<li><div class="plh-empty"><strong>No broadcasts yet.</strong><div style="margin-top:4px;font-size:12px">Every time you start a broadcast it will be logged here automatically.</div></div></li>';
+            list.innerHTML = '<div class="plh-empty"><strong>No broadcasts yet.</strong><div>Every time you start a broadcast it will be logged here automatically.</div></div>';
             return;
           }
-          var html = "";
+          var html = '<table class="plh-table"><caption class="plh-table-caption">Broadcast history with start and end times, duration, and peak viewers</caption><thead><tr><th scope="col">Parish</th><th scope="col">Started</th><th scope="col">Ended</th><th scope="col">Duration</th><th scope="col">Peak viewers</th><th scope="col">Started by</th><th scope="col">Status</th></tr></thead><tbody>';
           rows.forEach(function (r) {
             var live = !!r.is_live;
-            html +=
-              '<li class="plh-item' + (live ? " plh-item--live" : "") + '">' +
-                '<span class="plh-item__dot" aria-hidden="true"></span>' +
-                '<div class="plh-item__meta">' +
-                  '<div class="plh-item__top">' +
-                    '<span>' + escHtml(r.parish_name || "Parish") + '</span>' +
-                    '<span class="plh-item__badge">' + (live ? "Live now" : escHtml(r.duration_label || "Ended")) + '</span>' +
-                  '</div>' +
-                  '<div class="plh-item__bottom">' +
-                    '<span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>' + escHtml(fmtDate(r.started_at)) + '</span>' +
-                    (r.ended_at ? '<span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6v6H9z"/></svg>' + escHtml(fmtDate(r.ended_at)) + '</span>' : '') +
-                    '<span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Peak ' + Number(r.peak_viewer_count || 0) + '</span>' +
-                    (r.started_by_name ? '<span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>' + escHtml(r.started_by_name) + '</span>' : '') +
-                  '</div>' +
-                '</div>' +
-              '</li>';
+            html += '<tr' + (live ? ' class="plh-table-row--live"' : '') + '>' +
+              '<th scope="row">' + escHtml(r.parish_name || "Parish") + '</th>' +
+              '<td>' + escHtml(fmtDate(r.started_at) || '?') + '</td>' +
+              '<td>' + escHtml(r.ended_at ? fmtDate(r.ended_at) : '?') + '</td>' +
+              '<td><span class="plh-duration">' + escHtml(r.duration_label || (live ? 'In progress' : '?')) + '</span></td>' +
+              '<td><span class="plh-viewers">' + Number(r.peak_viewer_count || 0) + '</span></td>' +
+              '<td>' + escHtml(r.started_by_name || '?') + '</td>' +
+              '<td><span class="plh-status' + (live ? ' plh-status--live' : '') + '">' + (live ? 'Live now' : 'Ended') + '</span></td></tr>';
           });
-          list.innerHTML = html;
+          list.innerHTML = html + '</tbody></table>';
         }
 
         function refresh(forceSpinner) {
@@ -1613,7 +1606,7 @@
           if (!wrap) return;
           if (forceSpinner) {
             var list = wrap.querySelector("#plh-list");
-            if (list) list.innerHTML = '<li class="plh-loading"><span class="plh-spinner"></span>Loading history...</li>';
+            if (list) list.innerHTML = '<div class="plh-loading"><span class="plh-spinner"></span>Loading history...</div>';
           }
           var r = role();
           var pn = parishName();
@@ -2929,8 +2922,11 @@
         }
         function apply(v) {
           document.documentElement.style.setProperty("--sf-scale", String(v));
+          if (window.parishTextSizing) window.parishTextSizing.apply(v);
           updateButtons(v);
+          window.dispatchEvent(new CustomEvent("parish-font-size-change", {detail:v}));
         }
+        window.parishFontSize = {get:load, set:function (v) {v = clamp(v); save(v); apply(v);}, min:MIN, max:MAX, default:DEFAULT, step:STEP};
         function updateButtons(v) {
           var minus = document.getElementById("sf-toggle__minus");
           var reset = document.getElementById("sf-toggle__reset");
@@ -2941,50 +2937,10 @@
           reset.setAttribute("aria-pressed", String(Math.abs(v - DEFAULT) < 0.01));
         }
 
-        function render() {
-          if (document.getElementById("sf-toggle")) return;
-          var v = load();
-          apply(v);
-
-          var pill = document.createElement("div");
-          pill.id = "sf-toggle";
-          pill.setAttribute("role", "group");
-          pill.setAttribute("aria-label", "Adjust text size");
-          pill.innerHTML =
-            '<span id="sf-toggle__label" aria-hidden="true">Text</span>' +
-            '<button type="button" id="sf-toggle__minus" aria-label="Decrease text size" title="Decrease text size">A−</button>' +
-            '<button type="button" id="sf-toggle__reset" aria-label="Reset text size" title="Reset to comfortable default">A</button>' +
-            '<button type="button" id="sf-toggle__plus"  aria-label="Increase text size" title="Increase text size">A+</button>';
-          document.body.appendChild(pill);
-
-          pill.querySelector("#sf-toggle__minus").addEventListener("click", function () {
-            v = clamp(v - STEP); apply(v); save(v);
-          });
-          pill.querySelector("#sf-toggle__reset").addEventListener("click", function () {
-            v = DEFAULT; apply(v); save(v);
-          });
-          pill.querySelector("#sf-toggle__plus").addEventListener("click", function () {
-            v = clamp(v + STEP); apply(v); save(v);
-          });
-        }
-
-        function ensure() {
-          // Don't show the pill on the login splash -- the bypass pill
-          // is there already and we don't want two floating buttons in
-          // the same corner. The login hash is empty or "#login".
-          var onLogin = !window.location.hash || /#login/i.test(window.location.hash);
-          var pill = document.getElementById("sf-toggle");
-          if (onLogin) { if (pill) pill.remove(); return; }
-          if (!pill) render();
-        }
-
         function start() {
-          // Apply saved scale immediately even before the pill exists
-          // so the first paint is already senior-friendly.
+          var pill = document.getElementById("sf-toggle");
+          if (pill) pill.remove();
           apply(load());
-          ensure();
-          window.addEventListener("hashchange", ensure);
-          setInterval(ensure, 2000);
         }
 
         if (document.readyState === "complete" || document.readyState === "interactive") {
@@ -7953,19 +7909,24 @@
         new MutationObserver(schedule).observe(document.documentElement, { childList: true, subtree: true });
       })();
     </script>
-    <link rel="stylesheet" href="/dist/assets/login-ui-reference.css?v=20261008-5">
+    <link rel="stylesheet" href="/dist/assets/login-ui-reference.css?v=20261009-centered-3">
     <link rel="stylesheet" href="/dist/assets/admin-dashboard-reference.css?v=20261008-4">
-    <link rel="stylesheet" href="/dist/assets/parish-publishing.css?v=20261008-1">
+    <link rel="stylesheet" href="/dist/assets/parish-publishing.css?v=20261009-blue-outlines">
     <link rel="stylesheet" href="/dist/assets/sidebar-login-design.css?v=20261008-5">
-    <link rel="stylesheet" href="/dist/assets/parish-inbox.css?v=20261008-1">
+    <link rel="stylesheet" href="/dist/assets/parish-inbox.css?v=20261009-inbox-2">
     <link rel="stylesheet" href="/dist/assets/baptism-reference.css?v=20261008-1">
     <link rel="stylesheet" href="/dist/assets/certificate-preview.css?v=20261008-1">
-    <link rel="stylesheet" href="/dist/assets/parish-services-screen.css?v=20261009-2">
+    <link rel="stylesheet" href="/dist/assets/parish-services-screen.css?v=20261009-blue-outlines">
     <link rel="stylesheet" href="/dist/assets/live-stream-control.css?v=20261009-1">
-    <link rel="stylesheet" href="/dist/assets/sacramental-records-table.css?v=20261009-2">
+    <link rel="stylesheet" href="/dist/assets/sacramental-records-table.css?v=20261009-blue-grid">
+    <link rel="stylesheet" href="/dist/assets/shared-screen-theme.css?v=20261009-records-blue">
+    <link rel="stylesheet" href="/dist/assets/parish-archive-screen.css?v=20261009-blue-outlines">
+    <link rel="stylesheet" href="/dist/assets/parish-user-management.css?v=20261009-header-2">
+    <link rel="stylesheet" href="/dist/assets/dashboard-welcome-hero.css?v=20261009-size-2">
   </body>
   <script src="/dist/assets/chapel-information-menu.js?v=20260921-1"></script>
-  <script src="/dist/assets/parish-settings-toggles.js?v=20261003-working-settings"></script>
+  <script src="/dist/assets/parish-text-sizing.js?v=20261009-1"></script>
+  <script src="/dist/assets/parish-settings-toggles.js?v=20261009-no-dark-floating"></script>
   <script src="/dist/assets/baptism-certificate-design.js?v=20261003-marriage-longpaper-1"></script>
   <script src="/dist/assets/password-eye-toggle.js?v=20260921-1"></script>
 </html>

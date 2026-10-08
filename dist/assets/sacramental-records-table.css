@@ -31,6 +31,22 @@ html[data-design="heaven"] body #root#root#root#root#root .baptism-records {
     & .baptism-records__tools > button { padding: 8px !important; font-size: 12px !important; }
   }
 }
+/* Compact bordered records grid, consistent with the announcement tables. */
+@media screen {
+  html[data-design="heaven"]:not([data-theme="dark"]) body #root#root#root#root#root#root#root .baptism-records {
+    & .baptism-records__table-wrap { border: 0 !important; border-radius: 0 !important; background: #fff !important; }
+    & table.baptism-records__table { border-collapse: collapse !important; border-spacing: 0 !important; border: 1px solid #6d8db8 !important; }
+    & table.baptism-records__table :is(th, td) { padding: 9px 12px !important; border: 1px solid #6d8db8 !important; font-size: 13px !important; line-height: 1.4 !important; vertical-align: middle !important; color: #304c74 !important; }
+    & table.baptism-records__table thead th { background: #dceaff !important; color: #244b80 !important; font-weight: 700 !important; text-transform: none !important; }
+    & table.baptism-records__table tbody :is(th, td) { background: #fff !important; }
+    & table.baptism-records__table tbody tr:nth-child(even) > :is(th, td) { background: #f0f6ff !important; }
+    & table.baptism-records__table tbody tr:hover > :is(th, td) { background: #e3eeff !important; }
+    & table.baptism-records__table tbody tr:last-child :is(th, td) { border-bottom: 1px solid #6d8db8 !important; }
+    & table.baptism-records__table :is(th, td):first-child { width: 48px; text-align: center !important; }
+    & table.baptism-records__table :is(th, td):last-child { text-align: center !important; }
+    & .baptism-records__table-preview { min-height: 32px !important; padding: 5px 12px !important; font-size: 12px !important; background: #e6f0ff !important; color: #2456a6 !important; border: 1px solid #bdd3f2 !important; }
+  }
+}
 html[data-design="heaven"][data-theme="dark"] body #root#root#root#root#root .baptism-records {
   & .baptism-records__table-wrap { background: #17253a; border-color: #31425a; }
   & .baptism-records__table :is(th,td) { color: #c5d3e9 !important; border-bottom-color: #31425a; }

@@ -88,7 +88,7 @@ async function resolveParishId(request, session) {
 }
 
 export function ArchiveSacramentalRecords({ session, React, ui, request, recordType, options, onRecordTypeChange }) {
-  const { useEffect, useState } = React;
+  const { useEffect, useState, useRef } = React;
   const { jsx, jsxs } = ui;
   const isBaptism = recordType === 'Baptism';
   const isConfirmation = recordType === 'Confirmation';
@@ -98,39 +98,20 @@ export function ArchiveSacramentalRecords({ session, React, ui, request, recordT
   const dateFields = isBaptism
     ? ['year_baptism', 'month_batism', 'date_batism']
     : isConfirmation ? ['year_confirm', 'month_confirm', 'date_baptism'] : null;
-  const [rows, setRows] = useState([]);
+  const [savedRecord, setSavedRecord] = useState(null);
+  const dialogRef = useRef(null);
   const [values, setValues] = useState(() => emptyValues(fields));
   const [editingId, setEditingId] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
 
-  async function loadRecords() {
-    setLoading(true);
-    setError('');
-    try {
-      if (session?.role !== 'parish' || !session?.accessToken) throw new Error('Sign in as a parish administrator to manage sacramental records.');
-      const resolvedParishId = await resolveParishId(request, session);
-      const query = new URLSearchParams({ select: '*', parish_id: `eq.${resolvedParishId}`, order: 'created_at.desc.nullslast,id.desc' });
-      const result = await request(`/rest/v1/${table}?${query}`, { accessToken: session.accessToken });
-      if (!Array.isArray(result)) throw new Error('The records response was not a list. Please try again.');
-      setRows(result);
-    } catch (reason) {
-      setRows([]);
-      setError(reason?.message || 'Could not load sacramental records.');
-    } finally {
-      setLoading(false);
-    }
-  }
-
   useEffect(() => {
-    setRows([]);
-    setValues(emptyValues(fields));
-    setEditingId(null);
-    setNotice('');
-    loadRecords();
+    setValues(emptyValues(fields)); setEditingId(null); setNotice(''); setError(''); setSavedRecord(null);
   }, [table, session?.parish_id, session?.parishId, session?.email, session?.accessToken, session?.role]);
+  useEffect(() => {
+    if (savedRecord && dialogRef.current && !dialogRef.current.open) dialogRef.current.showModal();
+  }, [savedRecord]);
 
   function setField(column, value) {
     setValues(current => ({ ...current, [column]: value }));
@@ -153,6 +134,7 @@ export function ArchiveSacramentalRecords({ session, React, ui, request, recordT
     setError('');
     setNotice('');
     try {
+      if (session?.role !== 'parish' || !session?.accessToken) throw new Error('Sign in as a parish administrator before saving records.');
       const resolvedParishId = await resolveParishId(request, session);
       const payload = { parish_id: resolvedParishId };
       for (const [column, , type] of fields) {
@@ -170,10 +152,10 @@ export function ArchiveSacramentalRecords({ session, React, ui, request, recordT
         body: payload,
       });
       const saved = Array.isArray(result) ? result[0] : result;
-      if (!saved) throw new Error('The record could not be saved. Refresh the list and try again.');
+      if (!saved) throw new Error('The record could not be saved. Please try again.');
       resetForm();
       setNotice(editingId ? 'Record updated.' : 'Record saved.');
-      await loadRecords();
+      setSavedRecord(saved);
     } catch (reason) {
       setError(reason?.message || 'Could not save the record.');
     } finally {
@@ -211,35 +193,14 @@ export function ArchiveSacramentalRecords({ session, React, ui, request, recordT
           editingId ? jsx('button', { type: 'button', className: 'secondary-action', onClick: resetForm, disabled: saving, children: 'Cancel' }) : null,
         ] }),
       ] }),
-      jsxs('div', { className: 'glass-card__header archive-sacramental-records__list-header', children: [
-        jsxs('div', { children: [jsx('h4', { children: `${recordType} Records` }), jsx('p', { className: 'page-card__lead', children: 'Saved records for your parish.' })] }),
-        jsx('span', { className: 'status-badge status-badge--blue', children: `${isMarriage ? groupMarriageRecords(rows).length : rows.length} records` }),
-      ] }),
-      loading ? jsx('p', { role: 'status', children: 'Loading records…' }) : rows.length ? jsx('div', { className: 'archive-record-list', children: (isMarriage ? groupMarriageRecords(rows) : rows.map(record => ({ key: record.id, records: [record] }))).map(group => {
-        const record = group.records[0];
-        if (isMarriage) return jsxs('section', { className: 'archive-record-row archive-record-row--marriage', children: [
-          jsxs('div', { className: 'archive-record-row__identity', children: [jsx('span', { className: 'status-badge status-badge--blue', children: 'Marriage' }), jsxs('div', { children: [jsx('strong', { children: `Entry ${record.entry_no ?? '—'}` }), jsx('span', { children: record.marriage_date || 'Date not recorded' })] })] }),
-          jsx('div', { className: 'archive-marriage-parties', children: group.records.map((party, index) => {
-            const role = /groom/i.test(party.party_role || '') ? 'Groom' : /bride/i.test(party.party_role || '') ? 'Bride' : index === 0 ? 'Groom' : index === 1 ? 'Bride' : `Party ${index + 1}`;
-            const partyCells = fields.filter(([column]) => !['entry_no', 'marriage_date', 'party_role', 'name_family_name'].includes(column));
-            if (party.created_at) partyCells.push(['created_at', 'Recorded on', 'text']);
-            return jsxs('article', { className: 'archive-marriage-party', children: [
-              jsxs('header', { children: [jsxs('div', { children: [jsx('span', { children: role }), jsx('strong', { children: party.name_family_name || 'Name not recorded' })] }), jsx('button', { type: 'button', className: 'secondary-action archive-record-edit', onClick: () => edit(party), children: editingId === party.id ? 'Editing…' : 'Edit' })] }),
-              jsx('div', { className: 'archive-record-row__cells', children: partyCells.map(([column, label]) => jsxs('div', { children: [jsx('span', { children: label }), jsx('strong', { children: party[column] == null || party[column] === '' ? 'Not recorded' : String(party[column]) })] }, column)) }),
-            ] }, party.id);
-          }) }),
-        ] }, group.key);
-        const nameColumn = isMarriage ? 'name_family_name' : 'name';
-        const name = record[nameColumn] || 'Name not recorded';
-        const date = isMarriage ? record.marriage_date || 'Not recorded' : parishDate(record, dateFields);
-        const cells = fields.filter(([column]) => column !== nameColumn && column !== 'marriage_date');
-        if (record.created_at) cells.push(['created_at', 'Recorded on', 'text']);
-        return jsxs('section', { className: 'archive-record-row', children: [
-          jsxs('div', { className: 'archive-record-row__identity', children: [jsx('span', { className: 'status-badge status-badge--blue', children: recordType }), jsxs('div', { children: [jsx('strong', { children: name }), jsx('span', { children: date })] })] }),
-          jsx('div', { className: 'archive-record-row__cells', children: cells.map(([column, label]) => jsxs('div', { children: [jsx('span', { children: label }), jsx('strong', { children: record[column] == null || record[column] === '' ? 'Not recorded' : String(record[column]) })] }, column)) }),
-          jsx('div', { className: 'archive-record-row__actions', children: jsx('button', { type: 'button', className: 'secondary-action archive-record-edit', onClick: () => edit(record), children: editingId === record.id ? 'Editing…' : 'Edit' }) }),
-        ] }, record.id);
-      }) }) : jsx('div', { className: 'empty-state', children: [jsx('strong', { children: `No ${recordType.toLowerCase()} records yet` }), jsx('span', { children: 'Saved records for this parish will appear here.' })] }),
-    ] }),
-  ] });
+      savedRecord ? jsxs('dialog', { ref:dialogRef, className:'archive-saved-dialog', 'aria-labelledby':'archive-saved-title', onCancel:() => setSavedRecord(null), onClick:event => {if (event.target === event.currentTarget) {const rect=event.currentTarget.getBoundingClientRect(); if(event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) setSavedRecord(null);}}, children:[
+        jsxs('header', {className:'archive-saved-dialog__header', children:[
+          jsxs('div', {children:[jsx('span', {children:'Record saved successfully'}), jsx('h3', {id:'archive-saved-title', children: savedRecord[isMarriage ? 'name_family_name' : 'name'] || recordType + ' record'})]}),
+          jsx('button', {type:'button', className:'secondary-action', 'aria-label':'Close saved record', onClick:() => setSavedRecord(null), children:'Close'})
+        ]}),
+        jsx('dl', {className:'archive-saved-dialog__details', children:fields.map(([column,label]) => jsxs('div', {children:[jsx('dt', {children:label}), jsx('dd', {children:savedRecord[column] == null || savedRecord[column] === '' ? 'Not recorded' : String(savedRecord[column])})]}, column))}),
+        jsxs('footer', {className:'archive-saved-dialog__footer', children:[jsx('button', {type:'button', className:'secondary-action', onClick:() => {edit(savedRecord); setSavedRecord(null);}, children:'Edit saved record'}), jsx('button', {type:'button', className:'primary-action', onClick:() => setSavedRecord(null), children:'Done'})]})
+      ]}) : null,
+    ]}),
+  ]});
 }

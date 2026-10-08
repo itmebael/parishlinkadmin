@@ -36,3 +36,31 @@ html[data-design="heaven"] #root .plh-wrap {
 @container (max-width: 760px) { #root .plh-item__bottom { grid-template-columns: repeat(2,minmax(0,1fr)); } }
 @container (max-width: 640px) { #root .plh-stats { grid-template-columns: repeat(2,minmax(0,1fr)); } }
 @container (max-width: 360px) { #root .plh-item__bottom { grid-template-columns: minmax(0,1fr); } #root .plh-refresh { padding: 10px; } }
+
+html[data-design="heaven"] #root .plh-wrap {
+  padding: 20px;
+  border: 1px solid #d5e1f3;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(35, 65, 110, .06);
+}
+#root .plh-stat:nth-child(1) { background: #eef4ff; border-color: #cbdcff; border-top: 3px solid #4169e1; }
+#root .plh-stat:nth-child(2) { background: #edfaf7; border-color: #c5ebe1; border-top: 3px solid #159879; }
+#root .plh-stat:nth-child(3) { background: #f5f0ff; border-color: #e1d5fa; border-top: 3px solid #8655cc; }
+#root .plh-stat:nth-child(4) { background: #fff8e9; border-color: #f1dfb6; border-top: 3px solid #d59825; }
+#root .plh-table-scroll { width: 100%; max-height: 460px; overflow: auto; border: 1px solid #d8e2f1; border-radius: 10px; }
+#root .plh-table { width: 100%; min-width: 920px; border-collapse: separate; border-spacing: 0; font-size: 13px; line-height: 1.5; text-align: left; }
+#root .plh-table-caption { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+#root .plh-table thead th { position: sticky; top: 0; z-index: 1; padding: 14px 16px; background: #2446a8; color: #fff; font-weight: 700; white-space: nowrap; }
+#root .plh-table tbody td, #root .plh-table tbody th { padding: 16px; border-bottom: 1px solid #e1e8f3; color: #52647b; white-space: nowrap; }
+#root .plh-table tbody th { color: #193e75; font-weight: 650; }
+#root .plh-table tbody tr:nth-child(even) { background: #f1f6ff; }
+#root .plh-table tbody tr:hover { background: #e7efff; }
+#root .plh-table tbody tr:last-child > * { border-bottom: 0; }
+#root .plh-duration, #root .plh-viewers, #root .plh-status { display: inline-block; padding: 5px 10px; border-radius: 20px; font-size: 12px; font-weight: 650; }
+#root .plh-duration { background: #e9e2ff; color: #6941a5; }
+#root .plh-viewers { background: #e5f0ff; color: #2255a4; min-width: 32px; text-align: center; }
+#root .plh-status { background: #e1f4ec; color: #227254; }
+#root .plh-status--live { background: #ffe1e4; color: #b42334; }
+#root .plh-table .plh-table-row--live { background: #fff5f6; }
+@container (max-width: 640px) { html[data-design="heaven"] #root .plh-wrap { padding: 14px; } }

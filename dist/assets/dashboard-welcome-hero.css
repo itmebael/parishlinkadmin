@@ -1,0 +1,60 @@
+@media screen {
+  html[data-design="heaven"] body #root#root#root#root#root#root#root#root .parish-portal__hero {
+    --welcome-hero-height: clamp(220px, 18vw, 280px);
+    padding: 0 !important;
+    border: 1px solid #d5e1f3 !important;
+    border-radius: 20px !important;
+    background: #fff !important;
+    overflow: hidden;
+    &::before {
+      position: relative !important;
+      display: block !important;
+      inset: auto !important;
+      height: var(--welcome-hero-height) !important;
+      aspect-ratio: auto !important;
+      background: linear-gradient(90deg, #fff 0%, rgba(255,255,255,.94) 24%, rgba(255,255,255,.65) 43%, transparent 65%), url('/HEADER%20copy.png') center / cover no-repeat !important;
+      border-radius: 0 !important;
+    }
+    & .parish-portal__hero-head {
+      box-sizing: border-box;
+      position: absolute !important;
+      inset: 0 auto auto 0 !important;
+      width: 52% !important;
+      height: var(--welcome-hero-height) !important;
+      display: flex !important;
+      align-items: center !important;
+      padding: clamp(24px, 3vw, 48px) !important;
+      margin: 0 !important;
+      overflow: visible !important;
+      clip: auto !important;
+      clip-path: none !important;
+      white-space: normal !important;
+      background: transparent !important;
+    }
+    & .parish-portal__eyebrow {
+      margin: 0 0 14px !important;
+      font-size: 12px !important;
+      font-weight: 600 !important;
+      letter-spacing: .22em !important;
+      color: #527299 !important;
+    }
+    & .parish-portal__hero-head h4 {
+      margin: 0 !important;
+      font-family: Georgia, 'Times New Roman', serif !important;
+      font-size: clamp(26px, 2.8vw, 40px) !important;
+      font-weight: 400 !important;
+      line-height: 1.08 !important;
+      letter-spacing: -.035em !important;
+      color: #193e75 !important;
+      text-wrap: balance;
+    }
+    & .parish-portal__lead { margin: 18px 0 0 !important; font-size: 15px !important; letter-spacing: .08em !important; color: #526f90 !important; }
+    & > :is(.parish-portal__chips, .parish-portal__actions) { margin: 12px 24px !important; }
+    @media (max-width: 680px) {
+      --welcome-hero-height: 240px;
+      &::before { background-position: 65% center !important; }
+      & .parish-portal__hero-head { width: 74% !important; padding: 24px !important; }
+      & .parish-portal__hero-head h4 { font-size: 26px !important; }
+    }
+  }
+}

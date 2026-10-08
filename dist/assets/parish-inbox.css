@@ -1,5 +1,45 @@
 /* Compact inbox with independently scrolling threads and messages. */
 @media screen {
+  html[data-design="heaven"] body #root#root#root#root#root#root#root#root {
+    & .scene:has(.parish-secretary-layout), & .dashboard-frame:has(.parish-secretary-layout) { height: 100dvh !important; min-height: 0 !important; overflow: hidden !important; }
+    & .workspace:has(.parish-secretary-layout) { height: 100dvh !important; min-height: 0 !important; display: grid !important; grid-template-rows: auto minmax(0, 1fr) !important; overflow: hidden !important; }
+    & .overview-shell:has(.parish-secretary-layout) { height: 100% !important; min-height: 0 !important; box-sizing: border-box; display: grid !important; grid-template-rows: auto minmax(0, 1fr) !important; padding: 16px 20px !important; gap: 12px !important; overflow: hidden !important; }
+    & .screen-grid:has(.parish-secretary-layout) { height: 100% !important; min-height: 0 !important; overflow: hidden !important; }
+    & .page-card:has(.parish-secretary-layout) { height: 100% !important; max-height: none !important; min-height: 0 !important; box-sizing: border-box; display: flex !important; flex-direction: column; padding: 16px !important; gap: 14px !important; overflow: hidden !important; }
+    & .page-card:has(.parish-secretary-layout) > .glass-card__header { flex: 0 0 auto; margin: 0 !important; padding: 14px 16px !important; border-radius: 10px !important; }
+    & .page-card:has(.parish-secretary-layout) > .glass-card__header h4 { margin: 0 !important; font-size: 20px !important; }
+    & .page-card:has(.parish-secretary-layout) > .glass-card__header .page-card__lead { margin: 4px 0 0 !important; font-size: 13px !important; color: #e4edff !important; }
+    & .parish-secretary-layout { flex: 1 1 auto; height: auto !important; min-height: 0 !important; display: grid !important; grid-template-columns: minmax(220px, 260px) minmax(0, 1fr) !important; }
+    & .parish-secretary-thread-list { padding: 10px !important; background: #f8faff !important; }
+    & .parish-secretary-thread { text-align: left; padding: 12px !important; gap: 4px !important; }
+    & .parish-secretary-thread.is-active { background: #e7efff !important; border: 1px solid #c4d5f2 !important; border-left: 3px solid #3768bf !important; }
+    & .parish-secretary-thread p { margin: 6px 0 !important; line-height: 1.45 !important; }
+    & .parish-secretary-thread-panel { display: grid !important; grid-template-rows: auto minmax(0, 1fr) auto !important; }
+    & .parish-secretary-thread-panel__header { padding: 12px 16px !important; }
+    & .parish-secretary-thread-panel__header h5 { margin: 0 0 4px !important; font-size: 16px !important; }
+    & .parish-secretary-chat__body { display: flex !important; flex-direction: column; align-items: flex-start; justify-content: flex-start; overflow-y: auto !important; padding: 16px !important; gap: 10px !important; background: #f1f6ff !important; scrollbar-width: thin; scrollbar-color: #c0d0e8 transparent; }
+    & .parish-secretary-message { width: fit-content !important; min-width: 0 !important; max-width: min(80%, 620px) !important; margin: 0 !important; padding: 10px 14px !important; box-shadow: 0 2px 6px #2446a808; }
+    & .parish-secretary-message--incoming { align-self: flex-start; background: #fff !important; }
+    & .parish-secretary-message--outgoing { align-self: flex-end; background: #dceaff !important; border: 1px solid #c0d5f5 !important; }
+    & .parish-secretary-message p { margin: 3px 0 !important; font-size: 14px !important; line-height: 1.5 !important; }
+    & .parish-secretary-chat__composer { display: grid !important; gap: 12px !important; padding: 12px 16px !important; align-items: center !important; }
+    & .parish-secretary-chat__composer textarea { box-sizing: border-box; width: 100%; height: 52px !important; min-height: 52px !important; max-height: 52px !important; resize: none; border: 1px solid #849bbd !important; border-radius: 10px !important; background: #fff !important; }
+    & .parish-secretary-chat__composer textarea:focus-visible { outline: 2px solid #88aaf1; outline-offset: 2px; }
+    & .parish-secretary-chat__composer button { min-height: 42px !important; border-radius: 8px !important; background: #2446a8 !important; color: #fff !important; }
+    & .parish-secretary-chat__composer button:disabled { opacity: .5; cursor: not-allowed; }
+    @media (max-width: 760px) {
+      & .overview-shell:has(.parish-secretary-layout) { padding: 10px !important; }
+      & .page-card:has(.parish-secretary-layout) { padding: 10px !important; gap: 10px !important; }
+      & .parish-secretary-layout { grid-template-columns: minmax(0, 1fr) !important; grid-template-rows: minmax(70px, 120px) minmax(0, 1fr) !important; }
+      & .parish-secretary-thread-list { max-height: none !important; }
+      & .parish-secretary-thread-panel__header { padding: 10px 12px !important; }
+      & .parish-secretary-chat__body { padding: 12px !important; }
+      & .parish-secretary-chat__composer { padding: 10px 12px !important; gap: 8px !important; }
+      & .parish-secretary-message { max-width: 95% !important; }
+    }
+  }
+}
+@media screen {
   html[data-design="heaven"] body #root#root#root#root#root .dashboard-frame--parish {
     & .page-card:has(.parish-secretary-layout) {
       --inbox-surface: #fff;

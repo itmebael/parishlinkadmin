@@ -1,4 +1,21 @@
 .reports-workspace { display: grid; gap: 18px; }
+@media screen {
+  html[data-design="heaven"] body #root#root#root#root#root#root#root#root .parish-reports-card {
+    & .parish-reports-card__header { background: #2446a8 !important; border-radius: 12px !important; }
+    & .parish-reports-card__eyebrow { color: #dceaff !important; }
+    & .parish-reports-card__header h4 { color: #fff !important; }
+    & .parish-reports-card__header p { color: #e4edff !important; opacity: 1 !important; }
+    & .parish-reports-card__actions { align-items: center; gap: 10px; }
+    & .parish-reports-card__actions .secondary-action { background: #fff !important; color: #2446a8 !important; border: 1px solid #d4e2ff !important; }
+    & .parish-reports-card__actions .primary-action { background: #dceaff !important; color: #173d82 !important; border: 1px solid #dceaff !important; }
+    & .parish-reports-card__actions .primary-action:hover { background: #c4d9ff !important; }
+    & .parish-reports-card__actions button { min-height: 40px; padding: 10px 16px; border-radius: 8px !important; }
+    & .parish-reports-filters { background: #f0f6ff !important; border-color: #d5e1f3 !important; }
+    & .parish-reports-filters label { color: #415d83 !important; }
+    & .parish-reports-filters :is(input, select) { border-color: #849bbd !important; background: #fff !important; color: #344e73 !important; }
+    & .parish-reports-card__footer { color: #627797 !important; border-color: #d5e1f3 !important; }
+  }
+}
 .parish-reports-card { overflow: hidden; border: 1px solid rgba(25, 82, 65, .14); border-radius: 24px; background: linear-gradient(145deg, #fff 0%, #f5faf5 100%); box-shadow: 0 18px 48px rgba(20, 63, 49, .08); }
 .parish-reports-card__header { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; padding: 27px 28px 22px; border-bottom: 1px solid rgba(25, 82, 65, .1); }
 .parish-reports-card__eyebrow, .parish-report-details__intro > span { color: #27745c; font: 800 .69rem/1 system-ui, sans-serif; letter-spacing: .14em; }

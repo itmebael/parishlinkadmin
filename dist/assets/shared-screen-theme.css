@@ -1,0 +1,154 @@
+/* Shared screen styling drawn from the Broadcast History panel. */
+@media screen {
+  html[data-design="heaven"]:not([data-theme="dark"]) body #root#root#root#root#root#root .dashboard-frame--parish > .workspace {
+    --screen-blue: #2446a8;
+    --screen-line: #d5e1f3;
+    --screen-ink: #193e75;
+    background: #eef4ff !important;
+
+    & :is(.glass-card, .page-card, .parish-dashboard-card, .parish-reports-card, .dio-user-mgmt, .plh-wrap):not(.parish-portal__hero):not(:has(.metric-card__stats)) {
+      border: 1px solid var(--screen-line) !important;
+      border-radius: 16px !important;
+      background: #fff !important;
+      box-shadow: 0 8px 24px rgba(35, 65, 110, .06) !important;
+    }
+
+    & :is(.glass-card__header, .parish-reports-card__header) {
+      padding: 16px !important;
+      margin-bottom: 18px !important;
+      border: 0 !important;
+      border-radius: 10px !important;
+      background: var(--screen-blue) !important;
+      color: #fff !important;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    & :is(.glass-card__header, .parish-reports-card__header) :is(h3, h4, h5, .page-card__lead, p, small, .workspace__eyebrow) {
+      color: #fff !important;
+    }
+    & :is(.glass-card__header, .parish-reports-card__header) :is(p, .page-card__lead) { opacity: .88; }
+    & .glass-card__header .baptism-records__type > span { color: #e0eaff !important; }
+    & :is(.glass-card__header, .parish-reports-card__header) :is(.secondary-action, .ghost-action) {
+      background: #fff !important;
+      border-color: #d5e1f3 !important;
+      color: var(--screen-ink) !important;
+    }
+
+    & :is(.metric-card__stats > div, .parish-kpi-card, .parish-report-metric, .plh-stat) {
+      border: 1px solid #cbdcff !important;
+      border-top: 3px solid #4169e1 !important;
+      border-radius: 12px !important;
+      background: #eef4ff !important;
+      box-shadow: none !important;
+    }
+    & :is(.metric-card__stats > div, .parish-kpi-card, .parish-report-metric, .plh-stat):nth-child(4n + 2) {
+      border-color: #c5ebe1 !important;
+      border-top-color: #159879 !important;
+      background: #edfaf7 !important;
+    }
+    & :is(.metric-card__stats > div, .parish-kpi-card, .parish-report-metric, .plh-stat):nth-child(4n + 3) {
+      border-color: #e1d5fa !important;
+      border-top-color: #8655cc !important;
+      background: #f5f0ff !important;
+    }
+    & :is(.metric-card__stats > div, .parish-kpi-card, .parish-report-metric, .plh-stat):nth-child(4n + 4) {
+      border-color: #f1dfb6 !important;
+      border-top-color: #d59825 !important;
+      background: #fff8e9 !important;
+    }
+    & :is(.metric-card__stats strong, .parish-report-metric strong, .plh-stat__value) { color: var(--screen-ink) !important; }
+
+    & table:not(.certificate-template table):not(.certificate-preview table) {
+      width: 100%;
+      border-collapse: separate !important;
+      border-spacing: 0 !important;
+      text-align: left;
+      background: #fff !important;
+    }
+    & table:not(.certificate-template table):not(.certificate-preview table) thead th {
+      padding: 14px 16px !important;
+      background: var(--screen-blue) !important;
+      color: #fff !important;
+      border-bottom: 0 !important;
+      font-weight: 700 !important;
+    }
+    & table:not(.certificate-template table):not(.certificate-preview table) tbody :is(td, th) {
+      padding: 14px 16px !important;
+      border-bottom: 1px solid #e1e8f3 !important;
+      color: #435774 !important;
+    }
+    & table:not(.certificate-template table):not(.certificate-preview table) tbody tr:nth-child(even) { background: #f1f6ff !important; }
+    & table:not(.certificate-template table):not(.certificate-preview table) tbody tr:hover { background: #e7efff !important; }
+    & :is(.table-wrap, .table-container, .baptism-records__table-wrap, .plh-table-scroll) {
+      border: 1px solid var(--screen-line) !important;
+      border-radius: 10px !important;
+      overflow-x: auto;
+    }
+    & :is(.queue-list__item, .parish-agenda__item, .publishing-post) {
+      padding: 14px 16px !important;
+      border: 1px solid #e1e8f3 !important;
+      border-radius: 10px !important;
+      background: #fff !important;
+    }
+    & :is(.queue-list__item, .parish-agenda__item, .publishing-post):nth-child(even) { background: #f1f6ff !important; }
+    & .parish-reports-filters { background: #f1f6ff !important; border-color: var(--screen-line) !important; }
+    & .primary-action:not(.danger-action) { background: var(--screen-blue) !important; border-color: var(--screen-blue) !important; color: #fff !important; border-radius: 8px !important; }
+    & .primary-action:not(.danger-action):hover { background: #193782 !important; }
+    & :is(.primary-action, .secondary-action, .ghost-action):focus-visible { outline: 3px solid #7ba4f0 !important; outline-offset: 3px; }
+
+    /* Records: blue accents and light blue surfaces. */
+    & .baptism-records {
+      padding: 24px !important;
+      & > .glass-card__header {
+        background: #2456a6 !important;
+        padding: 20px !important;
+        margin: 0 0 20px !important;
+        border-radius: 12px !important;
+        gap: 20px !important;
+      }
+      & .baptism-records__type > span { color: #e1edff !important; }
+      & .baptism-records__tools { align-items: flex-end !important; }
+      & .baptism-records__tools > button { color: #2456a6 !important; }
+      & .baptism-records__search {
+        display: grid !important;
+        grid-template-columns: minmax(180px, 2fr) minmax(130px, 1fr) minmax(100px, .7fr) auto auto !important;
+        align-items: end !important;
+        gap: 14px !important;
+        padding: 18px !important;
+        margin: 0 0 22px !important;
+        border: 1px solid #d3e1f5 !important;
+        border-radius: 12px !important;
+        background: #f0f6ff !important;
+      }
+      & .baptism-records__search .login-field { min-width: 0; gap: 8px !important; }
+      & .baptism-records__search .login-field > span { color: #415d83 !important; font-size: 13px !important; font-weight: 650 !important; }
+      & .baptism-records__search :is(input, select) { box-sizing: border-box; width: 100%; min-width: 0; height: 44px !important; min-height: 44px !important; padding: 10px 12px !important; border: 1px solid #c9daf1 !important; border-radius: 8px !important; background: #fff !important; color: #344e73 !important; font-size: 14px !important; }
+      & .baptism-records__search > button { height: 44px !important; min-height: 44px !important; margin: 0 !important; padding: 10px 16px !important; font-size: 14px !important; white-space: nowrap; }
+      & .baptism-records__search > .primary-action { background: #2456a6 !important; border-color: #2456a6 !important; }
+      & .baptism-records__search > .primary-action:hover { background: #1c4384 !important; }
+      & .baptism-records__search > .secondary-action { background: #e5f0ff !important; border-color: #c2d8f7 !important; color: #2456a6 !important; }
+      & .baptism-records__table-wrap { border-color: #c9daf1 !important; }
+      & .baptism-records__table thead th { background: #dceaff !important; color: #244b80 !important; border-bottom: 1px solid #bdd1ef !important; font-size: 12px !important; }
+      & .baptism-records__table tbody :is(td, th) { background: transparent !important; color: #4b6384 !important; border-color: #dce6f4 !important; }
+      & .baptism-records__table tbody th { color: #263e60 !important; }
+      & .baptism-records__table tbody tr:nth-child(even) { background: #f0f6ff !important; }
+      & .baptism-records__table tbody tr:hover { background: #e3eeff !important; }
+      & .baptism-records__table-preview { background: #e6f0ff !important; border: 1px solid #bdd3f2 !important; color: #2456a6 !important; border-radius: 8px !important; }
+      & .baptism-records__table-preview:hover { background: #d6e7ff !important; }
+      & .baptism-records__pagination { padding-top: 16px; gap: 12px; }
+      @media (max-width: 1100px) {
+        & .baptism-records__search { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr) !important; }
+      }
+      @media (max-width: 600px) {
+        padding: 14px !important;
+        & > .glass-card__header { align-items: stretch !important; padding: 16px !important; gap: 14px !important; }
+        & .baptism-records__tools { width: 100%; flex-wrap: wrap; gap: 10px !important; }
+        & .baptism-records__type { flex: 1; min-width: 140px; }
+        & .baptism-records__type select { width: 100% !important; }
+        & .baptism-records__search { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important; padding: 12px !important; gap: 12px !important; }
+        & .baptism-records__search > label:first-child { grid-column: 1 / -1; }
+        & .baptism-records__search > button { width: 100%; padding: 10px 8px !important; font-size: 12px !important; }
+      }
+    }
+  }
+}
