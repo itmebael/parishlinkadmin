@@ -1,0 +1,67 @@
+@media screen {
+  html[data-design="heaven"] body #root#root#root#root#root .dashboard-frame--parish {
+    & .page-card:has(.certificate-builder) { padding: 24px !important; border-radius: 18px !important; }
+    & .certificate-builder { display: block !important; min-width: 0; }
+    & .certificate-form { display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 18px 24px !important; padding: 24px !important; border: 1px solid #dbe5f2 !important; border-radius: 14px !important; background: #f8faff !important; }
+    & .certificate-form .login-field { min-width: 0; gap: 7px; }
+    & .certificate-form .login-field > span { font-size: 13px !important; font-weight: 650 !important; color: #435774 !important; }
+    & .certificate-form :is(input, select) { width: 100%; min-height: 44px !important; font-size: 14px !important; border-radius: 8px !important; background: #fff !important; border: 1px solid #cfdbed !important; color: #17314b !important; }
+    & .certificate-form .login-field--wide { grid-column: 1 / -1; }
+    & .certificate-reference-form { padding: 18px !important; border: 1px solid #cfdbed; border-radius: 12px; background: #edf3ff; align-items: end; }
+    & .certificate-form__footer { display: flex; justify-content: flex-end; padding-top: 18px; border-top: 1px solid #dbe5f2; }
+    & .certificate-preview-trigger { min-height: 44px; padding: 10px 20px; font-size: 14px !important; }
+    & .certificate-preview-dialog {
+      position: fixed !important;
+      inset: 0 !important;
+      width: min(960px, calc(100vw - 40px)) !important;
+      height: min(94dvh, 1200px) !important;
+      max-width: none !important;
+      max-height: 94dvh !important;
+      padding: 0 !important;
+      margin: auto !important;
+      border: 1px solid #dbe5f2 !important;
+      border-radius: 18px !important;
+      background: #fff !important;
+      color: #17314b !important;
+      box-shadow: 0 24px 80px #0d1f4d55 !important;
+      overflow: hidden;
+    }
+    & .certificate-preview-dialog:not([open]) { display: none !important; }
+    & .certificate-preview-dialog[open] { display: grid !important; grid-template-rows: auto minmax(0, 1fr) auto auto; }
+    & .certificate-preview-dialog::backdrop { background: #10234499; backdrop-filter: blur(3px); }
+    & .certificate-preview-dialog__header { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px 24px; border-bottom: 1px solid #dbe5f2; }
+    & .certificate-preview-dialog__header h2 { margin: 0; font-size: 20px !important; color: #17314b !important; }
+    & .certificate-preview-dialog__header p { margin: 4px 0 0; font-size: 13px !important; color: #65758c !important; }
+    & .certificate-preview-dialog__paper { min-height: 0; overflow: auto; overscroll-behavior: contain; padding: 24px; background: #edf2f9; }
+    & .certificate-preview-dialog__paper .certificate-template { margin: 0 auto !important; }
+    & .certificate-preview-dialog__notice { padding: 8px 24px; max-height: 140px; overflow: auto; }
+    & .certificate-preview-dialog__footer { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; padding: 16px 24px; border-top: 1px solid #dbe5f2; background: #fff; }
+    & .certificate-preview-dialog__footer > span { font-size: 13px !important; color: #65758c !important; overflow-wrap: anywhere; }
+    & .certificate-preview-dialog .certificate-template-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    & .certificate-preview-dialog :is(.primary-action, .secondary-action) { min-height: 40px; padding: 9px 16px; font-size: 13px !important; }
+  }
+  html[data-design="heaven"][data-theme="dark"] body #root#root#root#root#root .dashboard-frame--parish {
+    & .certificate-form { background: #17253a !important; border-color: #31425a !important; }
+    & .certificate-form .login-field > span { color: #c5d3e9 !important; }
+    & .certificate-form :is(input, select) { background: #101e30 !important; border-color: #31425a !important; color: #edf3ff !important; }
+    & .certificate-reference-form { background: #17253a; border-color: #31425a; }
+  }
+  @media (max-width: 600px) {
+    html[data-design="heaven"] body #root#root#root#root#root .dashboard-frame--parish {
+      & .page-card:has(.certificate-builder) { padding: 14px !important; }
+      & .certificate-form { grid-template-columns: minmax(0, 1fr) !important; padding: 16px !important; }
+      & .page-card:has(.certificate-builder) > .glass-card__header { align-items: stretch; flex-direction: column; }
+      & .certificate-preview-dialog { width: calc(100vw - 16px) !important; height: 96dvh !important; max-height: 96dvh !important; border-radius: 12px !important; }
+      & .certificate-preview-dialog__header { padding: 14px; gap: 8px; }
+      & .certificate-preview-dialog__header h2 { font-size: 17px !important; }
+      & .certificate-preview-dialog__header p { display: none; }
+      & .certificate-preview-dialog__paper { padding: 12px; }
+      & .certificate-preview-dialog__footer { padding: 12px; }
+      & .certificate-preview-dialog .certificate-template-actions { width: 100%; }
+      & .certificate-preview-dialog .certificate-template-actions button { flex: 1 1 auto; padding-inline: 10px; }
+    }
+  }
+}
+@media print {
+  .certificate-preview-dialog { display: none !important; }
+}

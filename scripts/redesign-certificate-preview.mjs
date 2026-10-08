@@ -1,0 +1,33 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+const file = 'dist/assets/index-v20260422157000.js';
+let source = fs.readFileSync(file, 'utf8');
+const start = source.indexOf('function Ch(');
+const end = source.indexOf('function Rg(', start);
+assert.ok(start >= 0 && end > start);
+let component = source.slice(start, end);
+if (!component.includes('certificate-preview-dialog')) {
+  component = component.replace('const[t,r]=N.useState([])', `const[certificatePreviewOpen,setCertificatePreviewOpen]=N.useState(false),certificateDialogRef=N.useRef(null);N.useEffect(()=>{const dialog=certificateDialogRef.current;if(!dialog)return;if(certificatePreviewOpen){const previous=document.body.style.overflow;dialog.showModal();document.body.style.overflow="hidden";return()=>{document.body.style.overflow=previous;if(dialog.open)dialog.close();};}if(dialog.open)dialog.close();},[certificatePreviewOpen]);const[t,r]=N.useState([])`);
+  const printStart = component.indexOf('function T(){');
+  const copyStart = component.indexOf('function nr(){', printStart);
+  assert.ok(printStart >= 0 && copyStart > printStart);
+  component = component.slice(0, printStart) + 'function T(){window.print()}' + component.slice(copyStart);
+  const oldDocument = 'const M=`<!doctype html><html><head><meta charset="utf-8"><title>${u.clientFullName||"Certificate"}</title></head><body>${g.outerHTML}</body></html>`';
+  assert.ok(component.includes(oldDocument));
+  component = component.replace(oldDocument, `const styles=Array.from(document.querySelectorAll('link[rel="stylesheet"],style')).map(el=>el.outerHTML).join("\\n"),title=String(u.clientFullName||"Certificate").replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));const M=\`<!doctype html><html data-design="heaven" data-theme="light"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><base href="\${location.origin}/"><title>\${title}</title>\${styles}<style>body{background:white!important}#root .dashboard-frame{display:block!important;background:white!important;padding:20px!important}#root .certificate-template{margin:auto!important}@media print{#root .dashboard-frame{padding:0!important}}</style></head><body><div id="root"><div class="dashboard-frame dashboard-frame--parish"><div class="certificate-print-copy">\${g.outerHTML}</div></div></div><style>@media screen{.certificate-print-copy{display:block!important;position:static!important;visibility:visible!important;height:auto!important;width:auto!important;overflow:visible!important}}</style></body></html>\``);
+  const actions = 'n.jsxs("div",{className:"certificate-template-actions",children:[n.jsx("button",{type:"button",className:"secondary-action",onClick:T,children:"Print"}),n.jsx("button",{type:"button",className:"secondary-action",onClick:nr,children:"Copy File"}),n.jsx("button",{type:"button",className:"primary-action",onClick:sr,disabled:d||!Y,children:d?"Sending...":"Send to Owner"})]})';
+  assert.ok(component.includes(actions));
+  component = component.replace(actions, 'n.jsx("button",{type:"button",className:"primary-action certificate-preview-trigger",onClick:()=>setCertificatePreviewOpen(true),children:"Preview Certificate"})');
+  component = component.replace('children:"Certificate Template"', 'children:"Prepare a Certificate"');
+  component = component.replace('className:"certificate-form",children:', 'className:"certificate-form",onSubmit:event=>{event.preventDefault();setCertificatePreviewOpen(true)},children:');
+  const tail = ']}),n.jsx(Oc,{certificateForm:u,selectedCertificateService:E})]})]}),null]})}';
+  assert.ok(component.includes(tail));
+  component = component.replace(tail, `,n.jsx("div",{className:"certificate-form__footer login-field--wide",children:n.jsx("button",{type:"submit",className:"primary-action certificate-preview-trigger",children:"Preview Certificate"})})]}),n.jsxs("dialog",{ref:certificateDialogRef,className:"certificate-preview-dialog","aria-labelledby":"certificate-preview-title",onCancel:()=>setCertificatePreviewOpen(false),onClose:()=>setCertificatePreviewOpen(false),onClick:event=>{if(event.target===event.currentTarget)setCertificatePreviewOpen(false)},children:[n.jsxs("div",{className:"certificate-preview-dialog__header",children:[n.jsxs("div",{children:[n.jsx("h2",{id:"certificate-preview-title",children:"Certificate Preview"}),n.jsx("p",{children:"Review the details before printing or sending."})]}),n.jsx("button",{type:"button",className:"secondary-action",autoFocus:true,onClick:()=>setCertificatePreviewOpen(false),children:"Back to form"})]}),n.jsx("div",{className:"certificate-preview-dialog__paper",children:n.jsx(Oc,{certificateForm:u,selectedCertificateService:E})}),w?n.jsx("div",{className:"certificate-preview-dialog__notice",role:"status",children:n.jsx(Q,{tone:w.tone,title:w.title,message:w.message})}):null,n.jsxs("div",{className:"certificate-preview-dialog__footer",children:[n.jsx("span",{children:u.clientFullName||"Certificate copy"}),${actions}]})]})]})]}),null]})}`);
+  source = source.slice(0, start) + component + source.slice(end);
+  fs.writeFileSync(file, source);
+}
+source = source.replace('onCancel:()=>setCertificatePreviewOpen(false)', 'onKeyDown:event=>{if(event.key==="Escape"){event.preventDefault();event.stopPropagation();setCertificatePreviewOpen(false)}},onCancel:()=>setCertificatePreviewOpen(false)');
+source = source.replace(/(onKeyDown:event=>\{if\(event.key==="Escape"\)\{event.preventDefault\(\);event.stopPropagation\(\);setCertificatePreviewOpen\(false\)\}\},){2}/g, '$1');
+source = source.replace('onClose:()=>setCertificatePreviewOpen(false),', '');
+fs.writeFileSync(file, source);
+console.log('Form-first certificate workflow applied.');
