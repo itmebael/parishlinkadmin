@@ -1,4 +1,11 @@
 html[data-design="heaven"] body #root#root#root#root#root .baptism-records {
+  & > .glass-card__header { display: flex !important; flex-direction: row !important; align-items: center !important; justify-content: space-between; gap: 20px !important; }
+  & > .glass-card__header > div:first-child { min-width: 0; }
+  & .baptism-records__tools { display: flex !important; flex-direction: row !important; align-items: flex-end !important; gap: 12px !important; flex: 0 0 auto; }
+  & .baptism-records__type { display: flex !important; flex-direction: column; gap: 6px !important; width: auto !important; margin: 0; }
+  & .baptism-records__type > span { font-size: 12px !important; }
+  & .baptism-records__type select { width: 240px !important; min-height: 42px !important; height: 42px !important; padding: 8px 12px !important; font-size: 14px !important; }
+  & .baptism-records__tools > button { min-height: 42px !important; height: 42px !important; margin: 0 !important; padding: 8px 16px !important; font-size: 14px !important; }
   & .baptism-records__table-wrap { width: 100%; overflow-x: auto; border: 1px solid #dbe5f2; border-radius: 12px; background: #fff; }
   & .baptism-records__table { width: 100%; min-width: 660px; border-collapse: collapse; text-align: left; }
   & .baptism-records__table-caption { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); }
@@ -13,6 +20,16 @@ html[data-design="heaven"] body #root#root#root#root#root .baptism-records {
   & .baptism-records__table-name { display: block; font-size: 14px !important; }
   & .baptism-records__table-preview { min-height: 36px !important; padding: 7px 14px !important; border-radius: 7px !important; font-size: 13px !important; white-space: nowrap; }
   & .baptism-records__table-wrap:focus-visible { outline: 2px solid #356fbb; outline-offset: 2px; }
+}
+@media (max-width: 600px) {
+  html[data-design="heaven"] body #root#root#root#root#root .baptism-records {
+    & > .glass-card__header { gap: 10px !important; }
+    & > .glass-card__header h4 { font-size: 16px !important; }
+    & > .glass-card__header .page-card__lead { display: none; }
+    & .baptism-records__tools { gap: 6px !important; }
+    & .baptism-records__type select { width: 130px !important; font-size: 12px !important; padding: 6px !important; }
+    & .baptism-records__tools > button { padding: 8px !important; font-size: 12px !important; }
+  }
 }
 html[data-design="heaven"][data-theme="dark"] body #root#root#root#root#root .baptism-records {
   & .baptism-records__table-wrap { background: #17253a; border-color: #31425a; }
