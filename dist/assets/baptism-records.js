@@ -148,7 +148,7 @@ function downloadRecords(records, config) {
   URL.revokeObjectURL(url);
 }
 
-export function BaptismRecords({ session, React, ui, request }) {
+export function BaptismRecords({ session, React, ui, request, recordType: selectedRecordType, onRecordTypeChange }) {
   const { useState, useEffect } = React;
   const { jsx, jsxs } = ui;
   const [result, setResult] = useState({ rows: [], hasNext: false });
@@ -162,7 +162,9 @@ export function BaptismRecords({ session, React, ui, request }) {
   const [previewLoading, setPreviewLoading] = useState(false);
   const [page, setPage] = useState(0);
   const [revision, setRevision] = useState(0);
-  const [recordType, setRecordType] = useState('baptism');
+  const [localRecordType, setLocalRecordType] = useState('baptism');
+  const recordType = selectedRecordType ?? localRecordType;
+  const setRecordType = value => { setLocalRecordType(value); onRecordTypeChange?.(value); };
   const [month, setMonth] = useState('');
   const [year, setYear] = useState('');
   const config = RECORD_TYPES[recordType];
@@ -210,7 +212,7 @@ export function BaptismRecords({ session, React, ui, request }) {
       jsx('button', { type: 'button', className: 'secondary-action', disabled: loading || previewLoading, onClick: openFilteredPreview, children: previewLoading ? 'Preparing…' : 'Preview download' }),
     ] }),
     error ? jsxs('div', { role: 'alert', children: [jsx('strong', { children: `Could not load ${config.title.toLowerCase()}` }), jsx('p', { children: error })] }) : null,
-    loading ? jsx('p', { role: 'status', children: `Loading ${config.title.toLowerCase()}…` }) : !error && result.rows.length === 0 ? jsx('p', { role: 'status', children: search || month || year ? 'No records match these filters.' : `No ${config.title.toLowerCase()} found for your parish.` }) : null,
+    loading ? jsx('p', { role: 'status', children: `Loading ${config.title.toLowerCase()}…` }) : !error && result.rows.length === 0 ? jsxs('div', { className: 'empty-state', role: 'status', children: [jsx('strong', { children: search || month || year ? 'No matching records' : 'No records yet' }), jsx('span', { children: search || month || year ? 'No records match these filters.' : `No ${config.title.toLowerCase()} found for your parish.` })] }) : null,
     jsx('div', { className: 'baptism-records__table-wrap', tabIndex: 0, role: 'region', 'aria-label': `${config.title} table`, children: jsxs('table', { className: 'baptism-records__table', children: [
       jsx('caption', { className: 'baptism-records__table-caption', children: `${config.title} — page ${page + 1}` }),
       jsx('thead', { children: jsx('tr', { children: ['No.', 'Name', `${config.title.split(' ')[0]} date`, recordType === 'marriage' ? 'Minister' : 'Location', 'Action'].map(label => jsx('th', { scope: 'col', children: label }, label)) }) }),

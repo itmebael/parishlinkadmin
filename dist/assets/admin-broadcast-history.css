@@ -1,0 +1,40 @@
+@layer admin-broadcast-history {
+#root .plh-wrap { padding:20px!important; border:1px solid #d5e0ef!important; border-radius:14px!important; background:#fff!important; box-shadow:none!important; min-width:0!important; }
+#root .plh-head { margin-bottom:20px!important; gap:12px!important; }
+#root .plh-head__icon { background:#edf3fc!important; color:#315a91!important; border-radius:10px!important; box-shadow:none!important; }
+#root .plh-head__subtitle { display:none!important; }
+#root .plh-head__title { color:#193e75!important; font-size:19px!important; letter-spacing:0!important; margin:0!important; }
+#root .plh-refresh { background:#fff!important; border:1px solid #d5dfec!important; border-radius:7px!important; padding:9px 13px!important; min-height:38px!important; color:#365477!important; box-shadow:none!important; }
+#root .plh-stats { display:grid!important; grid-template-columns:repeat(4,minmax(0,1fr))!important; gap:0!important; background:#f5f8fc!important; border:1px solid #e1e8f2!important; border-radius:9px!important; padding:14px 0!important; margin:0 0 18px!important; }
+#root .plh-stat { padding:0 18px!important; border:0!important; border-right:1px solid #dce5f1!important; border-radius:0!important; background:transparent!important; box-shadow:none!important; }
+#root .plh-stat:last-child { border-right:0!important; }
+#root .plh-stat__label { color:#647895!important; font-size:11px!important; font-weight:500!important; letter-spacing:0!important; text-transform:none!important; line-height:1.5!important; }
+#root .plh-stat__value { color:#244b7f!important; font-size:21px!important; margin-top:5px!important; line-height:1.4!important; }
+#root .plh-stat:last-child .plh-stat__value { font-size:13px!important; }
+#root .plh-empty { border:0!important; border-radius:0!important; background:transparent!important; box-shadow:none!important; padding:28px 12px!important; min-height:160px!important; }
+#root .plh-empty strong { font-size:14px!important; }
+#root .plh-empty > div { font-size:13px!important; margin-top:7px!important; color:#7b8fac!important; }
+#root .plh-table-scroll { overflow-x:auto!important; max-width:100%!important; }
+#root .plh-table { width:100%!important; border-collapse:collapse!important; text-align:left!important; font-size:12px!important; color:#435b7b!important; }
+#root .plh-table-caption { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); }
+#root .plh-table th,#root .plh-table td { padding:13px 12px!important; border:0!important; border-bottom:1px solid #e5ebf3!important; background:transparent!important; vertical-align:middle!important; }
+#root .plh-table thead th { background:#f5f8fc!important; font-weight:600!important; white-space:nowrap!important; color:#476183!important; }
+#root .plh-status { background:#eef2f7; padding:4px 8px; border-radius:5px; white-space:nowrap; }
+#root .plh-status--live { background:#e7f6ee; color:#167047; }
+#root .plh-delete { padding:7px 10px!important; border:1px solid #ebcfd1!important; border-radius:6px!important; background:#fff!important; color:#ad3541!important; font:500 12px/1.3 system-ui!important; cursor:pointer!important; }
+#root .plh-delete:hover:not(:disabled) { background:#fff1f2!important; }
+#root .plh-delete:disabled { opacity:.4!important; cursor:not-allowed!important; }
+#root .plh-refresh:focus-visible,#root .plh-delete:focus-visible { outline:2px solid #4169c5!important; outline-offset:3px!important; }
+#root .plh-action-status:not([hidden]) { margin-bottom:14px; padding:10px 12px; background:#edf5fc; border-radius:6px; font-size:13px; }
+.plh-delete-dialog { width:min(420px,calc(100vw - 40px)); box-sizing:border-box; border:1px solid #dbe3ee; border-radius:14px; padding:26px; color:#243b5d; background:#fff; box-shadow:0 20px 70px #102a4940; }
+.plh-delete-dialog::backdrop { background:#12243e70; }
+.plh-delete-dialog__icon { background:#fff0f1; color:#ad3541; border-radius:10px; padding:10px; width:24px; height:24px; }
+.plh-delete-dialog__icon svg { width:24px; height:24px; }
+.plh-delete-dialog h2 { font:600 20px/1.4 system-ui; margin:16px 0 8px; }
+.plh-delete-dialog p { color:#667892; font:400 14px/1.6 system-ui; margin:0; }
+.plh-delete-dialog__actions { display:flex; justify-content:flex-end; gap:10px; margin-top:24px; }
+.plh-delete-dialog__actions button { border:1px solid #d5dfec; background:#fff; color:#365477; border-radius:7px; padding:10px 14px; font:500 13px system-ui; cursor:pointer; }
+.plh-delete-dialog__actions .plh-delete-dialog__confirm { background:#b23845; color:#fff; border-color:#b23845; }
+.plh-delete-dialog__actions button:focus-visible { outline:2px solid #4169c5; outline-offset:3px; }
+@media(max-width:640px) { #root .plh-wrap { padding:16px!important; } #root .plh-stats { grid-template-columns:repeat(2,minmax(0,1fr))!important; row-gap:18px!important; } #root .plh-stat:nth-child(2) { border-right:0!important; } #root .plh-head__title { font-size:17px!important; } }
+}

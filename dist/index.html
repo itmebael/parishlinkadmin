@@ -1576,9 +1576,9 @@
             deleting = true;
             refreshVersion++;
             button.disabled = true;
-            button.textContent = "Deleting?";
+            button.textContent = "Deleting...";
             status.className = "plh-action-status";
-            status.textContent = "Deleting broadcast?";
+            status.textContent = "Deleting broadcast...";
             rpc("delete_parish_livestream_history", { p_history_id: id }).then(function (removed) {
               if (removed !== true) throw new Error("The broadcast was not deleted. Refresh and try again.");
               deleting = false;
@@ -8011,7 +8011,13 @@
     <link rel="stylesheet" href="/dist/assets/record-editor.css?v=20261014-date-select-2">
     <link rel="stylesheet" href="/dist/assets/parish-user-management.css?v=20261009-header-2">
     <link rel="stylesheet" href="/dist/assets/dashboard-welcome-hero.css?v=20261012-banner-reference">
-  </body>
+      <link rel="stylesheet" href="/dist/assets/admin-empty-states.css?v=1">
+    <link rel="stylesheet" href="/dist/assets/admin-notifications.css?v=1">
+    <link rel="stylesheet" href="/dist/assets/admin-pending-queue.css?v=1">
+    <link rel="stylesheet" href="/dist/assets/admin-record-screen.css?v=1">
+    <link rel="stylesheet" href="/dist/assets/admin-broadcast-history.css?v=1">
+    <link rel="stylesheet" href="/dist/assets/admin-services-layout.css?v=1">
+</body>
   <script src="/dist/assets/chapel-information-menu.js?v=20260921-1"></script>
   <script src="/dist/assets/parish-text-sizing.js?v=20261012-fit-font"></script>
   <script src="/dist/assets/parish-settings-toggles.js?v=20261009-no-dark-floating"></script>

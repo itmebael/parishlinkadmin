@@ -14,7 +14,7 @@ const server = http.createServer((req, res) => {
   const file = path.resolve(root, relative);
   const parts = relative.split(/[\\/]/);
   if (!file.startsWith(root + path.sep) || parts.some(part => part.startsWith('.') || part === 'node_modules') ||
-      (!relative.startsWith('dist/') && !['index.html', 'logo.png', 'logocalbayog.png', 'logologin.png', 'backgrounddioses.jpg', 'HEADER.png', 'church.jpg'].includes(relative))) {
+      (!relative.startsWith('dist/') && !['index.html', 'logo.png', 'logocalbayog.png', 'logologin.png', 'backgrounddioses.jpg', 'HEADER.png', 'HEADER copy.png', 'church.jpg'].includes(relative))) {
     res.writeHead(404); res.end('Not found'); return;
   }
   if (!fs.existsSync(file) || !fs.statSync(file).isFile()) { res.writeHead(404); res.end('Not found'); return; }

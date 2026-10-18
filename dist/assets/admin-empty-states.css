@@ -1,0 +1,98 @@
+@layer admin-empty-states {
+/* Match the client portal's tray illustration and soft blue empty panels. */
+html[data-design="heaven"] #root .dashboard-frame--parish :is(.empty-state, .notification-empty, .plh-empty, .pending-queue-empty) {
+  box-sizing: border-box;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  min-height: 160px !important;
+  width: 100%;
+  padding: 24px 20px !important;
+  border: 1px solid #e1eaf5 !important;
+  border-radius: 14px !important;
+  background: #f8faff !important;
+  color: #788aa5 !important;
+  text-align: center !important;
+  box-shadow: inset 0 1px 0 #fff, 0 2px 0 #edf2f9, 0 5px 12px #31598309 !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--parish :is(.empty-state, .notification-empty, .plh-empty, .pending-queue-empty) .dashboard-empty-icon {
+  width: 48px !important;
+  height: 48px !important;
+  margin: 0 0 4px !important;
+  color: #637b9b !important;
+}
+html[data-design="heaven"] #root .dashboard-frame--parish :is(.empty-state, .notification-empty, .plh-empty, .pending-queue-empty):not(:has(svg))::before {
+  content: '';
+  display: block;
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 4px;
+  background: #637b9b;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48' fill='none' stroke='black' stroke-width='3.5'%3E%3Cpath d='M4 18 12 4h24l8 14v26H4V18Zm0 6h12l5 8h6l5-8h12'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+html[data-design="heaven"] #root .dashboard-frame--parish .empty-state:has(svg)::before { content: none !important; }
+html[data-design="heaven"] #root .dashboard-frame--parish :is(.empty-state, .notification-empty, .plh-empty, .pending-queue-empty) strong {
+  color: #304568 !important;
+  font-size: .9375rem !important;
+  font-weight: 700 !important;
+  line-height: 1.4;
+}
+html[data-design="heaven"] #root .dashboard-frame--parish :is(.empty-state, .notification-empty, .plh-empty, .pending-queue-empty) :is(span, p) {
+  max-width: 48ch;
+  margin: 0;
+  color: #788aa5 !important;
+  font-size: .8125rem !important;
+  font-weight: 400 !important;
+  line-height: 1.6;
+}
+html[data-design="heaven"][data-theme="dark"] #root .dashboard-frame--parish :is(.empty-state, .notification-empty, .plh-empty, .pending-queue-empty) {
+  background: var(--heaven-surface, #172238) !important;
+  border-color: var(--heaven-line, #334155) !important;
+  box-shadow: none !important;
+}
+html[data-design="heaven"][data-theme="dark"] #root .dashboard-frame--parish :is(.empty-state, .notification-empty, .plh-empty, .pending-queue-empty) strong { color: #e1ebfa !important; }
+html[data-design="heaven"][data-theme="dark"] #root .dashboard-frame--parish :is(.empty-state, .notification-empty, .plh-empty, .pending-queue-empty) :is(span, p, .dashboard-empty-icon) { color: #a3b7d2 !important; }
+html[data-design="heaven"][data-theme="dark"] #root .dashboard-frame--parish :is(.empty-state, .notification-empty, .plh-empty, .pending-queue-empty)::before { background-color: #a3b7d2; }
+@media (max-width: 600px) {
+  html[data-design="heaven"] #root .dashboard-frame--parish :is(.empty-state, .notification-empty, .plh-empty, .pending-queue-empty) {
+    min-height: 140px !important;
+    padding: 20px 16px !important;
+  }
+}
+}
+
+@layer admin-empty-states {
+  /* Keep Office Queue empty content directly on the outer card. */
+  html[data-design="heaven"] body #root .dashboard-frame--parish .queue-list > .empty-state {
+    min-height: 0 !important;
+    padding: 16px 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+  html[data-design="heaven"] body #root .dashboard-frame--parish .queue-list:has(> .empty-state) {
+    max-height: none !important;
+    overflow: visible !important;
+  }
+}
+
+@layer admin-empty-states {
+  /* Keep the schedule empty state directly inside its outer card. */
+  html[data-design="heaven"] body #root .dashboard-frame--parish .parish-agenda > .empty-state {
+    min-height: 0 !important;
+    padding: 16px 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+  html[data-design="heaven"] body #root .dashboard-frame--parish .parish-agenda:has(> .empty-state) {
+    max-height: none !important;
+    overflow: visible !important;
+  }
+}
+.parish-agenda__time { white-space: normal; }

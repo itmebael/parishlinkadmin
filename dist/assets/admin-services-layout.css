@@ -1,0 +1,35 @@
+@layer admin-services-layout {
+@media screen {
+html:has(.parish-services-screen),body:has(.parish-services-screen) { height:auto!important; overflow:auto!important; }
+#root :is(.scene,.dashboard-frame,.workspace):has(.parish-services-screen) { height:auto!important; min-height:100dvh!important; overflow:visible!important; }
+#root .workspace:has(.parish-services-screen) { display:flex!important; flex-direction:column!important; }
+#root .overview-shell:has(.parish-services-screen) { display:flex!important; flex-direction:column!important; height:auto!important; min-height:0!important; overflow:visible!important; padding:20px!important; gap:20px!important; }
+#root .parish-services-screen { height:auto!important; max-height:none!important; min-width:0!important; padding:0!important; overflow:visible!important; }
+#root .parish-services-screen > .page-card { display:block!important; height:auto!important; min-height:0!important; overflow:visible!important; padding:24px!important; border:1px solid #d5e1ef!important; border-radius:14px!important; background:#fff!important; box-shadow:none!important; }
+#root .parish-services-screen > .page-card > .glass-card__header { display:flex!important; flex-wrap:wrap!important; align-items:center!important; justify-content:space-between!important; gap:16px!important; padding:0 0 20px!important; margin:0 0 20px!important; border:0!important; border-bottom:1px solid #e2e9f2!important; border-radius:0!important; background:transparent!important; }
+#root .parish-services-screen .glass-card__header h4 { color:#193e75!important; font-size:20px!important; line-height:1.4!important; margin:0!important; }
+#root .parish-services-screen .glass-card__header .page-card__lead { color:#7184a0!important; font-size:13px!important; line-height:1.6!important; margin:6px 0 0!important; }
+#root .parish-services-screen .certificate-reference-form { display:grid!important; grid-template-columns:minmax(0,1fr) auto!important; align-items:end!important; padding:16px!important; margin:0 0 24px!important; gap:12px!important; background:#f5f8fc!important; border:1px solid #e0e8f2!important; border-radius:9px!important; }
+#root .parish-services-screen .certificate-reference-form .login-field--wide { grid-column:auto!important; }
+#root .parish-services-screen .certificate-builder { display:block!important; height:auto!important; min-height:0!important; overflow:visible!important; margin:0!important; padding:0!important; border:0!important; background:transparent!important; }
+#root .parish-services-screen .certificate-form { display:grid!important; grid-template-columns:repeat(3,minmax(0,1fr))!important; gap:20px 18px!important; padding:0!important; margin:0!important; background:transparent!important; border:0!important; }
+#root .parish-services-screen .certificate-form .login-field--wide { grid-column:1 / -1!important; }
+#root .parish-services-screen .login-field { min-width:0!important; margin:0!important; gap:7px!important; }
+#root .parish-services-screen :is(.certificate-form,.certificate-reference-form) .login-field > span { color:#465f7e!important; font-size:13px!important; font-weight:500!important; line-height:1.4!important; }
+#root .parish-services-screen :is(.certificate-form,.certificate-reference-form) :is(input,select,textarea) { box-sizing:border-box!important; width:100%!important; min-width:0!important; height:42px!important; min-height:42px!important; padding:10px 12px!important; border:1px solid #cdd9e8!important; border-radius:7px!important; background:#fff!important; color:#243b5d!important; font-size:14px!important; line-height:1.4!important; box-shadow:none!important; }
+#root .parish-services-screen .certificate-form textarea { height:90px!important; resize:vertical!important; }
+#root .parish-services-screen :is(input,select,textarea):focus-visible { outline:2px solid #547cd0!important; outline-offset:2px!important; }
+#root .parish-services-screen :is(.primary-action,.secondary-action) { min-height:42px!important; padding:10px 16px!important; border-radius:7px!important; font-size:13px!important; line-height:1.4!important; box-shadow:none!important; }
+#root .parish-services-screen .certificate-form__footer { grid-column:1 / -1!important; display:flex!important; flex-wrap:wrap!important; justify-content:flex-end!important; gap:10px!important; margin:4px 0 0!important; padding:20px 0 0!important; border-top:1px solid #e2e9f2!important; }
+#root .parish-services-screen > .page-card > :is(.auth-notice,.archive-match-list) { max-height:none!important; overflow:visible!important; margin:0 0 20px!important; }
+@media(max-width:1100px) { #root .parish-services-screen .certificate-form { grid-template-columns:repeat(2,minmax(0,1fr))!important; } }
+@media(max-width:600px) {
+#root .overview-shell:has(.parish-services-screen) { padding:12px!important; }
+#root .parish-services-screen > .page-card { padding:18px!important; }
+#root .parish-services-screen :is(.certificate-form,.certificate-reference-form) { grid-template-columns:minmax(0,1fr)!important; }
+#root .parish-services-screen .certificate-form { gap:16px!important; }
+#root .parish-services-screen .certificate-form__footer > button { flex:1 1 100%!important; }
+#root .parish-services-screen .certificate-reference-form input { font-size:16px!important; }
+}
+}
+}

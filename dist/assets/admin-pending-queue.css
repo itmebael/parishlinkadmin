@@ -1,0 +1,85 @@
+@layer admin-pending-queue {
+  #root .pending-queue-card .pending-queue-tabs {
+    display: flex !important;
+    gap: 4px !important;
+    padding: 4px !important;
+    margin: 0 0 12px !important;
+    border: 1px solid #e5eaf1 !important;
+    border-radius: 8px !important;
+    background: #f2f5f9 !important;
+  }
+  #root .pending-queue-card .pending-queue-tabs button {
+    flex: 1;
+    min-width: 0 !important;
+    padding: 9px 10px !important;
+    border: 1px solid transparent !important;
+    border-radius: 5px !important;
+    background: transparent !important;
+    color: #6b7a90 !important;
+    font: inherit;
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    line-height: 1.4 !important;
+    box-shadow: none !important;
+    cursor: pointer;
+  }
+  #root .pending-queue-card .pending-queue-tabs button[aria-selected="true"] {
+    background: #fff !important;
+    border-color: #dbe3ee !important;
+    color: #2f4e76 !important;
+    font-weight: 600 !important;
+    box-shadow: 0 1px 3px #172b4d08 !important;
+  }
+  #root .pending-queue-card .pending-queue-tabs button:focus:not(:focus-visible) { outline: none !important; }
+  #root .pending-queue-card .pending-queue-tabs button:focus-visible { outline: 2px solid #8aa5c9 !important; outline-offset: 2px !important; }
+  #root .pending-queue-card .pending-queue-panel:not([hidden]) { display: grid !important; gap: 0 !important; }
+  #root .pending-queue-card .queue-list__item {
+    display: grid !important;
+    grid-template-columns: 32px minmax(0, 1fr) !important;
+    align-items: start !important;
+    gap: 12px !important;
+    min-width: 0;
+    padding: 14px 4px !important;
+    border: 0 !important;
+    border-bottom: 1px solid #e9eef5 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+  #root .pending-queue-card .queue-list__item:last-child { border-bottom: 0 !important; }
+  #root .pending-queue-card .queue-list__avatar {
+    display: grid !important;
+    place-items: center !important;
+    width: 32px !important;
+    height: 32px !important;
+    min-width: 32px !important;
+    border: 0 !important;
+    border-radius: 50% !important;
+    background: #edf2f8 !important;
+    color: #526987 !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    box-shadow: none !important;
+  }
+  #root .pending-queue-details { display: grid; gap: 3px; min-width: 0; }
+  #root .pending-queue-card .pending-queue-name { color: #30445f !important; font-size: 13px !important; font-weight: 600 !important; line-height: 1.5 !important; text-align: left !important; overflow-wrap: anywhere; }
+  #root .pending-queue-card .pending-queue-service { display: block !important; color: #748299 !important; font-size: 12px !important; font-weight: 400 !important; line-height: 1.55 !important; text-align: left !important; white-space: normal !important; overflow-wrap: anywhere; }
+  html[data-theme="dark"] #root .pending-queue-card .pending-queue-tabs { background: #1a2940 !important; border-color: #334155 !important; }
+  html[data-theme="dark"] #root .pending-queue-card .pending-queue-tabs button { color: #a8b7cb !important; }
+  html[data-theme="dark"] #root .pending-queue-card .pending-queue-tabs button[aria-selected="true"] { background: #2a3d59 !important; border-color: #435c7b !important; color: #e3edf9 !important; }
+  html[data-theme="dark"] #root .pending-queue-card .queue-list__item { border-color: #334155 !important; }
+  html[data-theme="dark"] #root .pending-queue-card .queue-list__avatar { background: #263b57 !important; color: #b5c7de !important; }
+  html[data-theme="dark"] #root .pending-queue-card .pending-queue-name { color: #e3edf9 !important; }
+  html[data-theme="dark"] #root .pending-queue-card .pending-queue-service { color: #a8b7cb !important; }
+}
+@layer admin-pending-queue {
+  #root .pending-queue-card .pending-queue-panel:not([hidden]) {
+    max-height: 320px !important;
+    overflow-y: auto !important;
+    scrollbar-width: thin;
+  }
+  #root .pending-queue-card .pending-queue-panel:has(> .empty-state) {
+    max-height: none !important;
+    overflow: visible !important;
+  }
+}

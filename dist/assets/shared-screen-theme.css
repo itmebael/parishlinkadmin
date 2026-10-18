@@ -219,3 +219,24 @@ html[data-theme="dark"] .pending-queue-tabs button[aria-selected="true"] { color
     }
   }
 }
+
+/* Online indicator in the parish account menu. */
+html[data-design="heaven"] #root .profile-pill .profile-online-status {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 6px;
+}
+html[data-design="heaven"] #root .profile-pill .profile-online-status::before {
+  content: '';
+  display: inline-block;
+  flex: 0 0 8px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #22c55e;
+}
+
+.pending-queue-card .pending-queue-tabs { margin: 0 0 12px; }
+.pending-queue-card .pending-queue-tabs button { min-width: 0; line-height: 1.4; }
+.pending-queue-card .pending-queue-panel[hidden] { display: none !important; }
+.pending-queue-card .pending-queue-panel:focus-visible { outline: 2px solid #4169e1; outline-offset: 3px; border-radius: 8px; }

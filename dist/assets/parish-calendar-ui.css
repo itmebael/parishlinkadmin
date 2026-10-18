@@ -121,3 +121,105 @@ html[data-design="heaven"] #root .parish-events-list__actions .primary-action {
 .pc-confirm-actions .secondary-action{border:1px solid #c3d1e5;background:#fff;color:#243b5d}
 .pc-confirm-actions .pc-danger{border:1px solid #b42334;background:#b42334;color:#fff}
 .pc-confirm-actions .pc-danger:hover{background:#921b2a}
+
+.pc-location-field { display: grid; gap: 8px; min-width: 0; }
+.pc-location-field > :is(input, select) { box-sizing: border-box; width: 100%; min-width: 0; }
+.pc-dialog--compact { width: min(420px, calc(100% - 24px)); }
+.pc-dialog--add-schedule .event-form { min-width: 0; }
+
+/* Compact spacing for the selected day's schedule, independent of form dialogs. */
+@layer calendar-day-spacing {
+.pc-dialog--day-details { box-sizing:border-box!important; }
+.pc-dialog--day-details .pc-dialog__header { padding:16px 20px!important; gap:16px!important; }
+.pc-dialog--day-details .pc-dialog__header h4 { margin:0!important; font-size:18px!important; line-height:1.4!important; }
+.pc-dialog--day-details .pc-dialog__header .pc-icon { flex:0 0 34px!important; width:34px!important; height:34px!important; min-height:34px!important; padding:0!important; display:grid!important; place-items:center!important; font-size:20px!important; }
+.pc-dialog--day-details .pc-dialog__body { padding:4px 20px 18px!important; }
+.pc-dialog--day-details .pc-event-list { display:flex!important; flex-direction:column!important; gap:0!important; margin:0!important; padding:0!important; }
+.pc-dialog--day-details .pc-event-detail { padding:16px 0!important; margin:0!important; border-bottom:1px solid #e2e8f0!important; }
+.pc-dialog--day-details .pc-event-detail small { display:block!important; margin:0 0 5px!important; font-size:12px!important; line-height:1.4!important; }
+.pc-dialog--day-details .pc-event-detail h4 { margin:0 0 5px!important; font-size:17px!important; line-height:1.4!important; }
+.pc-dialog--day-details .pc-event-detail p { margin:0!important; font-size:13px!important; line-height:1.6!important; overflow-wrap:anywhere!important; }
+.pc-dialog--day-details .pc-event-detail p + p { margin-top:6px!important; }
+.pc-dialog--day-details .pc-dialog__footer { margin:0!important; padding:16px 0 0!important; display:flex!important; justify-content:flex-end!important; }
+.pc-dialog--day-details .pc-dialog__footer button { min-height:40px!important; padding:10px 16px!important; margin:0!important; font-size:13px!important; line-height:1.4!important; }
+@media(max-width:480px) {
+.pc-dialog--day-details .pc-dialog__header { padding:14px 16px!important; }
+.pc-dialog--day-details .pc-dialog__header h4 { font-size:16px!important; }
+.pc-dialog--day-details .pc-dialog__body { padding:4px 16px 16px!important; }
+.pc-dialog--day-details .pc-dialog__footer button { width:100%!important; }
+}
+}
+
+@layer calendar-day-spacing {
+.pc-dialog--day-details { height:auto!important; min-height:0!important; }
+.pc-dialog--day-details .pc-dialog__body { display:block!important; height:auto!important; min-height:0!important; padding:0 20px 12px!important; }
+.pc-dialog--day-details .pc-event-list { height:auto!important; min-height:0!important; gap:0!important; }
+.pc-dialog--day-details .pc-event-detail { padding:10px 0!important; }
+.pc-dialog--day-details .pc-event-detail:last-child { padding-bottom:10px!important; }
+.pc-dialog--day-details .pc-dialog__footer { height:auto!important; min-height:0!important; padding:10px 0 0!important; margin:0!important; gap:0!important; }
+@media(max-width:480px) { .pc-dialog--day-details .pc-dialog__body { padding:0 16px 12px!important; } }
+}
+
+@layer calendar-day-spacing {
+/* Native dialogs must not stretch between inherited top/bottom offsets. */
+dialog.pc-dialog--day-details[open] {
+  position:fixed!important;
+  inset:0!important;
+  margin:auto!important;
+  display:block!important;
+  box-sizing:border-box!important;
+  width:min(640px,calc(100vw - 24px))!important;
+  height:fit-content!important;
+  block-size:fit-content!important;
+  min-height:0!important;
+  min-block-size:0!important;
+  max-height:calc(100dvh - 32px)!important;
+  overflow-y:auto!important;
+  padding:0!important;
+}
+.pc-dialog--day-details .pc-dialog__body,
+.pc-dialog--day-details .pc-event-list,
+.pc-dialog--day-details .pc-event-detail {
+  flex:0 0 auto!important;
+  min-width:0!important;
+  max-width:100%!important;
+  box-sizing:border-box!important;
+}
+.pc-dialog--day-details :is(h4,p,small) {
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+  word-break:normal!important;
+  text-overflow:clip!important;
+  max-width:100%!important;
+}
+.pc-dialog--day-details .pc-dialog__header h4 { min-width:0!important; flex:1!important; }
+}
+
+@layer calendar-day-spacing {
+.pc-dialog--day-details .pc-dialog__header {
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  padding:14px 20px!important;
+  min-height:0!important;
+}
+.pc-dialog--day-details .pc-dialog__header h4 {
+  margin:0!important;
+  padding:0!important;
+  line-height:1.4!important;
+}
+.pc-dialog--day-details .pc-dialog__header .pc-icon {
+  position:static!important;
+  inset:auto!important;
+  transform:none!important;
+  align-self:center!important;
+  margin:0!important;
+  flex:0 0 32px!important;
+  width:32px!important;
+  height:32px!important;
+  min-height:32px!important;
+  padding:0!important;
+  line-height:1!important;
+}
+@media(max-width:480px) { .pc-dialog--day-details .pc-dialog__header { padding:12px 16px!important; } }
+}

@@ -1,6 +1,6 @@
 export function createParishCalendarUI(jsx, React) {
   const h = React.createElement;
-  function Modal({ title, onClose, children }) {
+  function Modal({ title, onClose, children, className = "", hideClose = false }) {
     const ref = React.useRef(null);
     React.useEffect(() => {
       const dialog = ref.current;
@@ -8,14 +8,30 @@ export function createParishCalendarUI(jsx, React) {
       return () => dialog.close();
     }, []);
     const titleId = React.useId();
-    return h('dialog', { ref, className: 'pc-dialog', 'aria-labelledby': titleId, onCancel: event => { event.preventDefault(); onClose(); }, onClick: event => {
+    return h('dialog', { ref, className: ['pc-dialog', className].filter(Boolean).join(' '), 'aria-labelledby': titleId, onCancel: event => { event.preventDefault(); onClose(); }, onClick: event => {
       if (event.target === ref.current) {
         const rect = ref.current.getBoundingClientRect();
         if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) onClose();
       }
     } }, h('header', { className: 'pc-dialog__header' }, h('h4', { id: titleId }, title),
-      h('button', { type: 'button', className: 'pc-icon', title: 'Close', 'aria-label': 'Close', onClick: onClose }, '\u00d7')),
+      hideClose ? null : h('button', { type: 'button', className: 'pc-icon', title: 'Close', 'aria-label': 'Close', onClick: onClose }, '\u00d7')),
     h('div', { className: 'pc-dialog__body' }, children));
+  }
+  function LocationField({ name, value, defaultValue = 'Main Parish', onChange }) {
+    const [localValue, setLocalValue] = React.useState(defaultValue);
+    const [customLocation, setCustomLocation] = React.useState(() => { const initial = String(value ?? defaultValue ?? '').trim(); return Boolean(initial && initial.toLowerCase() !== 'main parish' && !/^BEC Area:/i.test(initial)); });
+    const location = String(value ?? localValue ?? '').trim();
+    const isArea = /^BEC Area:/i.test(location);
+    const type = isArea ? 'bec' : customLocation || (location && location.toLowerCase() !== 'main parish') ? 'other' : 'parish';
+    const detail = isArea ? location.replace(/^BEC Area:\s*/i, '') : type === 'other' ? location : '';
+    const update = next => { setLocalValue(next); onChange?.(next); };
+    return h('div', { className: 'pc-location-field' },
+      h('select', { 'aria-label': 'Mass location', value: type, onChange: event => { setCustomLocation(event.target.value === 'other'); update(event.target.value === 'parish' ? 'Main Parish' : event.target.value === 'bec' ? 'BEC Area: ' : ''); } },
+        h('option', { value: 'parish' }, 'Main Parish'),
+        h('option', { value: 'bec' }, 'BEC Area'),
+        h('option', { value: 'other' }, 'Other location')),
+      type !== 'parish' ? h('input', { type: 'text', 'aria-label': type === 'bec' ? 'BEC area' : 'Other location', placeholder: type === 'bec' ? 'Enter the BEC area' : 'Enter the location', required: true, value: detail, onChange: event => update(type === 'bec' ? 'BEC Area: ' + event.target.value : event.target.value) }) : null,
+      name ? h('input', { type: 'hidden', name, value: location || 'Main Parish' }) : null);
   }
   function Calendar({ entries, visibleMonth, selectedDate, onChangeMonth, onSelectDate, onAdd, isLoading, message }) {
     const [openDate, setOpenDate] = React.useState(null);
@@ -45,7 +61,7 @@ export function createParishCalendarUI(jsx, React) {
             h('strong', null, i + 1), events.map(event => h('span', { key: event.id, className: `pc-event pc-event--${event.tone}`, title: event.title }, event.title)));
         }),
         Array.from({ length: (7 - (offset + days) % 7) % 7 }, (_, i) => h('div', { key: `end-${i}`, className: 'pc-day pc-day--blank' }))),
-      openDate ? h(Modal, { title: dateLabel(openDate), onClose: () => setOpenDate(null) },
+      openDate ? h(Modal, { title: dateLabel(openDate), className: 'pc-dialog--day-details', onClose: () => setOpenDate(null) },
         h('div', { className: 'pc-event-list' }, (grouped[openDate] || []).length ? grouped[openDate].map(event => h('article', { key: event.id, className: 'pc-event-detail' }, h('small', null, event.badge), h('h4', null, event.title), h('p', null, event.meta), event.description ? h('p', null, event.description) : null)) : h('p', null, 'No events scheduled for this date.')),
         h('footer', { className: 'pc-dialog__footer' }, h('button', { type: 'button', className: 'primary-action', onClick: () => { setOpenDate(null); onAdd(); } }, '+ Add Mass Schedule'))) : null);
   }
@@ -62,14 +78,14 @@ export function createParishCalendarUI(jsx, React) {
       resolver.current?.(false);
       return new Promise(resolve => { resolver.current = resolve; setPending(options); });
     }
-    const dialog = pending ? h(Modal, { title: pending.title, onClose: () => finish(false) },
-      h('p', { className: 'pc-confirm-message' }, pending.message),
+    const dialog = pending ? h(Modal, { title: pending.title, className: pending.compact ? 'pc-dialog--compact' : '', hideClose: pending.hideClose, onClose: () => finish(false) },
+      pending.message ? h('p', { className: 'pc-confirm-message' }, pending.message) : null,
       h('footer', { className: 'pc-dialog__footer pc-confirm-actions' },
         h('button', { type: 'button', className: 'secondary-action', autoFocus: true, onClick: () => finish(false) }, 'Cancel'),
         h('button', { type: 'button', className: pending.destructive ? 'pc-danger' : 'primary-action', onClick: () => finish(true) }, pending.action))) : null;
     return [confirm, dialog];
   }
-  return { Calendar, Modal, useConfirmation };
+  return { Calendar, Modal, LocationField, useConfirmation };
 }
 
 export function formatScheduleTime(value) {

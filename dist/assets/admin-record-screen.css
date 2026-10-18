@@ -1,0 +1,117 @@
+/* The combined Record page uses normal page scrolling, not the old archive-only viewport. */
+@layer admin-record-screen {
+  html[data-design="heaven"] #root :is(.scene, .dashboard-frame):has(.record-workspace) {
+    height: auto !important;
+    min-height: 100dvh !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+  html[data-design="heaven"] #root .workspace:has(.record-workspace) {
+    display: flex !important;
+    flex-direction: column !important;
+    height: auto !important;
+    min-height: 100dvh !important;
+    max-height: none !important;
+    min-width: 0 !important;
+    overflow: visible !important;
+  }
+  html[data-design="heaven"] #root .overview-shell:has(.record-workspace) {
+    display: block !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+    padding: 20px !important;
+  }
+  #root .record-workspace {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    align-items: start !important;
+    gap: 20px !important;
+    min-width: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+  }
+  #root .record-workspace :is(.screen-grid, .archive-sacramental-records) {
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+    min-width: 0 !important;
+    width: 100% !important;
+  }
+  #root .record-workspace .archive-sacramental-records { display: block !important; }
+  #root .record-workspace :is(.archive-sacramental-records > .page-card, .baptism-records) {
+    box-sizing: border-box;
+    display: flex !important;
+    flex-direction: column !important;
+    align-self: start !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    padding: 20px !important;
+    gap: 16px !important;
+    overflow: visible !important;
+  }
+  #root .record-workspace .glass-card__header { flex-wrap: wrap !important; gap: 12px !important; margin: 0 !important; }
+  #root .record-workspace .archive-sacramental-form {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    grid-auto-rows: auto !important;
+    align-content: start !important;
+    align-items: start !important;
+    gap: 16px !important;
+    flex: none !important;
+    height: auto !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+  #root .record-workspace .archive-record-form__field { min-width: 0 !important; margin: 0 !important; gap: 6px !important; }
+  #root .record-workspace .archive-record-form__field--wide { grid-column: span 1 !important; }
+  #root .record-workspace .archive-record-form__field > span { color: #415470 !important; font-size: 12px !important; font-weight: 600 !important; line-height: 1.5 !important; }
+  #root .record-workspace .archive-record-form__field :is(input, select, textarea) {
+    box-sizing: border-box;
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 40px !important;
+    min-height: 40px !important;
+    padding: 9px 11px !important;
+    border: 1px solid #d5deea !important;
+    border-radius: 6px !important;
+    background: #fff !important;
+    color: #2d405b !important;
+    font: inherit;
+    font-size: 13px !important;
+  }
+  #root .record-workspace .archive-record-form__field textarea { height: 80px !important; resize: vertical !important; }
+  #root .record-workspace .archive-sacramental-form__actions {
+    grid-column: 1 / -1 !important;
+    position: static !important;
+    display: flex !important;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 10px;
+    margin: 0 !important;
+    padding: 16px 0 0 !important;
+    border-top: 1px solid #e2e9f2;
+    background: transparent !important;
+  }
+  #root .record-workspace .baptism-records__table-wrap { width: 100%; min-width: 0; max-width: 100%; overflow-x: auto !important; }
+  html[data-theme="dark"] #root .record-workspace .archive-record-form__field > span { color: #c1ccdc !important; }
+  html[data-theme="dark"] #root .record-workspace .archive-record-form__field :is(input, select, textarea) { background: #172238 !important; border-color: #42536b !important; color: #e2e8f0 !important; }
+  @media (max-width: 1100px) {
+    #root .record-workspace .archive-sacramental-form { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  }
+  @media (max-width: 600px) {
+    html[data-design="heaven"] #root .overview-shell:has(.record-workspace) { padding: 12px !important; }
+    #root .record-workspace :is(.archive-sacramental-records > .page-card, .baptism-records) { padding: 14px !important; }
+    #root .record-workspace .archive-sacramental-form { grid-template-columns: minmax(0, 1fr) !important; }
+    #root .record-workspace .archive-sacramental-form__actions button { width: 100% !important; min-width: 0 !important; }
+    #root .record-workspace .baptism-records__tools { flex-wrap: wrap; min-width: 0; }
+    #root .record-workspace .baptism-records__type { min-width: 0 !important; max-width: 100%; }
+  }
+}

@@ -87,7 +87,7 @@ async function resolveParishId(request, session) {
   return parishId;
 }
 
-export function ArchiveSacramentalRecords({ session, React, ui, request, recordType, options, onRecordTypeChange, initialRecord, onSaved }) {
+export function ArchiveSacramentalRecords({ session, React, ui, request, recordType, options, onRecordTypeChange, initialRecord, onSaved, heading }) {
   const { useEffect, useState, useRef } = React;
   const { jsx, jsxs } = ui;
   const isBaptism = recordType === 'Baptism';
@@ -197,7 +197,7 @@ export function ArchiveSacramentalRecords({ session, React, ui, request, recordT
   return jsxs('div', { className: 'screen-grid archive-sacramental-records', children: [
     jsxs('article', { className: 'glass-card page-card screen-grid__full', children: [
       jsxs('div', { className: 'glass-card__header', children: [
-        jsxs('div', { children: [jsx('h4', { children: `${recordType} Records` }), jsx('p', { className: 'page-card__lead', children: `Manage parish ${recordType.toLowerCase()} records.` })] }),
+        jsxs('div', { children: [jsx('h4', { children: heading || `${recordType} Records` }), jsx('p', { className: 'page-card__lead', children: `Manage parish ${recordType.toLowerCase()} records.` })] }),
         jsxs('label', { className: 'login-field baptism-records__type', children: [jsx('span', { children: 'Record Type' }), jsx('select', { value: recordType, onChange: event => { resetForm(); onRecordTypeChange(event.target.value); }, children: options.map(option => jsx('option', { value: option, children: option }, option)) })] }),
       ] }),
       error ? jsx('div', { className: 'auth-notice auth-notice--error', role: 'alert', children: error }) : null,

@@ -1,0 +1,55 @@
+@layer admin-notifications {
+  html[data-design="heaven"] #root .notification-menu {
+    width: min(380px, calc(100vw - 24px)) !important;
+    padding: 0 !important;
+    border: 1px solid #dce3eb !important;
+    border-radius: 10px !important;
+    background: #fff !important;
+    box-shadow: 0 10px 32px #172b4d1a !important;
+    color: #25344a !important;
+  }
+  #root .notification-menu .topbar-menu__header {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 12px !important;
+    padding: 16px !important;
+    margin: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+  }
+  #root .notification-menu .workspace__eyebrow { margin: 0 0 4px !important; color: #758297 !important; font-size: 10px !important; font-weight: 600 !important; letter-spacing: .08em !important; }
+  #root .notification-menu h4 { margin: 0 !important; color: #25344a !important; font-size: 16px !important; font-weight: 600 !important; line-height: 1.4 !important; }
+  #root .notification-menu .summary-pill { padding: 4px 8px !important; border: 0 !important; border-radius: 5px !important; background: #eef3f9 !important; color: #425d81 !important; font-size: 11px !important; box-shadow: none !important; white-space: nowrap; }
+  #root .notification-selection-bar { display: flex !important; align-items: center !important; gap: 6px !important; margin: 0 !important; padding: 10px 16px !important; border-block: 1px solid #e8edf3 !important; }
+  #root .notification-selection-bar label { display: inline-flex !important; align-items: center !important; gap: 7px !important; margin-right: auto !important; font-size: 12px !important; color: #526176 !important; white-space: nowrap; }
+  #root .notification-selection-bar button { appearance: none !important; padding: 5px 8px !important; border: 1px solid #dce3eb !important; border-radius: 5px !important; background: #fff !important; color: #425774 !important; font: inherit; font-size: 11px !important; line-height: 1.4 !important; box-shadow: none !important; cursor: pointer; white-space: nowrap; }
+  #root .notification-selection-bar button:disabled { opacity: .45 !important; cursor: default; }
+  #root .notification-selection-bar button:not(:disabled):hover { background: #f1f5fa !important; }
+  #root .notification-menu input[type="checkbox"] { appearance: auto !important; width: 14px !important; height: 14px !important; min-height: 0 !important; padding: 0 !important; margin: 2px 0 0 !important; accent-color: #365e91; flex-shrink: 0; }
+  #root .notification-menu__list { display: grid !important; gap: 0 !important; padding: 0 !important; max-height: min(340px, calc(100dvh - 230px)) !important; overflow-y: auto !important; scrollbar-width: thin; }
+  #root .notification-menu .notification-item { display: grid !important; grid-template-columns: 14px minmax(0, 1fr) !important; align-items: start !important; gap: 12px !important; width: 100% !important; min-height: 0 !important; padding: 14px 16px !important; margin: 0 !important; border: 0 !important; border-bottom: 1px solid #edf0f5 !important; border-radius: 0 !important; background: #f8faff !important; box-shadow: none !important; }
+  #root .notification-menu .notification-item:last-child { border-bottom: 0 !important; }
+  #root .notification-menu .notification-item--read { background: #fff !important; }
+  #root .notification-menu .notification-item:has(input:checked) { background: #edf3fb !important; }
+  #root .notification-menu .notification-open { appearance: none !important; display: grid !important; grid-template-columns: minmax(0, 1fr) !important; align-items: start !important; gap: 9px !important; width: 100% !important; min-width: 0 !important; padding: 0 !important; border: 0 !important; border-radius: 0 !important; background: transparent !important; text-align: left !important; color: inherit !important; font: inherit; box-shadow: none !important; cursor: pointer; }
+  #root .notification-menu .notification-open:has(.notification-item__dot) { grid-template-columns: 6px minmax(0, 1fr) !important; }
+  #root .notification-menu .notification-item__dot { display: block !important; width: 6px !important; height: 6px !important; margin: 5px 0 0 !important; border-radius: 50% !important; background: #4f77a6 !important; box-shadow: none !important; }
+  #root .notification-menu .notification-content { min-width: 0; }
+  #root .notification-menu .notification-content strong { display: block !important; color: #2c3e56 !important; font-size: 13px !important; line-height: 1.5 !important; font-weight: 600 !important; overflow-wrap: anywhere; }
+  #root .notification-menu .notification-detail { display: block !important; margin-top: 2px !important; color: #596b80 !important; font-size: 12px !important; font-weight: 400 !important; line-height: 1.5 !important; overflow-wrap: anywhere; }
+  #root .notification-menu .notification-date { display: block !important; margin-top: 5px !important; color: #8692a3 !important; font-size: 11px !important; font-weight: 400 !important; line-height: 1.4 !important; }
+  #root .notification-menu button:focus-visible { outline: 2px solid #4f77a6 !important; outline-offset: 3px; }
+  html[data-theme="dark"] #root .notification-menu { background: #172238 !important; border-color: #334155 !important; color: #e2e8f0 !important; }
+  html[data-theme="dark"] #root .notification-menu :is(h4, .notification-content strong) { color: #e2e8f0 !important; }
+  html[data-theme="dark"] #root .notification-menu .notification-item { background: #1c2940 !important; border-color: #334155 !important; }
+  html[data-theme="dark"] #root .notification-menu .notification-item--read { background: #172238 !important; }
+  html[data-theme="dark"] #root .notification-menu .notification-item:has(input:checked) { background: #263c59 !important; }
+  html[data-theme="dark"] #root .notification-menu :is(.notification-detail, .notification-selection-bar label) { color: #b1bfd0 !important; }
+  html[data-theme="dark"] #root .notification-selection-bar { border-color: #334155 !important; }
+  html[data-theme="dark"] #root .notification-selection-bar button { background: transparent !important; border-color: #4c5c73 !important; color: #cbd5e1 !important; }
+  @media (max-width: 600px) {
+    html[data-design="heaven"] #root .notification-menu { right: 12px !important; }
+    #root .notification-selection-bar { padding-inline: 12px !important; }
+  }
+}
