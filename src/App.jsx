@@ -19,6 +19,7 @@ export default function App() {
       }}
     >
       <iframe
+        allow="camera 'self'"
         title="DioLink Admin Portal"
         src="/dist/index.html?v=20261008-services-screen-2"
         style={{

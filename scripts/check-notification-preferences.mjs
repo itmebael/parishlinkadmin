@@ -1,0 +1,17 @@
+import assert from 'node:assert/strict';
+import {notificationStorageKey, loadNotificationState, updateNotificationState, visibleNotifications} from '../dist/assets/notification-preferences.js';
+const items = [{_key:'b:1:Booked:today',route:'parish-bookings'}, {_key:'m:2',route:'parish-messages'}];
+const read = updateNotificationState({}, [items[0]._key], 'read');
+assert.equal(visibleNotifications(items,read).filter(item=>!item.read).length,1);
+const allRead = updateNotificationState(read, [items[1]._key], 'read');
+assert.equal(visibleNotifications(items,allRead).some(item=>!item.read),false);
+const deleted = updateNotificationState(allRead,[items[0]._key],'delete');
+assert.deepEqual(visibleNotifications(items,deleted).map(item=>item.route),['parish-messages']);
+assert.equal(visibleNotifications(items,loadNotificationState('test',{getItem:()=>JSON.stringify(deleted)})).length,1);
+assert.deepEqual(loadNotificationState('test',{getItem:()=>'{broken'}),{});
+assert.deepEqual(loadNotificationState('test',{getItem:()=>{throw Error('Unavailable')}}),{});
+assert.notEqual(notificationStorageKey({email:'one@example.com'}),notificationStorageKey({email:'two@example.com'}));
+assert.equal(notificationStorageKey({email:'ONE@example.com'}),notificationStorageKey({user:{email:'one@example.com'}}));
+assert.equal(visibleNotifications([{_key:'b:1:Approved:tomorrow'}],deleted)[0].read,false);
+assert.equal(items[0].read,undefined);
+console.log('Notification checks passed: bulk read/delete, indicator, routes, persistence, account isolation, and new updates.');

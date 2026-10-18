@@ -1,0 +1,18 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import vm from 'node:vm';
+const html=fs.readFileSync('dist/index.html','utf8');
+const script=[...html.matchAll(/<script[^>]*>([\s\S]*?)<\/script>/g)].find(match=>match[1].includes('window.__dioNoPastBookingDates'))[1];
+let calls=0,alerts=0;
+const window={location:{href:'https://example.com/dist/index.html'},fetch:async()=>{calls++;return new Response('{}',{status:200});},alert(){alerts++;}};
+vm.runInNewContext(script,{window,URL,Response,Date,Promise});
+const base='https://example.supabase.co/rest/v1/';
+const body=JSON.stringify({event_date:'2000-01-01'});
+assert.equal((await window.fetch(base+'parish_events?id=eq.saved-event',{method:'PATCH',body})).status,200);
+assert.equal(alerts,0);
+assert.equal((await window.fetch(base+'parish_events',{method:'POST',body})).status,400);
+assert.equal((await window.fetch(base+'parish_events',{method:'PATCH',body})).status,400);
+assert.equal((await window.fetch(base+'diocese_service_bookings?id=eq.booking',{method:'PATCH',body:JSON.stringify({booking_date:'2000-01-01'})})).status,400);
+assert.equal((await window.fetch(base+'parish_events',{method:'POST',body:JSON.stringify({event_date:'2099-01-01'})})).status,200);
+assert.equal(calls,2);
+console.log('Past-date checks passed: existing event edits allowed, new past schedules/bookings blocked, future schedules allowed.');

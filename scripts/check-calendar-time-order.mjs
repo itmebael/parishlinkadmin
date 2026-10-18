@@ -1,0 +1,11 @@
+import assert from 'node:assert/strict';
+import {sortSchedules,formatScheduleTime} from '../dist/assets/parish-calendar-ui.js';
+const entries=[{title:'10 AM',startTime:'10:00'},{title:'6 AM',startTime:'06:00:00'},{title:'8 AM',startTime:'08:00'},{title:'Unscheduled'}];
+assert.deepEqual(sortSchedules(entries).map(item=>item.title),['6 AM','8 AM','10 AM','Unscheduled']);
+assert.equal(entries[0].title,'10 AM');
+assert.equal(formatScheduleTime('06:00'),'6 AM');
+assert.equal(formatScheduleTime('13:30'),'1:30 PM');
+assert.equal(formatScheduleTime('00:00'),'12 AM');
+assert.equal(formatScheduleTime('12:00'),'12 PM');
+assert.equal(formatScheduleTime(null),'Time not set');
+console.log('Calendar checks passed: chronological order, missing times, AM/PM formatting, and unchanged input.');

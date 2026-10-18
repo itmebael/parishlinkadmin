@@ -1,0 +1,16 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import {assertCameraAccess, cameraErrorMessage} from '../dist/assets/camera-access.js';
+const context = {isSecureContext:true,navigator:{mediaDevices:{getUserMedia(){}}},document:{permissionsPolicy:{allowsFeature:()=>true}}};
+assert.doesNotThrow(()=>assertCameraAccess(context));
+assert.throws(()=>assertCameraAccess({...context,isSecureContext:false}),/HTTPS/);
+assert.throws(()=>assertCameraAccess({...context,document:{permissionsPolicy:{allowsFeature:()=>false}}}),/hosting/);
+assert.throws(()=>assertCameraAccess({...context,navigator:{}}),/unavailable/);
+assert.match(cameraErrorMessage({name:'NotAllowedError'}),/Camera to Allow/);
+assert.match(cameraErrorMessage({name:'NotFoundError'}),/No camera/);
+assert.match(cameraErrorMessage({name:'NotReadableError'}),/other apps/);
+assert.equal(cameraErrorMessage({message:'Unexpected camera failure'}),'Unexpected camera failure');
+for(const file of ['index.html','src/App.jsx']) assert.match(fs.readFileSync(file,'utf8'),/allow="camera 'self'"/);
+const config=JSON.parse(fs.readFileSync('vercel.json','utf8'));
+assert.ok(config.headers.some(rule=>rule.source==='/(.*)' && rule.headers.some(header=>header.key==='Permissions-Policy'&&header.value==='camera=(self)')));
+console.log('Camera checks passed: iframe permissions, deployment policy, secure context, and error handling.');

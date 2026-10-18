@@ -87,7 +87,7 @@ async function resolveParishId(request, session) {
   return parishId;
 }
 
-export function ArchiveSacramentalRecords({ session, React, ui, request, recordType, options, onRecordTypeChange }) {
+export function ArchiveSacramentalRecords({ session, React, ui, request, recordType, options, onRecordTypeChange, initialRecord, onSaved }) {
   const { useEffect, useState, useRef } = React;
   const { jsx, jsxs } = ui;
   const isBaptism = recordType === 'Baptism';
@@ -108,6 +108,10 @@ export function ArchiveSacramentalRecords({ session, React, ui, request, recordT
 
   useEffect(() => {
     setValues(emptyValues(fields)); setEditingId(null); setNotice(''); setError(''); setSavedRecord(null);
+    if (initialRecord) {
+      setEditingId(initialRecord.id);
+      setValues(Object.fromEntries(fields.map(([column]) => [column, initialRecord[column] == null ? '' : String(initialRecord[column])])));
+    }
   }, [table, session?.parish_id, session?.parishId, session?.email, session?.accessToken, session?.role]);
   useEffect(() => {
     if (savedRecord && dialogRef.current && !dialogRef.current.open) dialogRef.current.showModal();
@@ -153,6 +157,7 @@ export function ArchiveSacramentalRecords({ session, React, ui, request, recordT
       });
       const saved = Array.isArray(result) ? result[0] : result;
       if (!saved) throw new Error('The record could not be saved. Please try again.');
+      if (onSaved) { onSaved(saved); return; }
       resetForm();
       setNotice(editingId ? 'Record updated.' : 'Record saved.');
       setSavedRecord(saved);
@@ -171,12 +176,23 @@ export function ArchiveSacramentalRecords({ session, React, ui, request, recordT
     window.scrollTo?.({ top: 0, behavior: 'smooth' });
   }
 
-  const renderField = ([column, label, type, required]) => jsxs('label', {
+  const dateOptions = column => {
+    const currentYear = Number(new Intl.DateTimeFormat('en-US', {year:'numeric', timeZone:'Asia/Manila'}).format(new Date()));
+    if (/^year_(birth|baptism|confirm)$/.test(column)) return Array.from({length:currentYear - 1800 + 1}, (_, index) => String(currentYear - index));
+    if (['month_birth','month_batism','month_confirm'].includes(column)) return Array.from({length:12}, (_, index) => new Date(2020, index, 1).toLocaleString('en-US', {month:'long'}));
+    if (['day_birth','date_batism','date_baptism'].includes(column)) return Array.from({length:31}, (_, index) => String(index + 1));
+    return null;
+  };
+  const renderField = ([column, label, type, required]) => {
+    const options = dateOptions(column);
+    const existing = values[column] || '';
+    return jsxs('label', {
     className: `login-field archive-record-form__field ${type === 'textarea' ? 'archive-record-form__field--wide' : ''}`,
-    children: [jsx('span', { children: label }), type === 'textarea'
+    children: [jsx('span', { children: label }), options ? jsx('select', {name:column, value:existing, required:Boolean(required), onChange:event => setField(column, event.target.value), children:[jsx('option', {value:'', children:'Choose ' + label.toLowerCase()}), ...(existing && !options.includes(existing) ? [jsx('option', {value:existing, children:existing}, existing)] : []), ...options.map(value => jsx('option', {value, children:value}, value))]}) : type === 'textarea'
       ? jsx('textarea', { name: column, value: values[column] || '', required: Boolean(required), rows: 2, onChange: event => setField(column, event.target.value) })
       : jsx('input', { name: column, type, value: values[column] || '', required: Boolean(required), step: column === 'fee' ? '0.01' : undefined, onChange: event => setField(column, event.target.value) })],
   }, column);
+  };
 
   return jsxs('div', { className: 'screen-grid archive-sacramental-records', children: [
     jsxs('article', { className: 'glass-card page-card screen-grid__full', children: [

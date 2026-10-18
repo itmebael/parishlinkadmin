@@ -1,3 +1,70 @@
+/* Today's Activity uses one shared statistics container. */
+@media screen {
+  html[data-design="heaven"] body #root#root#root#root#root#root#root#root#root .parish-portal .metric-card__stats {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 0 !important;
+    padding: 20px 0 !important;
+    border: 1px solid #cbdcff !important;
+    border-radius: 12px !important;
+    background: #eef4ff !important;
+    overflow: hidden;
+  }
+  html[data-design="heaven"] body #root#root#root#root#root#root#root#root#root .parish-portal .metric-card__stats > div {
+    padding: 8px 24px !important;
+    margin: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    min-width: 0;
+  }
+  html[data-design="heaven"] body #root#root#root#root#root#root#root#root#root .parish-portal .metric-card__stats > div + div {
+    border-left: 1px solid #cbdcff !important;
+  }
+  html[data-design="heaven"][data-theme="dark"] body #root#root#root#root#root#root#root#root#root .parish-portal .metric-card__stats {
+    background: #172238 !important;
+    border-color: #334155 !important;
+  }
+  @media (max-width: 600px) {
+    html[data-design="heaven"] body #root#root#root#root#root#root#root#root#root .parish-portal .metric-card__stats {
+      grid-template-columns: minmax(0, 1fr) !important;
+      padding: 0 !important;
+    }
+    html[data-design="heaven"] body #root#root#root#root#root#root#root#root#root .parish-portal .metric-card__stats > div { padding: 18px 24px !important; }
+    html[data-design="heaven"] body #root#root#root#root#root#root#root#root#root .parish-portal .metric-card__stats > div + div {
+      border-left: 0 !important;
+      border-top: 1px solid #cbdcff !important;
+    }
+  }
+}
+.dashboard-empty-icon { display: block; flex-shrink: 0; color: #637b9b; margin: 0 auto 12px; }
+.parish-agenda .empty-state:has(.dashboard-empty-icon) { text-align: center; align-items: center; }
+html[data-theme="dark"] .dashboard-empty-icon { color: #a3b7d2; }
+.pending-queue-tabs { display: flex; border-bottom: 1px solid #d5e1f3; gap: 12px; margin-bottom: 20px; }
+.pending-queue-tabs button { flex: 1; padding: 12px 4px; background: transparent; border: 0; border-bottom: 3px solid transparent; color: #627797; font: inherit; font-weight: 600; cursor: pointer; }
+.pending-queue-tabs button[aria-selected="true"] { color: #2446a8; border-bottom-color: #2446a8; }
+.pending-queue-tabs button:focus-visible { outline: 2px solid #4169e1; outline-offset: 2px; }
+.pending-queue-count { margin: 0 0 18px; font-size: 17px; }
+.pending-queue-empty { min-height: 160px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; text-align: center; color: #627797; }
+.pending-queue-empty p { margin: 0; }
+.pending-queue-request { width: 100%; text-align: left; background: transparent; color: inherit; font: inherit; cursor: pointer; border: 1px solid #d5e1f3; }
+.pending-queue-request > div:nth-child(2) { display: grid; gap: 5px; flex: 1; }
+html[data-theme="dark"] .pending-queue-tabs button[aria-selected="true"] { color: #a9c7ff; border-bottom-color: #a9c7ff; }
+/* Give Today's Activity the same outer container as Queue and Schedule. */
+@media screen {
+  html[data-design="heaven"] body #root#root#root#root#root#root#root#root#root .parish-portal > .page-card:has(.metric-card__stats) {
+    padding: 22px !important;
+    border: 1px solid #d5e1f3 !important;
+    border-radius: 16px !important;
+    background: #fff !important;
+    box-shadow: 0 8px 24px rgba(35, 65, 110, .06) !important;
+  }
+  html[data-design="heaven"][data-theme="dark"] body #root#root#root#root#root#root#root#root#root .parish-portal > .page-card:has(.metric-card__stats) {
+    background: var(--heaven-panel, #172238) !important;
+    border-color: var(--heaven-line, #334155) !important;
+  }
+}
 /* Shared screen styling drawn from the Broadcast History panel. */
 @media screen {
   html[data-design="heaven"]:not([data-theme="dark"]) body #root#root#root#root#root#root .dashboard-frame--parish > .workspace {

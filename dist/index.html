@@ -11,9 +11,9 @@
     <title>ParishLink | Admin Portal</title>
     <!-- User dashboard: light (white) theme only — runs before React reads localStorage. -->
     
-    <script type="module" crossorigin src="/dist/assets/index-v20260422157000.js?v=booking-details-20261009-5"></script>
-    <link rel="stylesheet" href="/dist/assets/parish-calendar-ui.css?v=20261003-confirm-dialog-3">
-    <link rel="stylesheet" href="/dist/assets/broadcast-history.css?v=20261009-table">
+    <script type="module" crossorigin src="/dist/assets/index-v20260422157000.js?v=20261014-certificate-pdf-7"></script>
+    <link rel="stylesheet" href="/dist/assets/parish-calendar-ui.css?v=20261013-mass-audience">
+    <link rel="stylesheet" href="/dist/assets/broadcast-history.css?v=20261012-delete-dialog">
     <link rel="stylesheet" crossorigin href="/dist/assets/index-yReDnWMe.css">
     <link rel="stylesheet" href="/dist/assets/parish-reports.css?v=20261009-header-colors">
     <link rel="stylesheet" href="/dist/assets/chapel-information-menu.css?v=20260921-1">
@@ -1139,7 +1139,8 @@
     <link rel="stylesheet" href="/dist/assets/parish-dark-mode.css?v=20261003-dashboard-dark-9">
     <link rel="stylesheet" href="/dist/assets/parish-bookings-ui.css?v=20261009-details-popup-3">
     <link rel="stylesheet" href="/dist/assets/baptism-certificate-design.css?v=20261003-marriage-longpaper-1">
-  </head>
+    
+</head>
   <body>
     <dialog id="login-terms-dialog" class="login-terms-dialog" aria-labelledby="login-terms-title">
       <form method="dialog" class="login-terms-dialog__inner">
@@ -1440,6 +1441,8 @@
         var WRAP_ATTR = "data-plh-injected";
         var pollTimer = null;
         var lastWrap = null;
+        var deleting = false;
+        var refreshVersion = 0;
 
         function escHtml(s) {
           return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
@@ -1540,6 +1543,7 @@
                 'Refresh' +
               '</button>' +
             '</div>' +
+            '<div class="plh-action-status" role="status" aria-live="polite" hidden></div>' +
             '<div class="plh-stats" id="plh-stats"></div>' +
             '<div class="plh-table-scroll" id="plh-list" aria-live="polite"><div class="plh-loading"><span class="plh-spinner"></span>Loading history...</div></div>';
 
@@ -1554,7 +1558,75 @@
           }
 
           wrap.querySelector(".plh-refresh").addEventListener("click", function () { refresh(true); });
+          wrap.addEventListener("click", async function (event) {
+            var button = event.target.closest(".plh-delete");
+            if (!button || button.disabled || deleting) return;
+            var id = button.getAttribute("data-history-id");
+            if (!id) return;
+            if (!await confirmBroadcastDelete(button)) return;
+            if (deleting || !document.body.contains(wrap)) return;
+            var session = getSession();
+            var status = wrap.querySelector(".plh-action-status");
+            status.hidden = false;
+            if (!session || !session.accessToken) {
+              status.className = "plh-action-status plh-error";
+              status.textContent = "Log in again before deleting a broadcast.";
+              return;
+            }
+            deleting = true;
+            refreshVersion++;
+            button.disabled = true;
+            button.textContent = "Deleting?";
+            status.className = "plh-action-status";
+            status.textContent = "Deleting broadcast?";
+            rpc("delete_parish_livestream_history", { p_history_id: id }).then(function (removed) {
+              if (removed !== true) throw new Error("The broadcast was not deleted. Refresh and try again.");
+              deleting = false;
+              status.textContent = "Broadcast deleted.";
+              return refresh(false);
+            }).catch(function (error) {
+              deleting = false;
+              button.disabled = false;
+              button.textContent = "Delete";
+              status.className = "plh-action-status plh-error";
+              status.textContent = /schema cache|could not find.*function|does not exist/i.test(error.message || "")
+                ? "Deletion is not enabled yet. Please contact your system administrator."
+                : "Could not delete broadcast: " + (error.message || "Please try again.");
+            });
+          });
           return wrap;
+        }
+
+        function confirmBroadcastDelete(trigger) {
+          if (document.querySelector(".plh-delete-dialog")) return Promise.resolve(false);
+          return new Promise(function (resolve) {
+            var dialog = document.createElement("dialog");
+            dialog.className = "plh-delete-dialog";
+            dialog.setAttribute("aria-labelledby", "plh-delete-title");
+            dialog.setAttribute("aria-describedby", "plh-delete-description");
+            dialog.innerHTML = '<div class="plh-delete-dialog__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M9 6V4h6v2M5 6l1 14h12l1-14M10 10v6M14 10v6"/></svg></div>' +
+              '<h2 id="plh-delete-title">Delete broadcast?</h2>' +
+              '<p id="plh-delete-description">This broadcast will be permanently removed from your history. This action cannot be undone.</p>' +
+              '<div class="plh-delete-dialog__actions"><button type="button" class="plh-delete-dialog__cancel" autofocus>Cancel</button><button type="button" class="plh-delete-dialog__confirm">Delete broadcast</button></div>';
+            var finished = false;
+            function finish(confirmed) {
+              if (finished) return;
+              finished = true;
+              dialog.close();
+              dialog.remove();
+              if (trigger && trigger.isConnected) trigger.focus();
+              resolve(confirmed);
+            }
+            dialog.querySelector(".plh-delete-dialog__cancel").addEventListener("click", function () { finish(false); });
+            dialog.querySelector(".plh-delete-dialog__confirm").addEventListener("click", function () { finish(true); });
+            dialog.addEventListener("cancel", function (event) { event.preventDefault(); finish(false); });
+            dialog.addEventListener("click", function (event) {
+              var bounds = dialog.getBoundingClientRect();
+              if (event.target === dialog && (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom)) finish(false);
+            });
+            document.body.appendChild(dialog);
+            dialog.showModal();
+          });
         }
 
         function renderStats(wrap, stats) {
@@ -1586,7 +1658,7 @@
             list.innerHTML = '<div class="plh-empty"><strong>No broadcasts yet.</strong><div>Every time you start a broadcast it will be logged here automatically.</div></div>';
             return;
           }
-          var html = '<table class="plh-table"><caption class="plh-table-caption">Broadcast history with start and end times, duration, and peak viewers</caption><thead><tr><th scope="col">Parish</th><th scope="col">Started</th><th scope="col">Ended</th><th scope="col">Duration</th><th scope="col">Peak viewers</th><th scope="col">Started by</th><th scope="col">Status</th></tr></thead><tbody>';
+          var html = '<table class="plh-table"><caption class="plh-table-caption">Broadcast history with start and end times, duration, and peak viewers</caption><thead><tr><th scope="col">Parish</th><th scope="col">Started</th><th scope="col">Ended</th><th scope="col">Duration</th><th scope="col">Peak viewers</th><th scope="col">Started by</th><th scope="col">Status</th><th scope="col">Action</th></tr></thead><tbody>';
           rows.forEach(function (r) {
             var live = !!r.is_live;
             html += '<tr' + (live ? ' class="plh-table-row--live"' : '') + '>' +
@@ -1596,14 +1668,16 @@
               '<td><span class="plh-duration">' + escHtml(r.duration_label || (live ? 'In progress' : '?')) + '</span></td>' +
               '<td><span class="plh-viewers">' + Number(r.peak_viewer_count || 0) + '</span></td>' +
               '<td>' + escHtml(r.started_by_name || '?') + '</td>' +
-              '<td><span class="plh-status' + (live ? ' plh-status--live' : '') + '">' + (live ? 'Live now' : 'Ended') + '</span></td></tr>';
+              '<td><span class="plh-status' + (live ? ' plh-status--live' : '') + '">' + (live ? 'Live now' : 'Ended') + '</span></td>' +
+              '<td><button type="button" class="plh-delete" data-history-id="' + escHtml(r.id || '') + '" aria-label="Delete broadcast started ' + escHtml(fmtDate(r.started_at)) + '"' + (live || !r.id ? ' disabled title="Only ended broadcasts can be deleted"' : '') + '>Delete</button></td></tr>';
           });
           list.innerHTML = html + '</tbody></table>';
         }
 
         function refresh(forceSpinner) {
           var wrap = lastWrap;
-          if (!wrap) return;
+          if (!wrap || deleting) return;
+          var version = ++refreshVersion;
           if (forceSpinner) {
             var list = wrap.querySelector("#plh-list");
             if (list) list.innerHTML = '<div class="plh-loading"><span class="plh-spinner"></span>Loading history...</div>';
@@ -1612,15 +1686,17 @@
           var pn = parishName();
           var scopeName = (r === "parish" && pn) ? pn : null;
 
-          Promise.all([
+          return Promise.all([
             rpc("list_parish_livestream_history", { p_parish_name: scopeName, p_limit: 30, p_offset: 0 }),
             rpc("parish_livestream_stats", { p_parish_name: scopeName })
           ]).then(function (res) {
+            if (version !== refreshVersion || !document.body.contains(wrap)) return;
             var rows = Array.isArray(res[0]) ? res[0] : [];
             var stats = Array.isArray(res[1]) ? res[1][0] : res[1];
             renderStats(wrap, stats);
             renderList(wrap, rows, null);
           }).catch(function (err) {
+            if (version !== refreshVersion || !document.body.contains(wrap)) return;
             renderStats(wrap, null);
             renderList(wrap, null, err);
           });
@@ -6300,7 +6376,16 @@
             url.indexOf("/rest/v1/parish_events") !== -1 ||
             url.indexOf("/rest/v1/parish_appointment_slots") !== -1;
 
-          if (isWrite && isTarget) {
+          // Existing parish schedules may be corrected even after their date has passed.
+          var isExistingParishEventEdit = false;
+          if (method === "PATCH") {
+            try {
+              var target = new URL(url, window.location.href);
+              isExistingParishEventEdit = target.pathname === "/rest/v1/parish_events" &&
+                /^eq\.[^\s]+$/.test(target.searchParams.get("id") || "");
+            } catch (e) {}
+          }
+          if (isWrite && isTarget && !isExistingParishEventEdit) {
             try {
               var body = init && init.body;
               if (typeof body === "string" && body.length) {
@@ -7911,21 +7996,24 @@
     </script>
     <link rel="stylesheet" href="/dist/assets/login-ui-reference.css?v=20261009-centered-3">
     <link rel="stylesheet" href="/dist/assets/admin-dashboard-reference.css?v=20261008-4">
-    <link rel="stylesheet" href="/dist/assets/parish-publishing.css?v=20261009-blue-outlines">
+    <link rel="stylesheet" href="/dist/assets/parish-publishing.css?v=20261014-board-layout-5">
     <link rel="stylesheet" href="/dist/assets/sidebar-login-design.css?v=20261008-5">
     <link rel="stylesheet" href="/dist/assets/parish-inbox.css?v=20261009-inbox-2">
     <link rel="stylesheet" href="/dist/assets/baptism-reference.css?v=20261008-1">
     <link rel="stylesheet" href="/dist/assets/certificate-preview.css?v=20261008-1">
     <link rel="stylesheet" href="/dist/assets/parish-services-screen.css?v=20261009-blue-outlines">
     <link rel="stylesheet" href="/dist/assets/live-stream-control.css?v=20261009-1">
-    <link rel="stylesheet" href="/dist/assets/sacramental-records-table.css?v=20261009-blue-grid">
-    <link rel="stylesheet" href="/dist/assets/shared-screen-theme.css?v=20261009-records-blue">
+    <link rel="stylesheet" href="/dist/assets/sacramental-records-table.css?v=20261014-record-actions-2">
+    <link rel="stylesheet" href="/dist/assets/record-form-preview.css?v=20261014-light-blue-2">
+    <link rel="stylesheet" href="/dist/assets/shared-screen-theme.css?v=20261010-single-stats">
+    <link rel="stylesheet" href="/dist/assets/dashboard-compact.css?v=20261012-banner-reference">
     <link rel="stylesheet" href="/dist/assets/parish-archive-screen.css?v=20261009-blue-outlines">
+    <link rel="stylesheet" href="/dist/assets/record-editor.css?v=20261014-date-select-2">
     <link rel="stylesheet" href="/dist/assets/parish-user-management.css?v=20261009-header-2">
-    <link rel="stylesheet" href="/dist/assets/dashboard-welcome-hero.css?v=20261009-size-2">
+    <link rel="stylesheet" href="/dist/assets/dashboard-welcome-hero.css?v=20261012-banner-reference">
   </body>
   <script src="/dist/assets/chapel-information-menu.js?v=20260921-1"></script>
-  <script src="/dist/assets/parish-text-sizing.js?v=20261009-1"></script>
+  <script src="/dist/assets/parish-text-sizing.js?v=20261012-fit-font"></script>
   <script src="/dist/assets/parish-settings-toggles.js?v=20261009-no-dark-floating"></script>
   <script src="/dist/assets/baptism-certificate-design.js?v=20261003-marriage-longpaper-1"></script>
   <script src="/dist/assets/password-eye-toggle.js?v=20260921-1"></script>

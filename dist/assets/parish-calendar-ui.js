@@ -21,7 +21,7 @@ export function createParishCalendarUI(jsx, React) {
     const [openDate, setOpenDate] = React.useState(null);
     const year = visibleMonth.getFullYear(), month = visibleMonth.getMonth();
     const key = day => `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-    const grouped = entries.reduce((all, entry) => {
+    const grouped = sortSchedules(entries).reduce((all, entry) => {
       const date = String(entry.date || '').slice(0, 10);
       (all[date] ||= []).push(entry);
       return all;
@@ -70,4 +70,20 @@ export function createParishCalendarUI(jsx, React) {
     return [confirm, dialog];
   }
   return { Calendar, Modal, useConfirmation };
+}
+
+export function formatScheduleTime(value) {
+  if (!value) return 'Time not set';
+  const match = String(value).match(/^(\d{1,2}):(\d{2})(?::\d{2})?$/);
+  if (!match) return String(value);
+  const hour = Number(match[1]);
+  if (hour > 23 || Number(match[2]) > 59) return String(value);
+  return `${hour % 12 || 12}${match[2] === '00' ? '' : ':' + match[2]} ${hour >= 12 ? 'PM' : 'AM'}`;
+}
+export function sortSchedules(entries) {
+  const minutes = entry => {
+    const match = String(entry.startTime || entry.start_time || '').match(/^(\d{1,2}):(\d{2})(?::\d{2})?$/);
+    return match && Number(match[1]) < 24 && Number(match[2]) < 60 ? Number(match[1]) * 60 + Number(match[2]) : Infinity;
+  };
+  return [...entries].sort((left, right) => minutes(left) - minutes(right));
 }
