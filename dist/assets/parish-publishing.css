@@ -98,3 +98,10 @@ html[data-design="heaven"] #root#root#root .publishing-file-list button { flex-s
 .parish-publishing--announcements .publishing-options-row:has([name="announcementArea"]) { grid-template-columns:minmax(0,1fr)!important; }
 }
 }
+@layer announcement-options-row {
+.parish-publishing .announcement-table-wrap { overflow-x:auto!important; }
+.parish-publishing .announcement-table { min-width:850px!important; table-layout:fixed!important; }
+.parish-publishing .announcement-table th:first-child { width:18%!important; }
+.parish-publishing .announcement-table th:nth-child(2) { width:38%!important; }
+.parish-publishing .announcement-table th:nth-child(3),.parish-publishing .announcement-table th:nth-child(4) { width:22%!important; }
+}

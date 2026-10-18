@@ -1,3 +1,4 @@
+import { parseAnnouncementActivities, serializeAnnouncementActivities } from './announcement-activities.js';
 import { ADDRESS_OPTIONS } from './address-options.js';
 export const BULLETIN_CATEGORIES = ['Project transparency', 'Donations & contributions', 'Visiting priests', 'Fundraising', 'Parish matters'];
 export const ANNOUNCEMENT_CATEGORIES = ['Notice', 'Financial Report'];
@@ -18,22 +19,17 @@ export function validateFiles(files, existing = 0) {
 }
 const encodePath = path => path.split('/').map(encodeURIComponent).join('/');
 const blank = kind => ({title:'', content:'', activities:[{date:'', activity:''}], category:kind === 'bulletin' ? 'Parish matters' : 'Notice', status:'Draft', audience_type:'main_parish', audience_area:'', attachments:[]});
-export function announcementActivities(row) {
-  const lines = (row.content || '').split('\n');
-  if (lines.length && lines.every(line => /^\d{4}-\d{2}-\d{2}\t.+$/.test(line))) {
-    return lines.map(line => ({date:line.slice(0, 10), activity:line.slice(11)}));
-  }
-  return [{date:(row.published_at || row.created_at || '').slice(0, 10), activity:[row.title, row.content].filter(Boolean).join(' — ')}];
-}
+export function announcementActivities(row) { return parseAnnouncementActivities(row); }
 export function announcementDraft(draft) {
   if (!draft.activities?.length) throw new Error('Add at least one date and activity.');
-  const activities = draft.activities.map(({date, activity}) => {
+  const activities = draft.activities.map(({date, activity, barangay = '', organization = ''}) => {
     const value = activity.trim();
     if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !value) throw new Error('Complete the date and activity in every row.');
     if (/[\r\n\t]/.test(value)) throw new Error('Keep each activity on one line.');
-    return {date, activity:value};
+    if (/[\r\n\t]/.test(barangay + organization)) throw new Error('Keep barangay and organization on one line.');
+    return {date, activity:value, barangay:barangay.trim(), organization:organization.trim()};
   });
-  return {...draft, title:activities[0].activity.slice(0, 200), content:activities.map(item => item.date + '\t' + item.activity).join('\n')};
+  return {...draft, title:activities[0].activity.slice(0, 200), content:serializeAnnouncementActivities(activities)};
 }
 export function postAttachments(row) {
   const items = [...(Array.isArray(row.attachments) ? row.attachments : [])];
@@ -183,12 +179,13 @@ export function ParishPublishing({React:R, request, getHeaders, url, session}) {
   const activityTable = (items, editable = false) => h('div', {className:'announcement-table-wrap'},
     h('table', {className:'announcement-table'},
       h('caption', {className:'announcement-table-caption'}, editable ? 'Announcement dates and activities to save' : 'Parish announcement dates and activities'),
-      h('thead', null, h('tr', null, h('th', {scope:'col'}, 'Date'), h('th', {scope:'col'}, 'Activities'))),
+      h('thead', null, h('tr', null, h('th', {scope:'col'}, 'Date'), h('th', {scope:'col'}, 'Activities'), h('th', {scope:'col'}, 'Barangay'), h('th', {scope:'col'}, 'Organization'))),
       h('tbody', null, items.map((item, index) => h('tr', {key:index},
         h('td', null, editable ? h('input', {type:'date', required:true, value:item.date, 'aria-label':'Date, row ' + (index + 1), onChange:event => updateActivity(index, 'date', event.target.value)}) : item.date ? new Date(item.date + 'T00:00:00').toLocaleDateString([], {month:'short', day:'numeric', year:'numeric'}) : '—'),
         h('td', null, editable ? h('div', {className:'announcement-activity-input'},
           h('input', {type:'text', required:true, maxLength:2000, placeholder:'Enter an activity', value:item.activity, 'aria-label':'Activities, row ' + (index + 1), onChange:event => updateActivity(index, 'activity', event.target.value)}),
-          items.length > 1 ? h('button', {type:'button', className:'announcement-remove-row', 'aria-label':'Remove row ' + (index + 1), onClick:() => setDraft(current => ({...current, activities:current.activities.filter((_, i) => i !== index)}))}, '×') : null) : item.activity))))));
+          items.length > 1 ? h('button', {type:'button', className:'announcement-remove-row', 'aria-label':'Remove row ' + (index + 1), onClick:() => setDraft(current => ({...current, activities:current.activities.filter((_, i) => i !== index)}))}, '×') : null) : item.activity),
+        ...['barangay','organization'].map(key => h('td', {key}, editable ? h('input', {type:'text', maxLength:200, placeholder:key==='barangay'?'Enter barangay':'Enter organization', value:item[key]||'', 'aria-label':(key==='barangay'?'Barangay':'Organization')+', row '+(index+1), onChange:event=>updateActivity(index,key,event.target.value)}) : item[key]||'Not specified')))))));
   const attachmentNodes = row => {
     const items = postAttachments(row);
     return h('div', {className:'publishing-attachments'}, items.map((item, i) => h(Attachment, {key:item.path || item.url || i, React:R, request, token, url, item})));
