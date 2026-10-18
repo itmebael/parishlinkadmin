@@ -1,3 +1,4 @@
+import { previewRecordReport } from './record-report-download.js';
 import { RecordEditor } from './sacramental-record-editor.js';
 const PAGE_SIZE = 25;
 const COLUMNS = 'id,year_baptism,month_batism,date_batism,name,year_birth,month_birth,day_birth,mother_name,father_name,forefathers,foremothers,godparents,location,fee,minister,created_at,parish_id';
@@ -95,60 +96,6 @@ function groupMarriageRecords(rows) {
   });
 }
 
-function downloadRecord(record, config) {
-  const escape = value => String(value ?? '').replace(/[&<>"']/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[character]);
-  const recordedAt = record.created_at ? new Date(record.created_at) : null;
-  const formattedRecordedAt = recordedAt && !Number.isNaN(recordedAt.getTime())
-    ? new Intl.DateTimeFormat('en-PH', { dateStyle: 'long', timeStyle: 'short' }).format(recordedAt)
-    : '';
-  const rows = config.fields.map(key => {
-    const value = key === 'created_at' ? formattedRecordedAt : record[key];
-    return `<tr><th>${escape(LABELS[key] || key)}</th><td>${escape(value) || '<span class="empty">Not recorded</span>'}</td></tr>`;
-  }).join('');
-  const title = escape(config.title.replace(/ records$/i, ' record'));
-  const name = escape(record[config.name] || record.name_family_name || 'Sacramental Record');
-  const workbookHtml = `<!doctype html><html><head><meta charset="utf-8"><style>
-    body{font-family:Calibri,Arial,sans-serif;color:#202b3c;margin:28px}
-    .sheet{width:100%;border-collapse:collapse}
-    .brand{background:#17365d;color:#fff;font-size:11pt;font-weight:bold;letter-spacing:1px;padding:10px 12px}
-    .title{background:#dbe5f1;color:#17365d;font-size:18pt;font-weight:bold;padding:14px 12px}
-    .person{background:#f2f6fa;color:#34445a;font-size:12pt;font-weight:bold;padding:10px 12px;border-bottom:2px solid #7890ad}
-    .section{background:#e9eff6;color:#17365d;font-size:10pt;font-weight:bold;padding:8px 10px;text-transform:uppercase}
-    th,td{border:1px solid #c8d2df;padding:7px 10px;text-align:left;vertical-align:top}
-    th{width:28%;background:#f7f9fc;color:#43536a;font-weight:bold}
-    td{width:72%;mso-number-format:"\\@"}
-    .empty{color:#8994a3;font-style:italic}
-    .footer{color:#66758a;font-size:9pt;padding:10px 0;border:0}
-  </style></head><body><table class="sheet">
-    <tr><td class="brand" colspan="2">DIOCESE OF CALBAYOG · PARISH RECORDS</td></tr>
-    <tr><td class="title" colspan="2">${title}</td></tr>
-    <tr><td class="person" colspan="2">${name}</td></tr>
-    <tr><td class="section" colspan="2">Record details</td></tr>
-    ${rows}
-    <tr><td class="footer" colspan="2">Official parish record · Generated ${escape(new Intl.DateTimeFormat('en-PH', { dateStyle: 'long' }).format(new Date()))}</td></tr>
-  </table></body></html>`;
-  const url = URL.createObjectURL(new Blob(['\ufeff', workbookHtml], { type: 'application/vnd.ms-excel;charset=utf-8' }));
-  const anchor = document.createElement('a');
-  anchor.href = url;
-  anchor.download = `${config.title.toLowerCase().replace(/\s+/g, '-')}-${record.id || 'record'}.xls`;
-  document.body.appendChild(anchor);
-  anchor.click();
-  anchor.remove();
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-}
-
-function downloadRecords(records, config) {
-  const headers = config.fields;
-  const escape = value => `"${String(value ?? '').replace(/"/g, '""')}"`;
-  const csv = [headers.map(key => escape(LABELS[key] || key)).join(','), ...records.map(record => headers.map(key => escape(record[key])).join(','))].join('\r\n');
-  const url = URL.createObjectURL(new Blob(['\ufeff', csv], { type: 'text/csv;charset=utf-8' }));
-  const anchor = document.createElement('a');
-  anchor.href = url;
-  anchor.download = `${config.title.toLowerCase().replace(/\s+/g, '-')}-filtered.csv`;
-  anchor.click();
-  URL.revokeObjectURL(url);
-}
-
 export function BaptismRecords({ session, React, ui, request, recordType: selectedRecordType, onRecordTypeChange, onAddRecord }) {
   const { useState, useEffect } = React;
   const { jsx, jsxs } = ui;
@@ -160,7 +107,6 @@ export function BaptismRecords({ session, React, ui, request, recordType: select
   const [searchBy, setSearchBy] = useState('name');
   const [selectedRecord, setSelectedRecord] = useState(null);
   const [editingRecords, setEditingRecords] = useState(null);
-  const [previewRows, setPreviewRows] = useState(null);
   const [previewLoading, setPreviewLoading] = useState(false);
   const [page, setPage] = useState(0);
   const [revision, setRevision] = useState(0);
@@ -196,6 +142,10 @@ export function BaptismRecords({ session, React, ui, request, recordType: select
   const field = (key, value) => jsxs('div', { children: [jsx('dt', { children: LABELS[key] || key }), jsx('dd', { children: formatPreviewValue(key, value) })] }, key);
   const resetPage = setter => value => { setter(value); setPage(0); };
   const openFilteredPreview = async () => {
+    const previewWindow = window.open('', '_blank', 'width=960,height=760');
+    if (!previewWindow) { setError('Please allow the report preview window, then try again.'); return; }
+    previewWindow.document.write('<!doctype html><title>Record report preview</title><p style="font:14px Arial;padding:24px">Preparing filtered records...</p>');
+    previewWindow.document.close();
     setPreviewLoading(true);
     try {
       let allRows = [];
@@ -208,8 +158,9 @@ export function BaptismRecords({ session, React, ui, request, recordType: select
         currentPage += 1;
       }
       setSearch(input.trim());
-      setPreviewRows(allRows);
+      await previewRecordReport({ records: allRows, config, labels: LABELS, session, request, previewWindow });
     } catch (reason) {
+      previewWindow.close();
       setError(reason.message || 'Could not prepare the filtered preview.');
     } finally {
       setPreviewLoading(false);
@@ -222,7 +173,7 @@ export function BaptismRecords({ session, React, ui, request, recordType: select
       jsxs('label', { className: 'login-field', children: [jsx('span', { children: 'Month' }), jsxs('select', { value: month, onChange: event => resetPage(setMonth)(event.target.value), children: [jsx('option', { value: '', children: 'All months' }), ...Array.from({ length: 12 }, (_, index) => jsx('option', { value: String(index + 1), children: new Date(2020, index, 1).toLocaleString('en', { month: 'long' }) }, index))] })] }),
       jsxs('label', { className: 'login-field', children: [jsx('span', { children: 'Year' }), jsx('input', { type: 'number', min: '1000', max: '9999', value: year, placeholder: 'All years', onChange: event => resetPage(setYear)(event.target.value) })] }),
       jsx('button', { type: 'submit', className: 'primary-action', disabled: loading, children: 'Search' }),
-      jsx('button', { type: 'button', className: 'secondary-action', disabled: loading || previewLoading, onClick: openFilteredPreview, children: previewLoading ? 'Preparing…' : 'Preview download' }),
+      jsx('button', { type: 'button', className: 'secondary-action', disabled: loading || previewLoading, onClick: openFilteredPreview, children: previewLoading ? 'Preparing…' : 'Preview report' }),
     ] }),
     error ? jsxs('div', { role: 'alert', children: [jsx('strong', { children: `Could not load ${config.title.toLowerCase()}` }), jsx('p', { children: error })] }) : null,
     loading ? jsx('p', { role: 'status', children: `Loading ${config.title.toLowerCase()}…` }) : !error && result.rows.length === 0 ? jsxs('div', { className: 'empty-state', role: 'status', children: [jsx('strong', { children: search || month || year ? 'No matching records' : 'No records yet' }), jsx('span', { children: search || month || year ? 'No records match these filters.' : `No ${config.title.toLowerCase()} found for your parish.` })] }) : null,
@@ -244,8 +195,7 @@ export function BaptismRecords({ session, React, ui, request, recordType: select
     }) }),
     ] }) }),
     editingRecords ? jsx(RecordEditor, { React, request, session, config, labels: LABELS, records: editingRecords, onClose: () => setEditingRecords(null), onSaved: () => { setEditingRecords(null); setRevision(value => value + 1); } }) : null,
-    selectedRecord ? jsx('div', { className: 'baptism-records__modal-backdrop', onClick: event => { if (event.target === event.currentTarget) setSelectedRecord(null); }, children: jsxs('section', { className: 'baptism-records__modal baptism-records__detail-preview', role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': 'baptism-record-popup-title', children: [jsxs('header', { className: 'baptism-records__modal-header', children: [jsxs('div', { children: [jsx('span', { className: 'record-preview-eyebrow', children: config.title.replace(/ records$/i, ' record') }), jsx('h3', { id: 'baptism-record-popup-title', children: selectedRecord[config.name] || config.title })] }), jsxs('div', { className: 'baptism-records__modal-actions', children: [jsx('button', { type: 'button', className: 'primary-action', onClick: () => downloadRecord(selectedRecord, config), children: 'Download' }), jsx('button', { type: 'button', className: 'secondary-action', onClick: () => setSelectedRecord(null), children: 'Close' })] })] }), jsx('div', { className: 'record-preview-sections', children: previewSections.map(section => { const keys = section.keys.filter(key => config.fields.includes(key)); return keys.length ? jsxs('section', { className: 'record-preview-section', children: [jsx('h4', { children: section.title }), jsx('dl', { className: 'baptism-records__fields', children: keys.map(key => field(key, selectedRecord[key])) })] }, section.title) : null; }) })] }) }) : null,
-    previewRows ? jsx('div', { className: 'baptism-records__modal-backdrop', onClick: event => { if (event.target === event.currentTarget) setPreviewRows(null); }, children: jsxs('section', { className: 'baptism-records__modal baptism-records__filtered-preview', role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': 'baptism-filter-preview-title', children: [jsxs('header', { className: 'baptism-records__modal-header', children: [jsxs('div', { children: [jsx('h3', { id: 'baptism-filter-preview-title', children: 'Filtered records preview' }), jsx('p', { children: `${previewRows.length} matching ${config.title.toLowerCase()}` })] }), jsxs('div', { className: 'baptism-records__modal-actions', children: [jsx('button', { type: 'button', className: 'primary-action', disabled: previewRows.length === 0, onClick: () => downloadRecords(previewRows, config), children: 'Download CSV' }), jsx('button', { type: 'button', className: 'secondary-action', onClick: () => setPreviewRows(null), children: 'Cancel' })] })] }), jsx('div', { className: 'baptism-records__filtered-preview-list', children: previewRows.length ? previewRows.map(record => jsxs('article', { children: [jsx('strong', { children: record[config.name] || 'Name not recorded' }), ...config.fields.filter(key => key !== config.name && key !== 'id').slice(0, 4).map(key => jsx('span', { children: `${LABELS[key] || key}: ${record[key] ?? 'Not recorded'}` }, key))] }, record.id)) : jsx('p', { children: 'No records match these filters.' }) })] }) }) : null,
+    selectedRecord ? jsx('div', { className: 'baptism-records__modal-backdrop', onClick: event => { if (event.target === event.currentTarget) setSelectedRecord(null); }, children: jsxs('section', { className: 'baptism-records__modal baptism-records__detail-preview', role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': 'baptism-record-popup-title', children: [jsxs('header', { className: 'baptism-records__modal-header', children: [jsxs('div', { children: [jsx('span', { className: 'record-preview-eyebrow', children: config.title.replace(/ records$/i, ' record') }), jsx('h3', { id: 'baptism-record-popup-title', children: selectedRecord[config.name] || config.title })] }), jsxs('div', { className: 'baptism-records__modal-actions', children: [jsx('button', { type: 'button', className: 'primary-action', onClick: () => previewRecordReport({ records: [selectedRecord], config, labels: LABELS, session, request }), children: 'Preview report' }), jsx('button', { type: 'button', className: 'secondary-action', onClick: () => setSelectedRecord(null), children: 'Close' })] })] }), jsx('div', { className: 'record-preview-sections', children: previewSections.map(section => { const keys = section.keys.filter(key => config.fields.includes(key)); return keys.length ? jsxs('section', { className: 'record-preview-section', children: [jsx('h4', { children: section.title }), jsx('dl', { className: 'baptism-records__fields', children: keys.map(key => field(key, selectedRecord[key])) })] }, section.title) : null; }) })] }) }) : null,
     jsx('nav', { className: 'baptism-records__pagination', 'aria-label': `${config.title} pages`, children: [jsx('button', { type: 'button', className: 'secondary-action', disabled: loading || page === 0, onClick: () => setPage(value => value - 1), children: 'Previous' }), jsx('span', { children: `Page ${page + 1}` }), jsx('button', { type: 'button', className: 'secondary-action', disabled: loading || !result.hasNext, onClick: () => setPage(value => value + 1), children: 'Next' })] }),
   ] }) });
 }
