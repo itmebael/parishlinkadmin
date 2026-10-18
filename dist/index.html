@@ -2257,7 +2257,7 @@
             '<input type="search" data-prb-f="search" placeholder="Search name, service, reference…">' +
             '<div class="prb-spacer"></div>' +
             '<button type="button" class="prb-btn prb-btn--ghost" data-prb-action="reset">Reset</button>' +
-            '<button type="button" class="prb-btn prb-btn--primary" data-prb-action="print-all">Print report</button>';
+            '<button type="button" class="prb-btn prb-btn--primary" data-prb-action="print-all">Preview report</button>';
           body.appendChild(tb);
 
           // Bento
@@ -2562,7 +2562,7 @@
           setTimeout(function () { try { w.print(); } catch (e) {} }, 400);
         }
 
-        function printSummary() {
+        function printSummary() { if (window.parishReportPrint) { window.parishReportPrint(); return; }
           var card = findReportsCard();
           if (!card) return;
           var pid = parishIdFromSession();
