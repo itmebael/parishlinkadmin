@@ -80,3 +80,21 @@ html[data-design="heaven"] #root#root#root .publishing-file-list { padding:0; li
 html[data-design="heaven"] #root#root#root .publishing-file-list li { display:flex; align-items:center; justify-content:space-between; gap:10px; overflow-wrap:anywhere; }
 html[data-design="heaven"] #root#root#root .publishing-file-list button { flex-shrink:0; padding:5px 10px; border:1px solid #dce7f7; border-radius:8px; background:#fff; color:#973333; cursor:pointer; }
 @media(max-width:1100px) { html[data-design="heaven"] #root#root#root .publishing-layout { grid-template-columns:minmax(0,1fr); } }
+
+@layer announcement-options-row {
+.parish-publishing--announcements .publishing-options-row {
+ display:grid!important; grid-template-columns:minmax(0,1fr) minmax(130px,.65fr) minmax(0,1.3fr)!important;
+ gap:10px 16px!important; align-items:start!important; min-width:0!important;
+}
+.parish-publishing--announcements .publishing-options-row:has([name="announcementArea"]) {
+ grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(110px,.6fr) minmax(0,1.2fr)!important;
+}
+.parish-publishing--announcements .publishing-options-row > label { order:0!important; min-width:0!important; margin:0!important; }
+.parish-publishing--announcements .publishing-options-row > small { order:1!important; grid-column:1 / -1!important; margin:0!important; }
+.parish-publishing--announcements .publishing-options-row :is(input,select) { box-sizing:border-box!important; width:100%!important; min-width:0!important; height:44px!important; min-height:44px!important; }
+.parish-publishing--announcements .publishing-options-row input[type="file"] { padding:7px 10px!important; font-size:12px!important; }
+@media(max-width:700px) {
+.parish-publishing--announcements .publishing-options-row,
+.parish-publishing--announcements .publishing-options-row:has([name="announcementArea"]) { grid-template-columns:minmax(0,1fr)!important; }
+}
+}

@@ -782,7 +782,7 @@ html[data-design="heaven"] #root .dashboard-frame.dashboard-frame--parish .overv
   display: block;
   margin-bottom: 12px;
   color: #3880d5;
-  content: "PARISH SERVICES";
+  content: none;
   font-size: .72rem;
   font-weight: 800;
   letter-spacing: .13em;

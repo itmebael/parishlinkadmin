@@ -1,0 +1,9 @@
+@layer admin-header-cleanup {
+#root .dashboard-frame--parish .screen-title-block::before {
+ content:none!important;
+ display:none!important;
+ margin:0!important;
+ padding:0!important;
+ height:0!important;
+}
+}

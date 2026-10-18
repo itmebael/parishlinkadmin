@@ -1,6 +1,7 @@
+import { ADDRESS_OPTIONS } from './mass-audience.js';
 export function createParishCalendarUI(jsx, React) {
   const h = React.createElement;
-  function Modal({ title, onClose, children, className = "", hideClose = false }) {
+  function Modal({ title, onClose, children, className = "", hideClose = false, headerAction = null }) {
     const ref = React.useRef(null);
     React.useEffect(() => {
       const dialog = ref.current;
@@ -13,7 +14,7 @@ export function createParishCalendarUI(jsx, React) {
         const rect = ref.current.getBoundingClientRect();
         if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) onClose();
       }
-    } }, h('header', { className: 'pc-dialog__header' }, h('h4', { id: titleId }, title),
+    } }, h('header', { className: 'pc-dialog__header' }, h('h4', { id: titleId }, title), headerAction,
       hideClose ? null : h('button', { type: 'button', className: 'pc-icon', title: 'Close', 'aria-label': 'Close', onClick: onClose }, '\u00d7')),
     h('div', { className: 'pc-dialog__body' }, children));
   }
@@ -30,7 +31,11 @@ export function createParishCalendarUI(jsx, React) {
         h('option', { value: 'parish' }, 'Main Parish'),
         h('option', { value: 'bec' }, 'BEC Area'),
         h('option', { value: 'other' }, 'Other location')),
-      type !== 'parish' ? h('input', { type: 'text', 'aria-label': type === 'bec' ? 'BEC area' : 'Other location', placeholder: type === 'bec' ? 'Enter the BEC area' : 'Enter the location', required: true, value: detail, onChange: event => update(type === 'bec' ? 'BEC Area: ' + event.target.value : event.target.value) }) : null,
+      type === 'bec' ? h('select', { 'aria-label': 'BEC area', required: true, value: detail, onChange: event => update('BEC Area: ' + event.target.value) },
+        h('option', { value: '', disabled: true }, 'Select a BEC area'),
+        detail && !ADDRESS_OPTIONS.includes(detail) ? h('option', { value: detail, disabled: true }, detail + ' (choose an area below)') : null,
+        ADDRESS_OPTIONS.map(area => h('option', { key: area, value: area }, area))) : type === 'other' ? h('input', { type: 'text', 'aria-label': 'Other location', placeholder: 'Enter the location', required: true, value: detail, onChange: event => update(event.target.value) }) : null,
+      h('small', { className: 'pc-location-audience' }, type === 'bec' ? 'Visible only to parish members registered in the selected BEC area.' : type === 'parish' ? 'Visible to all members of your parish.' : 'Other locations are not listed on the member Mass Schedules page.'),
       name ? h('input', { type: 'hidden', name, value: location || 'Main Parish' }) : null);
   }
   function Calendar({ entries, visibleMonth, selectedDate, onChangeMonth, onSelectDate, onAdd, isLoading, message }) {
@@ -61,9 +66,8 @@ export function createParishCalendarUI(jsx, React) {
             h('strong', null, i + 1), events.map(event => h('span', { key: event.id, className: `pc-event pc-event--${event.tone}`, title: event.title }, event.title)));
         }),
         Array.from({ length: (7 - (offset + days) % 7) % 7 }, (_, i) => h('div', { key: `end-${i}`, className: 'pc-day pc-day--blank' }))),
-      openDate ? h(Modal, { title: dateLabel(openDate), className: 'pc-dialog--day-details', onClose: () => setOpenDate(null) },
-        h('div', { className: 'pc-event-list' }, (grouped[openDate] || []).length ? grouped[openDate].map(event => h('article', { key: event.id, className: 'pc-event-detail' }, h('small', null, event.badge), h('h4', null, event.title), h('p', null, event.meta), event.description ? h('p', null, event.description) : null)) : h('p', null, 'No events scheduled for this date.')),
-        h('footer', { className: 'pc-dialog__footer' }, h('button', { type: 'button', className: 'primary-action', onClick: () => { setOpenDate(null); onAdd(); } }, '+ Add Mass Schedule'))) : null);
+      openDate ? h(Modal, { title: dateLabel(openDate), className: 'pc-dialog--day-details', onClose: () => setOpenDate(null), headerAction: h('button', { type: 'button', className: 'primary-action pc-day-add', onClick: () => { setOpenDate(null); onAdd(); } }, '+ Add Mass Schedule') },
+        h('div', { className: 'pc-event-list' }, (grouped[openDate] || []).length ? grouped[openDate].map(event => h('article', { key: event.id, className: 'pc-event-detail' }, h('small', null, event.badge), h('h4', null, event.title), h('p', null, event.meta), event.description ? h('p', null, event.description) : null)) : h('p', null, 'No events scheduled for this date.'))) : null);
   }
   function useConfirmation() {
     const [pending, setPending] = React.useState(null);

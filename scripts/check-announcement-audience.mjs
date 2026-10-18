@@ -1,0 +1,11 @@
+import assert from 'node:assert/strict';
+import { publishingPayload, announcementDraft } from '../dist/assets/parish-announcement-table-20261009.js';
+import { ADDRESS_OPTIONS } from '../dist/assets/address-options.js';
+const draft = {activities:[{date:'2026-10-25',activity:'Community Mass'}],category:'Notice',status:'Published',audience_type:'main_parish'};
+const save = values => publishingPayload('announcement',announcementDraft({...draft,...values}),{id:'parish',parish_name:'Test Parish'},[],'new-post');
+assert.equal(save({}).audience,'Parish Members');
+for(const area of ADDRESS_OPTIONS) assert.equal(save({audience_type:'bec_area',audience_area:area}).audience,'BEC Area: '+area);
+assert.throws(()=>save({audience_type:'bec_area',audience_area:''}));
+assert.throws(()=>save({audience_type:'bec_area',audience_area:'Invalid'}));
+assert.equal(save({id:'existing',audience_type:'main_parish',audience_area:'Brgy. 1, Calbiga'}).audience,'Parish Members');
+console.log('PASS: all signup areas, default audience, invalid areas, and switching back to parish-wide.');

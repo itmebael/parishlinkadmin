@@ -1,0 +1,19 @@
+@layer sacramental-record-edit {
+.sacramental-row-actions { display:flex!important; justify-content:center!important; gap:8px!important; white-space:nowrap!important; }
+.sacramental-row-actions button { min-height:32px!important; padding:7px 12px!important; font-size:12px!important; }
+.sacramental-edit-dialog { box-sizing:border-box; width:min(760px,calc(100vw - 24px)); height:fit-content; max-height:calc(100dvh - 32px); padding:0; border:1px solid #d2deed; border-radius:12px; background:white; color:#254676; overflow:auto; }
+.sacramental-edit-dialog::backdrop { background:#162c4970; }
+.sacramental-edit-dialog header { display:flex; align-items:center; justify-content:space-between; gap:14px; padding:18px 22px; border-bottom:1px solid #e0e8f2; }
+.sacramental-edit-dialog h3 { margin:0; font:600 20px/1.4 Manrope,Segoe UI,sans-serif; }
+.sacramental-edit-dialog header button { width:32px; height:32px; border:1px solid #d2deed; border-radius:6px; background:white; color:#315477; cursor:pointer; }
+.sacramental-edit-dialog form { padding:20px 22px; }
+.record-edit-fields { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; border:0; margin:0; padding:0; }
+.sacramental-edit-dialog label { display:grid; gap:6px; min-width:0; font:500 13px/1.5 Manrope,Segoe UI,sans-serif; }
+.sacramental-edit-dialog :is(input,select) { box-sizing:border-box; width:100%; min-width:0; padding:10px 12px; height:42px; border:1px solid #cdd9e8; border-radius:7px; color:#254676; background:white; font:400 14px Manrope,Segoe UI,sans-serif; }
+.record-edit-party { margin-bottom:18px; }
+.sacramental-edit-dialog footer { display:flex; justify-content:flex-end; gap:10px; margin-top:22px; padding-top:16px; border-top:1px solid #e0e8f2; }
+.sacramental-edit-dialog footer button { padding:10px 16px; min-height:40px; border-radius:7px; cursor:pointer; }
+.sacramental-edit-dialog [role=alert] { color:#ad3541; font-size:13px; }
+.sacramental-edit-dialog :focus-visible { outline:2px solid #4169c5; outline-offset:2px; }
+@media(max-width:600px) { .record-edit-fields { grid-template-columns:1fr; } }
+}

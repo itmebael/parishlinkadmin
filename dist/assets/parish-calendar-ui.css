@@ -223,3 +223,18 @@ dialog.pc-dialog--day-details[open] {
 }
 @media(max-width:480px) { .pc-dialog--day-details .pc-dialog__header { padding:12px 16px!important; } }
 }
+
+@layer calendar-day-spacing {
+.pc-dialog--day-details .pc-dialog__header { gap:12px!important; }
+.pc-dialog--day-details .pc-day-add { position:static!important; flex:0 0 auto!important; align-self:center!important; margin:0!important; padding:8px 12px!important; min-height:34px!important; font-size:12px!important; line-height:1.4!important; border-radius:7px!important; white-space:nowrap!important; }
+.pc-dialog--day-details .pc-event-detail:last-child { border-bottom:0!important; }
+.pc-dialog--day-details .pc-dialog__body { padding-bottom:4px!important; }
+@media(max-width:480px) {
+.pc-dialog--day-details .pc-dialog__header { flex-wrap:wrap!important; gap:10px!important; }
+.pc-dialog--day-details .pc-dialog__header h4 { flex:1 1 calc(100% - 50px)!important; }
+.pc-dialog--day-details .pc-dialog__header .pc-icon { order:1!important; }
+.pc-dialog--day-details .pc-day-add { order:2!important; }
+}
+}
+
+.pc-location-audience { display:block; color:#6c7f99; font-size:12px; line-height:1.5; }

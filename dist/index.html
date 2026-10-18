@@ -686,7 +686,9 @@
           });
           var existing = nav.querySelector(".dio-user-mgmt-nav");
           if (existing) {
-            if (messages && nav.lastElementChild !== messages) nav.appendChild(messages);
+            var setting = Array.from(nav.querySelectorAll('.nav-item')).find(function(item) { return /^(setting|settings)$/i.test(item.textContent.trim()); });
+            if (setting && existing.nextElementSibling !== setting) nav.insertBefore(existing, setting);
+            if (messages && messages.nextElementSibling !== existing) nav.insertBefore(messages, existing);
             return;
           }
           var btn = document.createElement("button");
@@ -697,8 +699,9 @@
             state.open = true;
             mount();
           });
-          nav.appendChild(btn);
-          if (messages) nav.appendChild(messages);
+          var setting = Array.from(nav.querySelectorAll('.nav-item')).find(function(item) { return /^(setting|settings)$/i.test(item.textContent.trim()); });
+          nav.insertBefore(btn, setting || null);
+          if (messages && messages.nextElementSibling !== btn) nav.insertBefore(messages, btn);
           if (nav.getAttribute("data-dio-user-nav-listener") !== "1") {
             nav.setAttribute("data-dio-user-nav-listener", "1");
             nav.addEventListener("click", function (e) {
@@ -725,7 +728,7 @@
           if (!screen) {
             screen = document.createElement("section");
             screen.className = "dio-user-mgmt-screen";
-            screen.innerHTML = '<header class="dio-user-mgmt__page-header"><span>PARISH SERVICES</span><h3>User Management</h3><p>View and manage members registered to your parish.</p></header>';
+            screen.innerHTML = '<header class="dio-user-mgmt__page-header"><h3>User Management</h3><p>View and manage members registered to your parish.</p></header>';
             var topbar = workspace.querySelector(".workspace__topbar");
             if (topbar && topbar.parentElement === workspace) workspace.insertBefore(screen, topbar.nextSibling);
             else workspace.appendChild(screen);
@@ -1131,7 +1134,7 @@
       }
     </style>
     <link rel="stylesheet" href="/dist/assets/heaven.css?v=20260927-login-blue-2">
-    <link rel="stylesheet" href="/dist/assets/parish-layout.css?v=20261003-live-stream-header-2">
+    <link rel="stylesheet" href="/dist/assets/parish-layout.css?v=20261019-no-services-label">
     <link rel="stylesheet" href="/dist/assets/admin-reference-theme.css?v=20260927-1">
     <link rel="stylesheet" href="/dist/assets/responsive-navigation.css?v=20260927-1">
     <link rel="stylesheet" href="/dist/assets/user-dashboard-reference.css?v=2">
@@ -8017,7 +8020,7 @@
     <link rel="stylesheet" href="/dist/assets/admin-record-screen.css?v=1">
     <link rel="stylesheet" href="/dist/assets/admin-broadcast-history.css?v=1">
     <link rel="stylesheet" href="/dist/assets/admin-services-layout.css?v=1">
-</body>
+<link rel="stylesheet" href="/dist/assets/admin-header-cleanup.css?v=20261019-1"><link rel="stylesheet" href="/dist/assets/report-charts.css?v=1"><link rel="stylesheet" href="/dist/assets/sacramental-record-editor.css?v=1"></body>
   <script src="/dist/assets/chapel-information-menu.js?v=20260921-1"></script>
   <script src="/dist/assets/parish-text-sizing.js?v=20261012-fit-font"></script>
   <script src="/dist/assets/parish-settings-toggles.js?v=20261009-no-dark-floating"></script>

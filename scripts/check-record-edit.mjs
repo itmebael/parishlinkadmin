@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+import {updateSacramentalRecord} from '../dist/assets/sacramental-record-editor.js';
+const config={table:'baptism_records',name:'name',fields:['id','name','location','created_at']},session={role:'parish',accessToken:'test',parish_id:'parish-1'};
+let captured;
+const request=async(url,options)=>{captured={url,options};return [{id:'record-1',...options.body}];};
+await updateSacramentalRecord(request,session,config,{id:'record-1'},{id:'tampered',name:' Updated Name ',location:'Calbiga',created_at:'tampered'});
+assert.equal(new URL('https://test'+captured.url).searchParams.get('parish_id'),'eq.parish-1');
+assert.equal(new URL('https://test'+captured.url).searchParams.get('id'),'eq.record-1');
+assert.deepEqual(captured.options.body,{name:'Updated Name',location:'Calbiga'});
+assert.equal(captured.options.method,'PATCH');
+await assert.rejects(()=>updateSacramentalRecord(request,{...session,role:'user'},config,{id:'record-1'},{name:'Name'}));
+await assert.rejects(()=>updateSacramentalRecord(request,session,config,{id:'record-1'},{name:''}));
+await assert.rejects(()=>updateSacramentalRecord(async()=>[],session,config,{id:'record-1'},{name:'Name'}));
+console.log('PASS: authenticated parish-scoped updates, immutable fields excluded, name validation and permission failure handling.');

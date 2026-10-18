@@ -1,0 +1,12 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import { ADDRESS_OPTIONS, massAudience } from '../dist/assets/mass-audience.js';
+const client = fs.readFileSync('../dio-main - client - Copy/dist/assets/address-options.js', 'utf8');
+assert.deepEqual(ADDRESS_OPTIONS, JSON.parse(client.match(/= (\[.*\])/)[1]));
+assert.equal(ADDRESS_OPTIONS.length, 27);
+for (const area of ADDRESS_OPTIONS) assert.deepEqual(massAudience('BEC Area: '+area), {audience_type:'bec_area',audience_area:area});
+assert.deepEqual(massAudience('Main Parish'), {audience_type:'main_parish',audience_area:null});
+assert.deepEqual(massAudience('Other chapel'), {audience_type:'other',audience_area:null});
+assert.throws(()=>massAudience('BEC Area: '));
+assert.throws(()=>massAudience('BEC Area: Invalid'));
+console.log('PASS: all signup areas match exactly; area, parish, other and invalid audience mappings.');

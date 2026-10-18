@@ -1,3 +1,4 @@
+import { ADDRESS_OPTIONS } from './address-options.js';
 export const BULLETIN_CATEGORIES = ['Project transparency', 'Donations & contributions', 'Visiting priests', 'Fundraising', 'Parish matters'];
 export const ANNOUNCEMENT_CATEGORIES = ['Notice', 'Financial Report'];
 export const BUCKET = 'parish-post-attachments';
@@ -16,7 +17,7 @@ export function validateFiles(files, existing = 0) {
   });
 }
 const encodePath = path => path.split('/').map(encodeURIComponent).join('/');
-const blank = kind => ({title:'', content:'', activities:[{date:'', activity:''}], category:kind === 'bulletin' ? 'Parish matters' : 'Notice', status:'Draft', attachments:[]});
+const blank = kind => ({title:'', content:'', activities:[{date:'', activity:''}], category:kind === 'bulletin' ? 'Parish matters' : 'Notice', status:'Draft', audience_type:'main_parish', audience_area:'', attachments:[]});
 export function announcementActivities(row) {
   const lines = (row.content || '').split('\n');
   if (lines.length && lines.every(line => /^\d{4}-\d{2}-\d{2}\t.+$/.test(line))) {
@@ -52,7 +53,13 @@ export function publishingPayload(kind, draft, parish, attachments, id) {
     photo_urls:attachments.filter(a => a.type.startsWith('image/')).map(a => a.url)};
   if (!draft.id) result.id = id;
   if (kind === 'bulletin') result.parish_id = parish.id;
-  else {result.parish_name = parish.parish_name; result.audience = 'Parish Members';}
+  else {
+    result.parish_name = parish.parish_name;
+    if (draft.audience_type === 'bec_area') {
+      if (!ADDRESS_OPTIONS.includes(draft.audience_area)) throw new Error('Choose a BEC area from the list.');
+      result.audience = 'BEC Area: ' + draft.audience_area;
+    } else result.audience = 'Parish Members';
+  }
   return result;
 }
 function readableError(error) {
@@ -176,11 +183,11 @@ export function ParishPublishing({React:R, request, getHeaders, url, session}) {
   const activityTable = (items, editable = false) => h('div', {className:'announcement-table-wrap'},
     h('table', {className:'announcement-table'},
       h('caption', {className:'announcement-table-caption'}, editable ? 'Announcement dates and activities to save' : 'Parish announcement dates and activities'),
-      h('thead', null, h('tr', null, h('th', {scope:'col'}, 'Petsa'), h('th', {scope:'col'}, 'Aktibidades'))),
+      h('thead', null, h('tr', null, h('th', {scope:'col'}, 'Date'), h('th', {scope:'col'}, 'Activities'))),
       h('tbody', null, items.map((item, index) => h('tr', {key:index},
-        h('td', null, editable ? h('input', {type:'date', required:true, value:item.date, 'aria-label':'Petsa, row ' + (index + 1), onChange:event => updateActivity(index, 'date', event.target.value)}) : item.date ? new Date(item.date + 'T00:00:00').toLocaleDateString([], {month:'short', day:'numeric', year:'numeric'}) : '—'),
+        h('td', null, editable ? h('input', {type:'date', required:true, value:item.date, 'aria-label':'Date, row ' + (index + 1), onChange:event => updateActivity(index, 'date', event.target.value)}) : item.date ? new Date(item.date + 'T00:00:00').toLocaleDateString([], {month:'short', day:'numeric', year:'numeric'}) : '—'),
         h('td', null, editable ? h('div', {className:'announcement-activity-input'},
-          h('input', {type:'text', required:true, maxLength:2000, placeholder:'Ilagay ang aktibidad', value:item.activity, 'aria-label':'Aktibidades, row ' + (index + 1), onChange:event => updateActivity(index, 'activity', event.target.value)}),
+          h('input', {type:'text', required:true, maxLength:2000, placeholder:'Enter an activity', value:item.activity, 'aria-label':'Activities, row ' + (index + 1), onChange:event => updateActivity(index, 'activity', event.target.value)}),
           items.length > 1 ? h('button', {type:'button', className:'announcement-remove-row', 'aria-label':'Remove row ' + (index + 1), onClick:() => setDraft(current => ({...current, activities:current.activities.filter((_, i) => i !== index)}))}, '×') : null) : item.activity))))));
   const attachmentNodes = row => {
     const items = postAttachments(row);
@@ -192,22 +199,26 @@ export function ParishPublishing({React:R, request, getHeaders, url, session}) {
     h('div', {id:'parish-post-panel', role:'tabpanel', 'aria-label':noun + ' publishing', className:'publishing-layout'},
       h('article', {className:'glass-card page-card publishing-compose'},
         h('h4', null, (draft.id ? 'Edit Parish ' : 'Create Parish ') + noun),
-        h('p', null, kind === 'bulletin' ? 'Post parish updates, project reports, donations, and community matters.' : 'Ilagay ang petsa at aktibidad. Add another row for each parish activity.'),
+        h('p', null, kind === 'bulletin' ? 'Post parish updates, project reports, donations, and community matters.' : 'Enter the date and activity. Add another row for each parish activity.'),
         h('form', {ref:formRef, onSubmit:save}, h('fieldset', {disabled:busy || loading || !parish},
-          kind === 'announcement' ? h('div', {className:'announcement-editor'}, activityTable(draft.activities, true), h('button', {type:'button', className:'secondary-action announcement-add-row', onClick:() => setDraft(current => ({...current, activities:[...current.activities, {date:'', activity:''}]}))}, '+ Add row')) : field('Title', h('input', {name:'title', value:draft.title, onChange:update('title'), required:true, maxLength:200})),
+          kind === 'announcement' ? h('div', {className:'announcement-editor'}, activityTable(draft.activities, true), h('button', {type:'button', className:'secondary-action announcement-add-row', onClick:() => setDraft(current => ({...current, activities:[...current.activities, {date:'', activity:''}]}))}, '+ Add Parish Activity')) : field('Title', h('input', {name:'title', value:draft.title, onChange:update('title'), required:true, maxLength:200})),
           kind === 'bulletin' ? field('Category', h('select', {name:'category', value:draft.category, onChange:update('category')}, BULLETIN_CATEGORIES.map(c => h('option', {key:c}, c)))) : null,
+          h('div', {className:'publishing-options-row'},
+          kind === 'announcement' ? field('Visible to', h('select', {name:'announcementAudience', value:draft.audience_type, onChange:event => setDraft({...draft, audience_type:event.target.value, audience_area:''})}, h('option', {value:'main_parish'}, 'All parish members'), h('option', {value:'bec_area'}, 'Selected BEC area'))) : null,
+          kind === 'announcement' && draft.audience_type === 'bec_area' ? field('BEC area', h('select', {name:'announcementArea', required:true, value:draft.audience_area, onChange:update('audience_area')}, h('option', {value:'', disabled:true}, 'Select a BEC area'), ADDRESS_OPTIONS.map(area => h('option', {key:area, value:area}, area)))) : null,
+          kind === 'announcement' ? h('small', null, draft.audience_type === 'bec_area' ? 'Only members registered in this BEC area can see this announcement.' : 'All members of your parish can see this announcement.') : null,
           field('Status', h('select', {name:'status', value:draft.status, onChange:update('status')}, ['Draft','Published','Archived'].map(s => h('option', {key:s}, s)))),
           kind === 'bulletin' ? field('Content', h('textarea', {name:'content', value:draft.content, onChange:update('content'), rows:6, maxLength:20000, required:true})) : null,
           field('Images or files', h('input', {ref:fileInput, type:'file', multiple:true, accept:'.jpg,.jpeg,.png,.webp,.gif,.pdf,.txt,.docx,.xlsx', onChange:event => {const selected = [...event.target.files]; try {validateFiles(selected, draft.attachments.length); setFiles(selected);} catch(e) {event.target.value = ''; setFiles([]); setNotice({error:true, text:e.message});}}})),
-          h('small', null, 'Up to 10 attachments. Maximum 10 MB per file; 50 MB per upload.'),
+          h('small', null, 'Up to 10 attachments. Maximum 10 MB per file; 50 MB per upload.')),
           h('ul', {className:'publishing-file-list'}, draft.attachments.map((a, i) => h('li', {key:a.path || i}, a.name || 'Attachment', h('button', {type:'button', onClick:() => setDraft({...draft, attachments:draft.attachments.filter((_, j) => j !== i)})}, 'Remove'))), files.map((f, i) => h('li', {key:'new-' + i}, f.name, h('button', {type:'button', onClick:() => setFiles(files.filter((_, j) => j !== i))}, 'Remove')))),
           h('div', {className:'publishing-actions'}, h('button', {type:'submit', className:'primary-action'}, busy ? 'Saving…' : 'Save Parish ' + noun), draft.id ? h('button', {type:'button', className:'secondary-action', onClick:reset}, 'Cancel') : null)))),
       h('article', {className:'glass-card page-card publishing-board'},
         h('h4', null, kind === 'bulletin' ? 'Bulletin Board' : 'Notice Board'),
         h('p', null, kind === 'bulletin' ? 'Review parish bulletins and their publication status.' : 'Review the announcements parish members will receive.'),
         loading ? h('p', {role:'status'}, 'Loading ' + noun.toLowerCase() + 's…') : rows.length === 0 ? h('div', {className:'empty-state'}, 'No parish ' + noun.toLowerCase() + 's yet.') : rows.map(row => h('section', {key:row.id, className:'publishing-post'},
-          h('div', {className:'publishing-post-meta'}, h('span', null, row.category || 'Notice'), h('span', {className:'status-badge status-badge--' + (row.status === 'Published' ? 'green' : 'blue')}, row.status)),
+          h('div', {className:'publishing-post-meta'}, h('span', null, row.category || 'Notice'), kind === 'announcement' ? h('span', null, row.audience || 'Parish Members') : null, h('span', {className:'status-badge status-badge--' + (row.status === 'Published' ? 'green' : 'blue')}, row.status)),
           kind === 'announcement' ? activityTable(announcementActivities(row)) : h(R.Fragment, null, h('h5', null, row.title), h('p', {className:'publishing-post-content'}, row.content || 'No announcement details saved.')), attachmentNodes(row),
           h('small', null, new Date(row.published_at || row.created_at).toLocaleString()),
-          h('div', {className:'publishing-actions'}, h('button', {type:'button', className:'secondary-action', disabled:busy, onClick:() => {if ((draft.title || draft.content || draft.activities?.some(item => item.date || item.activity) || files.length) && !window.confirm('Discard your unsaved changes?')) return; setDraft({...blank(kind), ...row, activities:kind === 'announcement' ? announcementActivities(row) : blank(kind).activities, attachments:postAttachments(row)}); const audience = String(row.audience || ''); setAudienceType(/^BEC Area:/i.test(audience) ? 'bec_area' : 'main_parish'); setAudienceArea(/^BEC Area:/i.test(audience) ? audience.replace(/^BEC Area:\s*/i, '') : ''); setFiles([]); if(fileInput.current) fileInput.current.value = ''; formRef.current?.scrollIntoView({behavior:'smooth', block:'start'});}}, 'Edit'), h('button', {type:'button', className:'secondary-action', disabled:busy, onClick:() => deletePost(row)}, 'Delete')))))));
+          h('div', {className:'publishing-actions'}, h('button', {type:'button', className:'secondary-action', disabled:busy, onClick:() => {if ((draft.title || draft.content || draft.activities?.some(item => item.date || item.activity) || files.length) && !window.confirm('Discard your unsaved changes?')) return; setDraft({...blank(kind), ...row, audience_type:/^BEC Area:/i.test(row.audience || '') ? 'bec_area' : 'main_parish', audience_area:/^BEC Area:/i.test(row.audience || '') ? row.audience.replace(/^BEC Area:\s*/i, '') : '', activities:kind === 'announcement' ? announcementActivities(row) : blank(kind).activities, attachments:postAttachments(row)});  setFiles([]); if(fileInput.current) fileInput.current.value = ''; formRef.current?.scrollIntoView({behavior:'smooth', block:'start'});}}, 'Edit'), h('button', {type:'button', className:'secondary-action', disabled:busy, onClick:() => deletePost(row)}, 'Delete')))))));
 }
