@@ -1,0 +1,48 @@
+@layer record-create-dialog {
+#root dialog.record-create-dialog[open] { display:block!important; position:fixed!important; inset:0!important; margin:auto!important; box-sizing:border-box!important; width:min(900px,calc(100vw - 28px))!important; height:fit-content!important; min-height:0!important; max-height:calc(100dvh - 32px)!important; padding:0!important; overflow:auto!important; background:#fff!important; border:1px solid #d2deed!important; border-radius:12px!important; }
+#root .record-create-dialog .pc-dialog__header { padding:18px 22px!important; border-bottom:1px solid #e0e8f2!important; }
+#root .record-create-dialog .pc-dialog__body { padding:20px 22px!important; }
+#root .record-create-dialog .archive-sacramental-records { display:block!important; height:auto!important; min-height:0!important; padding:0!important; overflow:visible!important; }
+#root .record-create-dialog .archive-sacramental-records > article { display:block!important; height:auto!important; max-height:none!important; padding:0!important; border:0!important; background:transparent!important; box-shadow:none!important; overflow:visible!important; }
+#root .record-create-dialog .archive-sacramental-records > article > .glass-card__header { display:none!important; }
+#root .record-create-dialog form { display:grid!important; height:auto!important; max-height:none!important; overflow:visible!important; grid-template-columns:repeat(3,minmax(0,1fr))!important; gap:16px!important; padding:0!important; }
+#root .record-create-dialog .login-field { min-width:0!important; }
+#root .record-create-dialog :is(input,select,textarea) { box-sizing:border-box!important; width:100%!important; min-width:0!important; }
+#root .record-create-dialog textarea { min-height:80px!important; }
+#root .record-create-dialog form > button[type=submit] { grid-column:1 / -1!important; justify-self:end!important; }
+#root .record-add-button { white-space:nowrap!important; min-height:40px!important; }
+@media(max-width:700px) { #root .record-create-dialog form { grid-template-columns:repeat(2,minmax(0,1fr))!important; } }
+@media(max-width:480px) { #root .record-create-dialog form { grid-template-columns:1fr!important; } #root .record-create-dialog .pc-dialog__body { padding:16px!important; } }
+}
+@layer record-create-dialog {
+#root .record-create-dialog .archive-sacramental-records > article > .glass-card__header { display:flex!important; justify-content:flex-start!important; padding:0!important; margin:0 0 18px!important; background:transparent!important; border:0!important; }
+#root .record-create-dialog .archive-sacramental-records > article > .glass-card__header > div { display:none!important; }
+#root .record-create-dialog .baptism-records__type { width:min(280px,100%)!important; }
+#root .record-create-dialog .baptism-records__type > span { color:#526b8c!important; }
+#root .record-create-dialog .archive-sacramental-form__actions { grid-column:1 / -1!important; display:flex!important; justify-content:flex-end!important; }
+}
+
+@layer record-add-visibility {
+#root .baptism-records .baptism-records__tools .record-add-button {
+ display:inline-flex!important;
+ align-items:center!important;
+ justify-content:center!important;
+ background:#fff!important;
+ color:#244b91!important;
+ -webkit-text-fill-color:#244b91!important;
+ opacity:1!important;
+ visibility:visible!important;
+ border:1px solid #d2def0!important;
+ border-radius:7px!important;
+ padding:10px 16px!important;
+ min-height:42px!important;
+ font-size:14px!important;
+ font-weight:600!important;
+ line-height:1.4!important;
+ white-space:nowrap!important;
+ box-shadow:none!important;
+ cursor:pointer!important;
+}
+#root .baptism-records .baptism-records__tools .record-add-button:hover { background:#eaf2ff!important; }
+#root .baptism-records .baptism-records__tools .record-add-button:focus-visible { outline:3px solid #fff!important; outline-offset:3px!important; }
+}

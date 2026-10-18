@@ -1,0 +1,17 @@
+@layer record-preview-formal {
+.baptism-records__detail-preview { width:min(800px,calc(100vw - 32px))!important; max-height:calc(100dvh - 40px)!important; padding:0!important; border:1px solid #d8e1ec!important; border-radius:12px!important; background:#fff!important; box-shadow:0 24px 70px #142d4930!important; overflow:auto!important; }
+.baptism-records__detail-preview .baptism-records__modal-header { display:flex!important; justify-content:space-between!important; align-items:center!important; flex-wrap:wrap!important; gap:16px!important; padding:20px 24px!important; margin:0!important; border-bottom:1px solid #e2e8f0!important; background:#fff!important; }
+.record-preview-eyebrow { display:block!important; margin-bottom:5px!important; color:#75869e!important; font-size:11px!important; line-height:1.4!important; letter-spacing:.8px!important; text-transform:uppercase!important; }
+.baptism-records__detail-preview h3 { margin:0!important; color:#244469!important; font-size:22px!important; line-height:1.4!important; letter-spacing:0!important; }
+.baptism-records__detail-preview .baptism-records__modal-actions { display:flex!important; gap:8px!important; }
+.baptism-records__detail-preview .baptism-records__modal-actions button { padding:8px 14px!important; min-height:38px!important; border-radius:6px!important; font-size:13px!important; line-height:1.4!important; box-shadow:none!important; }
+.record-preview-sections { padding:4px 24px 16px!important; }
+.record-preview-section { padding:18px 0!important; border-bottom:1px solid #e7edf4!important; }
+.record-preview-section:last-child { border-bottom:0!important; }
+.baptism-records__detail-preview .record-preview-section h4 { color:#34516f!important; font-size:13px!important; font-weight:700!important; margin:0 0 14px!important; letter-spacing:0!important; }
+.baptism-records__detail-preview .baptism-records__fields { display:grid!important; grid-template-columns:repeat(2,minmax(0,1fr))!important; gap:16px 28px!important; padding:0!important; margin:0!important; background:transparent!important; }
+.baptism-records__detail-preview .baptism-records__fields > div { min-width:0!important; padding:0!important; border:0!important; background:transparent!important; }
+.baptism-records__detail-preview dt { color:#7a899c!important; font-size:12px!important; line-height:1.5!important; margin:0 0 4px!important; font-weight:400!important; }
+.baptism-records__detail-preview dd { color:#2e4766!important; font-size:14px!important; line-height:1.6!important; margin:0!important; overflow-wrap:anywhere!important; }
+@media(max-width:520px) { .baptism-records__detail-preview .baptism-records__modal-header { padding:18px!important; } .record-preview-sections { padding:0 18px 12px!important; } .baptism-records__detail-preview .baptism-records__fields { grid-template-columns:1fr!important; } }
+}
