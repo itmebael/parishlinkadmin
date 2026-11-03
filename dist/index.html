@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en" data-design="heaven">
-  <head>
+  <head><style>@layer system-royal-clay;</style><link rel="stylesheet" href="/dist/assets/system-royal-clay.css?v=20261025-even-blue-sidebar">
     <meta charset="UTF-8" />
     <!-- This CSP meta tag allows Vite to use eval() for hot-reloading in development -->
     <meta http-equiv="Content-Security-Policy" content="default-src * 'self' 'unsafe-inline' 'unsafe-eval' data: blob:;">
@@ -11,7 +11,7 @@
     <title>ParishLink | Admin Portal</title>
     <!-- User dashboard: light (white) theme only — runs before React reads localStorage. -->
     
-    <script type="module" crossorigin src="/dist/assets/index-v20260422157000.js?v=20261014-certificate-pdf-7"></script>
+    <script type="module" crossorigin src="/dist/assets/index-v20260422157000.js?v=20261103-preview-ui"></script>
     <link rel="stylesheet" href="/dist/assets/parish-calendar-ui.css?v=20261013-mass-audience">
     <link rel="stylesheet" href="/dist/assets/broadcast-history.css?v=20261012-delete-dialog">
     <link rel="stylesheet" crossorigin href="/dist/assets/index-yReDnWMe.css">
@@ -382,7 +382,7 @@
         var SUPABASE_URL = "https://lnipoknkbjcxwnggzrnm.supabase.co";
         var SUPABASE_KEY = "sb_publishable_865CAmJ0g9wUj9dlCo6phQ_l5biuRKK";
         var SESSION_KEY = "diocese-dashboard-db-session";
-        var state = { rows: [], parishMap: {}, loading: false, error: "", pid: "", role: "", open: false, scope: "users" };
+        var state = { rows: [], parishMap: {}, loading: false, error: "", pid: "", role: "", open: false, scope: "users", page: 0, userFilter: "all" };
 
         function esc(s) {
           return String(s == null ? "" : s).replace(/[<>&"']/g, function (ch) {
@@ -486,13 +486,44 @@
             : [row.full_name, row.email, row.phone_number, row.parish_name, state.parishMap[row.parish_id]].join(" ").toLowerCase();
           return hay.indexOf(q) !== -1;
         }
+        function deletedUserRows(row) {
+          var key = "parishlink-deleted-user-rows:" + sessionEmail() + ":" + (state.pid || sessionParishName());
+          try {
+            var rows = JSON.parse(sessionStorage.getItem(key) || "[]");
+            if (!Array.isArray(rows)) rows = [];
+            if (row && !rows.some(function (item) { return String(item.id) === String(row.id); })) {
+              rows.push({id:row.id,full_name:row.full_name,email:row.email,parish_name:row.parish_name,parish_id:row.parish_id,is_deleted:true});
+              sessionStorage.setItem(key, JSON.stringify(rows));
+            }
+            return rows;
+          } catch (_) { return []; }
+        }
         function renderRows(wrap) {
           var input = wrap.querySelector("[data-dio-user-search]");
           var q = input ? String(input.value || "").trim().toLowerCase() : "";
           var list = wrap.querySelector("[data-dio-user-list]");
           var total = wrap.querySelector("[data-dio-user-total]");
-          var visibleRows = state.rows.filter(function (row) { return rowMatches(row, q); });
-          if (total) total.textContent = String(visibleRows.length);
+          var sourceRows = state.userFilter === "deleted" ? deletedUserRows() : state.rows;
+          var visibleRows = sourceRows.filter(function (row) {
+            return (state.userFilter !== "active" || row.is_active !== false) && (state.userFilter !== "deactivated" || row.is_active === false) && rowMatches(row, q);
+          });
+          wrap.querySelectorAll("[data-user-filter]").forEach(function (button) { button.setAttribute("aria-pressed", String(button.getAttribute("data-user-filter") === state.userFilter)); });
+          if (total) total.textContent = String(state.rows.length);
+          var activeStat = wrap.querySelector("[data-user-active-total]");
+          var inactiveStat = wrap.querySelector("[data-user-inactive-total]");
+          var deletedStat = wrap.querySelector("[data-user-deleted-total]");
+          if (activeStat) activeStat.textContent = String(state.rows.filter(function (row) { return row.is_active !== false; }).length);
+          if (inactiveStat) inactiveStat.textContent = String(state.rows.filter(function (row) { return row.is_active === false; }).length);
+          if (deletedStat) deletedStat.textContent = String(deletedUserRows().length);
+          var pageCount = Math.max(1, Math.ceil(visibleRows.length / 5));
+          state.page = Math.max(0, Math.min(state.page || 0, pageCount - 1));
+          var pager = wrap.querySelector("[data-user-pager]");
+          if (pager) {
+            pager.hidden = state.loading || !!state.error || visibleRows.length <= 5;
+            wrap.querySelector("[data-user-page-label]").textContent = "Page " + (state.page + 1) + " of " + pageCount;
+            wrap.querySelector("[data-user-prev]").disabled = state.page === 0;
+            wrap.querySelector("[data-user-next]").disabled = state.page >= pageCount - 1;
+          }
           if (!list) return;
           if (state.loading) {
             list.innerHTML = '<div class="dio-user-mgmt__empty">Loading users...</div>';
@@ -506,7 +537,7 @@
             list.innerHTML = '<div class="dio-user-mgmt__empty">No ' + (state.scope === "parishes" ? "parishes" : "users") + ' found for this view.</div>';
             return;
           }
-          list.innerHTML = visibleRows.slice(0, 80).map(function (u) {
+          list.innerHTML = visibleRows.slice(state.page * 5, state.page * 5 + 5).map(function (u) {
             if (state.scope === "parishes") {
               var parishName = u.parish_name || "Unnamed parish";
               return '<div class="dio-user-mgmt__row">' +
@@ -519,7 +550,7 @@
                     '<em class="dio-user-mgmt__chip dio-user-mgmt__chip--blue">' + esc(u.contact_number || "No phone") + '</em>' +
                   '</div>' +
                 '</div>' +
-                '<div class="dio-user-mgmt__meta">Saved ' + esc(dateText(u.created_at)) + '</div>' +
+                '<div class="dio-user-mgmt__meta">Saved ' + esc(u.is_deleted ? 'Deleted' : dateText(u.created_at)) + '</div>' +
               '</div>';
             }
             var name = u.full_name || u.email || "Unnamed user";
@@ -531,7 +562,7 @@
                 '<span>' + esc(u.email || "No email saved") + '</span>' +
                 '<div class="dio-user-mgmt__chips">' +
                   '<em class="dio-user-mgmt__chip">' + esc(parish) + '</em>' +
-                  '<em class="dio-user-mgmt__chip dio-user-mgmt__chip--blue">' + esc(u.phone_number || "No phone") + '</em>' +
+                  '<em class="dio-user-mgmt__chip dio-user-mgmt__chip--blue">' + esc(u.is_deleted ? 'Deleted this session' : (u.phone_number || "No phone")) + '</em>' +
                 '</div>' +
               '</div>' +
               '<div class="dio-user-mgmt__meta">Joined ' + esc(dateText(u.created_at)) + '</div>' +
@@ -559,7 +590,7 @@
             action.disabled = true;
             action.textContent = kind === "delete" ? "Deleting…" : "Deactivating…";
             restWrite("registered_users", { id: "eq." + user.id }, kind === "delete" ? "DELETE" : "PATCH", kind === "delete" ? null : { is_active: false })
-              .then(function () { modal.remove(); if (kind === "delete") state.rows = state.rows.filter(function (row) { return String(row.id) !== String(user.id); }); else { user.is_active = false; } renderRows(wrap); if (kind === "deactivate") openUserPopup(wrap, user); })
+              .then(function () { modal.remove(); if (kind === "delete") { state.rows = state.rows.filter(function (row) { return String(row.id) !== String(user.id); }); deletedUserRows(user); } else { user.is_active = false; } renderRows(wrap); if (kind === "deactivate") openUserPopup(wrap, user); })
               .catch(function (error) { window.alert("Could not " + kind + " user: " + (error.message || error) + ". Check sql/user_management_actions.sql and database permissions."); action.disabled = false; action.textContent = kind === "delete" ? "Delete user" : "Deactivate user"; });
           });
           var closeOnEscape = function (event) { if (event.key === "Escape") { modal.remove(); document.removeEventListener("keydown", closeOnEscape); } };
@@ -567,6 +598,7 @@
           modal.querySelector("[data-user-close]").focus();
         }
         function renderShell(wrap) {
+          state.scope = "users";
           var r = state.role;
           var isParish = r === "parish";
           var scopeLabel = state.scope === "parishes" ? "Parishes" : "Users";
@@ -574,7 +606,7 @@
             '<div class="dio-user-mgmt__head">' +
               '<div>' +
                 '<h4>User Management</h4>' +
-                '<p>' + (isParish ? "Records are filtered to this parish." : "Choose users or parishes from the scope dropdown.") + '</p>' +
+                '<p>' + (isParish ? "Records are filtered to this parish." : "View and manage registered users.") + '</p>' +
               '</div>' +
               '<div class="dio-user-mgmt__tools">' +
                 '<input class="dio-user-mgmt__search" data-dio-user-search placeholder="Search users" />' +
@@ -582,23 +614,33 @@
               '</div>' +
             '</div>' +
             '<div class="dio-user-mgmt__stats dio-user-mgmt__stats--compact">' +
-              '<div class="dio-user-mgmt__stat"><span>Visible ' + (state.scope === "parishes" ? "parishes" : "users") + '</span><strong data-dio-user-total>0</strong></div>' +
-              '<div class="dio-user-mgmt__stat"><span>Scope</span><select class="dio-user-mgmt__scope" data-dio-user-scope>' +
-                '<option value="users"' + (state.scope === "users" ? " selected" : "") + '>Users</option>' +
-                '<option value="parishes"' + (state.scope === "parishes" ? " selected" : "") + '>Parishes</option>' +
-              '</select></div>' +
+              '<button type="button" class="dio-user-mgmt__stat" data-user-filter="all" aria-pressed="true"><span>Visible users</span><strong data-dio-user-total>0</strong></button>' +
+              '<button type="button" class="dio-user-mgmt__stat" data-user-filter="active" aria-pressed="false"><span>Active users</span><strong data-user-active-total>0</strong></button>' +
+              '<button type="button" class="dio-user-mgmt__stat" data-user-filter="deactivated" aria-pressed="false"><span>Deactivated users</span><strong data-user-inactive-total>0</strong></button>' +
+              '<button type="button" class="dio-user-mgmt__stat" data-user-filter="deleted" aria-pressed="false"><span>Deleted this session</span><strong data-user-deleted-total>0</strong></button>' +
             '</div>' +
-            '<div class="dio-user-mgmt__body"><div class="dio-user-mgmt__list" data-dio-user-list></div></div>';
-          wrap.querySelector("[data-dio-user-search]").addEventListener("input", function () { renderRows(wrap); });
+            '<div class="dio-user-mgmt__body"><div class="dio-user-mgmt__list" data-dio-user-list></div></div>' +
+            '<div class="dio-user-mgmt__pager" data-user-pager hidden><button type="button" class="dio-user-mgmt__btn" data-user-prev aria-label="Previous five users">Previous</button><span data-user-page-label role="status" aria-live="polite"></span><button type="button" class="dio-user-mgmt__btn" data-user-next aria-label="Next five users">Next</button></div>';
+          wrap.querySelector("[data-dio-user-search]").addEventListener("input", function () { state.page = 0; renderRows(wrap); });
           wrap.querySelector("[data-dio-user-refresh]").addEventListener("click", function () { loadUsers(wrap, true); });
-          var userList = wrap.querySelector("[data-dio-user-list]");
-          userList.addEventListener("click", function (event) { var row = event.target.closest("[data-dio-user-row]"); if (!row) return; var user = state.rows.find(function (item) { return String(item.id) === row.getAttribute("data-dio-user-id"); }); if (user) openUserPopup(wrap, user); });
-          userList.addEventListener("keydown", function (event) { if (event.key !== "Enter" && event.key !== " ") return; var row = event.target.closest("[data-dio-user-row]"); if (!row) return; event.preventDefault(); var user = state.rows.find(function (item) { return String(item.id) === row.getAttribute("data-dio-user-id"); }); if (user) openUserPopup(wrap, user); });
-          wrap.querySelector("[data-dio-user-scope]").addEventListener("change", function (e) {
-            state.scope = e.target.value === "parishes" ? "parishes" : "users";
-            renderShell(wrap);
-            loadUsers(wrap, true);
+          wrap.querySelectorAll("[data-user-filter]").forEach(function (button) {
+            button.addEventListener("click", function () { state.userFilter = button.getAttribute("data-user-filter"); state.page = 0; wrap.querySelector("[data-dio-user-search]").value = ""; renderRows(wrap); });
           });
+          var userList = wrap.querySelector("[data-dio-user-list]");
+          function movePage(delta) { state.page += delta; renderRows(wrap); }
+          wrap.querySelector("[data-user-prev]").addEventListener("click", function () { movePage(-1); });
+          wrap.querySelector("[data-user-next]").addEventListener("click", function () { movePage(1); });
+          var swipeStart = null;
+          userList.addEventListener("touchstart", function (event) { if (event.touches.length === 1) swipeStart = {x:event.touches[0].clientX,y:event.touches[0].clientY}; else swipeStart = null; }, {passive:true});
+          userList.addEventListener("touchend", function (event) {
+            if (!swipeStart || !event.changedTouches.length) return;
+            var dx = event.changedTouches[0].clientX - swipeStart.x, dy = event.changedTouches[0].clientY - swipeStart.y;
+            swipeStart = null;
+            if (Math.abs(dx) >= 60 && Math.abs(dx) > Math.abs(dy) * 1.5) { movePage(dx < 0 ? 1 : -1); }
+          }, {passive:true});
+          userList.addEventListener("touchcancel", function () { swipeStart = null; }, {passive:true});
+          userList.addEventListener("click", function (event) { var row = event.target.closest("[data-dio-user-row]"); if (!row) return; var user = state.rows.find(function (item) { return String(item.id) === row.getAttribute("data-dio-user-id"); }); if (user && !user.is_deleted) openUserPopup(wrap, user); });
+          userList.addEventListener("keydown", function (event) { if (event.key !== "Enter" && event.key !== " ") return; var row = event.target.closest("[data-dio-user-row]"); if (!row) return; event.preventDefault(); var user = state.rows.find(function (item) { return String(item.id) === row.getAttribute("data-dio-user-id"); }); if (user) openUserPopup(wrap, user); });
           renderRows(wrap);
         }
         function loadParishMap() {
@@ -654,6 +696,7 @@
           });
         }
         function cleanup() {
+          syncUserNavigation(false);
           var panels = document.querySelectorAll(".dio-user-mgmt");
           for (var i = 0; i < panels.length; i++) panels[i].remove();
           var screens = document.querySelectorAll(".dio-user-mgmt-screen");
@@ -663,7 +706,23 @@
           var active = document.querySelectorAll(".dio-user-mgmt-nav.is-active");
           for (var a = 0; a < active.length; a++) active[a].classList.remove("is-active");
         }
+        var previousUserNav = [];
+        function syncUserNavigation(open) {
+          var nav = findNav();
+          if (open && nav) {
+            nav.querySelectorAll(".nav-item.is-active:not(.dio-user-mgmt-nav)").forEach(function (button) {
+              if (previousUserNav.indexOf(button) === -1) previousUserNav.push(button);
+              button.classList.remove("is-active");
+            });
+          } else if (!open) {
+            previousUserNav.forEach(function (button) { if (button.isConnected) button.classList.add("is-active"); });
+            previousUserNav = [];
+          }
+          var userButton = document.querySelector(".dio-user-mgmt-nav");
+          if (userButton) { userButton.classList.toggle("is-active", open); if (open) userButton.setAttribute("aria-current", "page"); else userButton.removeAttribute("aria-current"); }
+        }
         function closeScreen() {
+          syncUserNavigation(false);
           state.open = false;
           var ws = findWorkspace();
           if (ws) ws.classList.remove("dio-user-mgmt-open");
@@ -723,7 +782,7 @@
           if (!workspace) return;
           workspace.classList.add("dio-user-mgmt-open");
           var navBtn = document.querySelector(".dio-user-mgmt-nav");
-          if (navBtn) navBtn.classList.add("is-active");
+          syncUserNavigation(true);
           var screen = workspace.querySelector(".dio-user-mgmt-screen");
           if (!screen) {
             screen = document.createElement("section");
@@ -1140,9 +1199,20 @@
     <link rel="stylesheet" href="/dist/assets/user-dashboard-reference.css?v=2">
     <link rel="stylesheet" href="/dist/assets/global-typography.css?v=20260928-1">
     <link rel="stylesheet" href="/dist/assets/parish-dark-mode.css?v=20261003-dashboard-dark-9">
-    <link rel="stylesheet" href="/dist/assets/parish-bookings-ui.css?v=20261009-details-popup-3">
+    <link rel="stylesheet" href="/dist/assets/parish-bookings-ui.css?v=20261103-preview-ui">
     <link rel="stylesheet" href="/dist/assets/baptism-certificate-design.css?v=20261003-marriage-longpaper-1">
     
+<style>.dio-user-mgmt__stats--compact { grid-template-columns:repeat(auto-fit,minmax(180px,1fr))!important; }</style>
+<style>
+.dio-user-mgmt__pager:not([hidden]) { display:flex; justify-content:center; align-items:center; gap:16px; margin-top:16px; }
+.dio-user-mgmt__pager button:disabled { opacity:.45; cursor:not-allowed; }
+.dio-user-mgmt__list { max-height:none!important; overflow-y:visible!important; touch-action:pan-y; }
+</style><style>
+.dio-user-mgmt__stats button { font:inherit; text-align:left; cursor:pointer; color:inherit; }
+.dio-user-mgmt__stats button[aria-pressed="true"] { outline:2px solid #7854e4; outline-offset:-2px; }
+.dio-user-mgmt__stats button:hover { border-color:#7854e4; }
+.dio-user-mgmt__stats button:focus-visible { outline:3px solid #7854e4; outline-offset:2px; }
+</style><link rel="stylesheet" href="/dist/assets/booking-management.css?v=20261103-blue-reports">
 </head>
   <body>
     <dialog id="login-terms-dialog" class="login-terms-dialog" aria-labelledby="login-terms-title">
@@ -7999,7 +8069,7 @@
     </script>
     <link rel="stylesheet" href="/dist/assets/login-ui-reference.css?v=20261009-centered-3">
     <link rel="stylesheet" href="/dist/assets/admin-dashboard-reference.css?v=20261008-4">
-    <link rel="stylesheet" href="/dist/assets/parish-publishing.css?v=20261014-board-layout-5">
+    <link rel="stylesheet" href="/dist/assets/parish-publishing.css?v=20261103-preview-ui">
     <link rel="stylesheet" href="/dist/assets/sidebar-login-design.css?v=20261008-5">
     <link rel="stylesheet" href="/dist/assets/parish-inbox.css?v=20261009-inbox-2">
     <link rel="stylesheet" href="/dist/assets/baptism-reference.css?v=20261008-1">

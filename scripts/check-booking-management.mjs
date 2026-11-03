@@ -1,0 +1,64 @@
+import assert from 'node:assert/strict';
+import {BookingManagement,managementStatus,statusCounts,filterManagementRows,serviceSeries,actionsFor,changeBookingStatus,bookingDay} from '../dist/assets/booking-management.js';
+const session={role:'parish',email:'office@example.test',accessToken:'admin-token',parish_id:'parish-1'};
+const row=(id,booking_status,service_name='Mass booking',date='2026-11-03')=>({id,reference_number:(/Certificate/.test(service_name)?'CERT-':'APT-')+id,booking_status,service_name,booking_date:date,created_at:'2026-10-30T12:00:00Z',client_name:'Person '+id,parish_name:'Parish of Catbalogan'});
+let database=[row('1','Pending'),row('2','Approved'),row('3','Released','Baptismal Certificate'),row('4','Declined'),row('5','Booked','Confirmation Certificate'),row('6','Cancelled')];
+assert.deepEqual(statusCounts(database),{pending:2,approved:1,completed:1,rejected:1});
+assert.equal(managementStatus(row('x','Rejected')),'rejected');
+assert.equal(managementStatus(row('x','Disapproved')),'rejected');
+assert.equal(bookingDay({created_at:'2026-11-02T20:00:00Z'}),'2026-11-03');
+assert.deepEqual(actionsFor(database[0]),['Approve','Decline']);
+assert.deepEqual(actionsFor(database[1]),['Preview','Mark as Completed']);
+assert.deepEqual(actionsFor(database[2]),['Preview','Print']);
+assert.deepEqual(actionsFor(database[3]),['Preview']);
+assert.equal(filterManagementRows(database,{status:'pending',search:'confirmation'}).length,1);
+assert.equal(filterManagementRows(database,{from:'2026-12-01'}).length,0);
+assert.equal(filterManagementRows(database,{type:'certificates'}).length,2);
+const series=serviceSeries([row('1','Pending'),row('2','Approved','Mass booking - Thanksgiving'),row('3','Released','Baptismal Certificate','2025-04-05')]);
+assert.equal(series.length,2);assert.equal(series[0].months[10],2);assert.equal(series[1].months[3],1);
+assert.deepEqual(serviceSeries([]),[]);
+let patches=0;
+async function request(url,options) {
+  patches++;assert.equal(options.accessToken,'admin-token');
+  const query=new URL(url,'http://localhost').searchParams;
+  const index=database.findIndex(row=>'eq.'+row.id===query.get('id')&&'eq.'+row.booking_status===query.get('booking_status'));
+  if(index<0)return [];
+  database[index]={...database[index],...options.body};return [database[index]];
+}
+const saved=await changeBookingStatus({row:database[0],action:'Approve',request,session});assert.equal(saved.booking_status,'Approved');
+const completed=await changeBookingStatus({row:saved,action:'Mark as Completed',request,session});assert.equal(completed.booking_status,'Completed');
+await assert.rejects(changeBookingStatus({row:completed,action:'Approve',request,session}),/changed/);
+const before=patches;await assert.rejects(changeBookingStatus({row:database[1],action:'Mark as Completed',request,session:{role:'user'}}),/administrator/);assert.equal(patches,before);
+const stale={...database[4]};database[4]={...stale,booking_status:'Declined'};
+await assert.rejects(changeBookingStatus({row:stale,action:'Approve',request,session}),/not updated/);
+
+// Mount the production component against an in-memory booking API.
+globalThis.document=new EventTarget();document.visibilityState='visible';
+globalThis.window=new EventTarget();window.confirm=()=>true;window.setInterval=()=>1;window.clearInterval=()=>{};
+globalThis.CustomEvent=class extends Event{constructor(type,options){super(type);this.detail=options.detail;}};
+let printed=false,reportHtml='';const popup={document:{write:html=>{reportHtml=html;},open(){},close(){},body:{},fonts:{ready:Promise.resolve()}},focus(){},print(){printed=true;},close(){}};window.open=()=>popup;
+const hookStates=[],refs=[],effects=[];let cursor=0,refIndex=0;
+const React={createElement:(type,props,...children)=>({type,props:props||{},children}),useState(initial){const i=cursor++;if(!(i in hookStates))hookStates[i]=typeof initial==='function'?initial():initial;return [hookStates[i],next=>{hookStates[i]=typeof next==='function'?next(hookStates[i]):next;}];},useRef(initial){const i=refIndex++;return refs[i]||(refs[i]={current:initial});},useEffect(fn,deps){const i=cursor++;if(!effects[i])effects[i]={cleanup:fn(),deps};}};
+let reads=0;const fetchRows=async(table,query,token)=>{assert.equal(token,'admin-token');if(table==='parishes')return[{id:'parish-1',parish_name:'Parish of Catbalogan'}];assert.equal(table,'diocese_service_bookings');assert.ok(query.includes('parish_name=ilike.Parish%20of%20Catbalogan'));reads++;return database.map(row=>({...row}));};
+function render(){cursor=0;refIndex=0;return BookingManagement({React,session,fetchRows,request,reports:true});}
+function nodes(root,predicate){if(!root||typeof root!=='object')return [];return [...(predicate(root)?[root]:[]),...(root.children||[]).flat(Infinity).flatMap(child=>nodes(child,predicate))];}
+render();await new Promise(resolve=>setTimeout(resolve,0));let tree=render();
+const cards=nodes(tree,node=>node.type==='button'&&node.props['data-status']);assert.equal(cards.length,4);
+cards.find(node=>node.props['data-status']==='approved').props.onClick();tree=render();
+assert.equal(nodes(tree,node=>node.type==='tr').length,2,'Approved filter has one booking plus header');
+const completeButton=nodes(tree,node=>node.type==='button'&&node.children.includes('Mark as Completed'))[0];await completeButton.props.onClick();tree=render();
+assert.equal(statusCounts(database).completed,3);assert.equal(nodes(tree,node=>node.type==='tr').length,2,'Empty result row plus header after request leaves approved filter');
+cards.find(node=>node.props['data-status']==='completed').props.onClick();tree=render();
+const printButton=nodes(tree,node=>node.type==='button'&&node.children.includes('Print'))[0];await printButton.props.onClick();await Promise.resolve();assert.equal(printed,true);assert.ok(reportHtml.includes('Request register'));
+const previousReads=reads;await nodes(tree,node=>node.type==='button'&&node.children.includes('Generate Reports'))[0].props.onClick();
+assert.ok(reads>previousReads,'Generate refreshes records');assert.ok(reportHtml.includes('COMPLETED'));assert.ok(reportHtml.includes('APT-2'));assert.ok(!reportHtml.includes('APT-4'),'Rejected records excluded from completed report');
+assert.ok(reportHtml.includes('Booking statuses'));
+database.push(...Array.from({length:14},(_,index)=>row(String(100+index),'Completed')));
+await nodes(tree,node=>node.type==='button'&&node.children.includes('Generate Reports'))[0].props.onClick();tree=render();
+assert.equal(nodes(tree,node=>node.type==='tr').length,8,'Seven booking rows plus header');assert.ok(reportHtml.includes('APT-113'),'Report retains records beyond the visible page');
+nodes(tree,node=>node.type==='button'&&node.children.includes('Next'))[0].props.onClick();tree=render();assert.equal(nodes(tree,node=>node.type==='tr').length,8);
+const region=nodes(tree,node=>node.props.role==='region')[0];region.props.onTouchStart({touches:[{clientX:20,clientY:20}]});region.props.onTouchEnd({changedTouches:[{clientX:130,clientY:25}]});tree=render();
+assert.equal(nodes(tree,node=>node.type==='button'&&node.children.includes('Previous'))[0].props.disabled,true,'Swipe right returns to first page');
+const pie=nodes(tree,node=>node.props.className==='report-pie')[0];assert.ok(pie);assert.ok(pie.props['aria-label'].includes('1 certificate requests'),'Pie counts all matching rows beyond one page');assert.ok(nodes(tree,node=>node.type==='h4'&&node.children.includes('Most-requested Certificates')).length);
+effects.forEach(effect=>effect?.cleanup?.());
+console.log('PASS: status aliases, counts, scoped reads, date/type/search filters, actual service charts, valid transitions, stale-update guards, immediate UI updates, completed printing, and fresh filtered reports.');

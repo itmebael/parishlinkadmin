@@ -1,0 +1,129 @@
+/* Shared client/admin theme. Screen-only: certificate and report printing retain their own layouts. */
+@layer system-royal-clay {
+@media screen {
+html[data-design="heaven"] body #root :is(.dashboard-frame--user,.dashboard-frame--parish) {
+  --royal:#2852ce; --royal-ink:#183578; --royal-muted:#405575;
+  --royal-line:#bec8dc; --royal-soft:#e5efff;
+  --royal-raised:6px 7px 17px #6887b824,inset 2px 2px 5px #ffffffed,inset -3px -3px 7px #94afe329;
+  --royal-inset:inset 2px 2px 5px #7d99c91f,inset -2px -2px 4px #fff;
+  --heaven-ink:#183578; --heaven-muted:#405575; --heaven-line:#bec8dc;
+  --screen-blue:#2852ce; --screen-ink:#183578; --screen-line:#bec8dc;
+  & .workspace, & .workspace__main, & .overview-shell { background:#fff!important; min-width:0; }
+  & .workspace__topbar:not(:has(.notification-menu)) { background:#fff!important; }
+  & :is(.screen-title-block,.workspace__headline) :is(h2,h3) {
+    font-family:Georgia,'Palatino Linotype',serif!important; color:var(--royal-ink)!important;
+    -webkit-text-fill-color:var(--royal-ink)!important;
+  }
+  & :is(.screen-subtitle,.workspace__subtitle) { color:var(--royal-muted)!important; }
+
+  /* Existing screen grids and form columns stay in control of layout. */
+  & .workspace :is(.glass-card,.page-card,.user-panel,.parish-dashboard-card,.parish-reports-card,
+    .dio-user-mgmt,.plh-wrap,.my-booking-card,.social-post,.user-profile-summary,.report-analytics,.report-chart,
+    .parish-secretary-thread-panel,.user-support-chat,.parish-secretary-thread-list) {
+    border:2px solid var(--royal-line)!important; border-radius:24px!important;
+    background:linear-gradient(140deg,#f5f9ff,#e5efff)!important;
+    box-shadow:var(--royal-raised)!important; min-width:0;
+  }
+  & .workspace :is(.glass-card__header,.parish-reports-card__header,.user-panel__header) {
+    background:linear-gradient(145deg,#5279ef,#254bd2)!important;
+    border:1px solid #8eaaff!important; border-radius:16px!important;
+    box-shadow:inset 2px 2px 4px #ffffff66,inset -3px -4px 6px #132f9944,0 4px 9px #4169e11f!important;
+    padding:14px 16px!important; gap:12px; flex-wrap:wrap;
+  }
+  & .workspace :is(.glass-card__header,.parish-reports-card__header,.user-panel__header) :is(h3,h4,h5,p,small,.page-card__lead,.workspace__eyebrow) {
+    color:#fff!important; -webkit-text-fill-color:#fff!important;
+  }
+  & .workspace :is(.empty-state,.settings-item--profile,.my-bookings-stats > div,.metric-card__stats) {
+    background:linear-gradient(145deg,#f4f8ff,#dceaff)!important;
+    border:1px solid #b6c8e7!important; border-radius:18px!important;
+    box-shadow:var(--royal-inset)!important; color:var(--royal-ink)!important;
+  }
+  & .workspace .empty-state :is(strong,span,p) { color:var(--royal-muted)!important; -webkit-text-fill-color:var(--royal-muted)!important; }
+  & .workspace .dashboard-empty-icon { color:var(--royal)!important; }
+  & .workspace :is(.my-booking-card,.social-post,.user-profile-summary) :is(h3,h4,h5,strong) {
+    color:var(--royal-ink)!important; -webkit-text-fill-color:var(--royal-ink)!important;
+  }
+  & .workspace :is(.my-booking-card,.social-post,.user-profile-summary) p { color:var(--royal-muted)!important; }
+
+  & .workspace :is(.primary-action,.login-submit,.client-latest-announcement__read,.user-profile-edit-button) {
+    background:linear-gradient(145deg,#5279ef,#254bd2)!important; color:#fff!important;
+    -webkit-text-fill-color:#fff!important; border:1px solid #456bdb!important;
+    border-radius:13px!important; box-shadow:var(--royal-raised)!important;
+  }
+  & .workspace :is(.secondary-action,.ghost-action,.filter-button,.profile-menu__item) {
+    background:linear-gradient(145deg,#fff,#dfeaff)!important; color:var(--royal-ink)!important;
+    border:1px solid #9eb5df!important; border-radius:12px!important; box-shadow:var(--royal-raised)!important;
+  }
+  & .workspace :is(.login-field,.certificate-field,.form-field,.certificate-form,.service-form,.user-profile-edit-form) :is(input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),select,textarea),
+  & .workspace :is(.search-field,.search-input,.records-search) {
+    background:#f8fbff!important; color:#172b50!important; border:1.5px solid #9eb3d4!important;
+    border-radius:12px!important; box-shadow:var(--royal-inset)!important; min-width:0;
+  }
+  & .workspace :is(input,textarea)::placeholder { color:#657895!important; opacity:1; }
+  & .workspace :is(button,a,input,select,textarea):focus-visible {
+    outline:3px solid #4169e1!important; outline-offset:3px!important;
+  }
+  & .workspace :is(.certificate-tabs,.member-post-tabs,.pending-queue-tabs,.my-bookings-filters) button {
+    border-radius:12px!important; color:var(--royal-ink)!important;
+  }
+  & .workspace :is(.certificate-tabs,.member-post-tabs,.pending-queue-tabs,.my-bookings-filters) button:is([aria-selected="true"],[aria-pressed="true"],.is-active) {
+    background:linear-gradient(145deg,#5279ef,#254bd2)!important; color:#fff!important;
+    border-color:#2852ce!important; box-shadow:var(--royal-raised)!important;
+  }
+  & .workspace :is(.data-table,.requests-table,.archive-table,.member-post-panel) thead th {
+    background:#dce9ff!important; color:var(--royal-ink)!important; border-color:#b5c9eb!important;
+  }
+  & .workspace :is(.data-table,.requests-table,.archive-table) tbody td { border-color:#cbd9ed!important; }
+  & .workspace :is(.data-table,.requests-table,.archive-table) tbody tr:hover { background:#edf4ff!important; }
+  & .workspace .settings-item--profile { padding:14px 16px!important; }
+  & .workspace .user-profile-summary__avatar {
+    width:56px!important; height:56px!important; min-width:56px!important;
+    aspect-ratio:1!important; border-radius:50%!important; align-self:center!important;
+  }
+  & .workspace__actions :is(.icon-button,.profile-pill) {
+    background:linear-gradient(145deg,#fff,#e5edff)!important; border:2px solid #24365a!important;
+    box-shadow:0 4px 10px #2647781a,inset 2px 2px 4px #fff!important; color:#24365a!important;
+  }
+  & .workspace :is(.profile-menu,.notification-menu) {
+    background:#f4f8ff!important; border:2px solid #9fb4da!important;
+    border-radius:20px!important; box-shadow:var(--royal-raised)!important;
+  }
+  & .sidebar {
+    background:linear-gradient(#2446c8bf,#2446c8bf),url('/dist/assets/church.jpg') 55% center / cover no-repeat,#2446c8!important;
+    border-right:1px solid #183b94!important;
+    box-shadow:inset -4px 0 12px #0c226333!important;
+  }
+  & .sidebar :is(.sidebar__brand,.sidebar__footer) { background:transparent!important; }
+  & .sidebar :is(h1,.sidebar__caption,.sidebar__eyebrow,.sidebar__footer p,.sidebar__footer strong,.nav-item) {
+    color:#fff!important; -webkit-text-fill-color:#fff!important;
+  }
+  & .sidebar .nav-item { border-radius:14px!important; }
+  & .sidebar .nav-item:is(.is-active,[aria-current="page"]) {
+    background:linear-gradient(145deg,#edf4ff,#cbddff)!important; color:#183578!important;
+    -webkit-text-fill-color:#183578!important; border:1px solid #ffffffb3!important;
+    box-shadow:inset 2px 2px 4px #fff,3px 4px 9px #0c226333!important;
+  }
+  & .sidebar .nav-item:is(.is-active,[aria-current="page"]) :is(span,svg) {
+    color:#183578!important; -webkit-text-fill-color:#183578!important;
+  }
+  & .sidebar .nav-item:hover { background:#ffffff21!important; }
+  & .phone-bottom-nav {
+    background:linear-gradient(145deg,#fff,#deebff)!important; border:2px solid #fff!important;
+    box-shadow:0 -5px 22px #4169e126,inset 2px 3px 6px #fff!important;
+  }
+  & .phone-bottom-nav a { color:#475d85!important; }
+  & .phone-bottom-nav a[aria-current] { color:#254bd2!important; }
+  & .phone-bottom-nav .phone-nav-home svg {
+    background:linear-gradient(145deg,#5279ef,#254bd2)!important; color:#fff!important;
+    border-color:#f8faff!important; box-shadow:0 5px 16px #254bd24d!important;
+  }
+}
+/* Do not decorate layout-only wrappers or certificate print canvases. */
+html[data-design="heaven"] body #root .dashboard-frame--user .user-panel:has(.my-bookings) {
+  border:0!important; border-radius:0!important; background:transparent!important; box-shadow:none!important;
+}
+@media(max-width:600px) {
+  html[data-design="heaven"] body #root :is(.dashboard-frame--user,.dashboard-frame--parish) .workspace :is(.glass-card,.page-card,.user-panel,.parish-reports-card) { border-radius:18px!important; }
+}
+}
+}

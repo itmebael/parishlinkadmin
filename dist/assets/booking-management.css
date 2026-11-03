@@ -1,0 +1,124 @@
+html[data-design="heaven"] #root .booking-management {display:grid;gap:20px;min-width:0;color:#35336f;}
+html[data-design="heaven"] #root .management-heading {padding:16px 20px;border-radius:16px;border:1px solid #b9b8ec;background:linear-gradient(120deg,#794aff,#5b00d9);box-shadow:inset 2px 2px 5px #ffffff70;}
+html[data-design="heaven"] #root .management-heading :is(h4,p) {margin:0;color:#fff!important;-webkit-text-fill-color:#fff!important;}
+html[data-design="heaven"] #root .management-heading p {margin-top:6px;font-size:13px;}
+html[data-design="heaven"] #root .management-filters {display:flex;gap:12px;flex-wrap:wrap;align-items:end;}
+html[data-design="heaven"] #root .management-filters label {display:grid;gap:6px;flex:1 1 150px;font-size:13px;}
+html[data-design="heaven"] #root .management-filters :is(input,select) {width:100%;min-width:0;min-height:44px;padding:10px 12px;border:1px solid #cccdf2;border-radius:12px;background:#fff;color:#413b80;font:inherit;}
+html[data-design="heaven"] #root .management-status-cards {display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;}
+html[data-design="heaven"] #root .management-status-cards button {display:grid;gap:12px;text-align:left;padding:20px;border:1px solid #d3d2f5;border-radius:18px;background:linear-gradient(145deg,#fff,#edefff);color:#42327e;cursor:pointer;box-shadow:inset 2px 2px 4px #fff,0 4px 12px #423a7810;}
+html[data-design="heaven"] #root .management-status-cards button[aria-pressed="true"] {border:2px solid #884dff;box-shadow:0 0 0 2px #dfd1ff;}
+html[data-design="heaven"] #root .management-status-cards span {font-size:13px;font-weight:700;letter-spacing:.04em;}
+html[data-design="heaven"] #root .management-status-cards strong {font-size:30px;line-height:1.2;}
+html[data-design="heaven"] #root .management-results-heading {display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;font-size:14px;}
+html[data-design="heaven"] #root .management-table-wrap {overflow-x:auto;border:1px solid #d3d2f5;border-radius:16px;background:#fff;}
+html[data-design="heaven"] #root .management-table-wrap table {width:100%;min-width:820px;border-collapse:collapse;font-size:13px;}
+html[data-design="heaven"] #root .management-table-wrap :is(th,td) {padding:14px 12px;text-align:left;border-bottom:1px solid #e2e1f6;vertical-align:middle;overflow-wrap:anywhere;}
+html[data-design="heaven"] #root .management-table-wrap th {background:#efedff;color:#493184;font-weight:700;}
+html[data-design="heaven"] #root .management-table-wrap tr:last-child td {border-bottom:0;}
+html[data-design="heaven"] #root .management-row-actions {display:flex;gap:8px;flex-wrap:wrap;}
+html[data-design="heaven"] #root .booking-management button {font:inherit;cursor:pointer;}
+html[data-design="heaven"] #root .booking-management :is(.primary-action,.secondary-action),html[data-design="heaven"] #root .management-booking-dialog :is(.primary-action,.secondary-action) {min-height:40px;padding:9px 14px;border:1px solid #b4a7ef;border-radius:12px;background:linear-gradient(145deg,#fff,#e7e6ff);color:#44317f;box-shadow:inset 2px 2px 4px #fff,0 3px 10px #44317f12;text-decoration:none;}
+html[data-design="heaven"] #root .booking-management .primary-action,html[data-design="heaven"] #root .management-booking-dialog .primary-action {background:linear-gradient(135deg,#814cff,#5b00db);color:#fff;border-color:#9b76ff;box-shadow:inset 2px 2px 4px #ffffff70,0 4px 12px #6833d426;}
+html[data-design="heaven"] #root .booking-management button:disabled {opacity:.5;cursor:wait;}
+html[data-design="heaven"] #root .booking-management :is(button,input,select):focus-visible {outline:3px solid #9768ff;outline-offset:3px;}
+html[data-design="heaven"] #root .management-status {display:inline-block;padding:5px 8px;border-radius:8px;background:#f2e9ff;color:#6635a8;font-size:11px;font-weight:700;}
+html[data-design="heaven"] #root .management-status[data-status="approved"] {background:#e8edff;color:#344fad;}
+html[data-design="heaven"] #root .management-status[data-status="completed"] {background:#e4f6ed;color:#27794f;}
+html[data-design="heaven"] #root .management-status[data-status="rejected"] {background:#fff0f1;color:#ac354d;}
+html[data-design="heaven"] #root .management-service-charts {border:1px solid #d3d2f5;border-radius:18px;padding:20px;background:#f9f9ff;}
+html[data-design="heaven"] #root .management-service-charts .report-chart:last-child {grid-column:auto;}
+html[data-design="heaven"] #root .management-service-charts svg {width:100%;height:auto;display:block;color:#56516f;}
+html[data-design="heaven"] #root .management-service-charts text {fill:currentColor;}
+html[data-design="heaven"] #root .management-service-charts p {font-size:13px;color:#706c90;}
+html[data-design="heaven"] #root .management-booking-dialog:not([open]) {display:none!important;}
+html[data-design="heaven"] #root .management-booking-dialog[open] {display:block!important;position:fixed;inset:0;margin:auto;width:min(850px,calc(100vw - 32px));max-height:calc(100dvh - 40px);padding:24px;border:1px solid #bfbceb;border-radius:20px;background:#fff;color:#35336f;overflow:auto;box-shadow:0 20px 80px #27204a40;}
+html[data-design="heaven"] #root .management-booking-dialog::backdrop {background:#20154380;backdrop-filter:blur(3px);}
+html[data-design="heaven"] #root .management-booking-dialog header {display:flex;justify-content:space-between;align-items:center;gap:12px;border-bottom:1px solid #e2e1f5;padding-bottom:16px;}
+html[data-design="heaven"] #root .management-booking-dialog h3 {margin:0;font-size:20px;}
+html[data-design="heaven"] #root .management-booking-dialog dl {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;}
+html[data-design="heaven"] #root .management-booking-dialog dt {font-size:12px;color:#817c9e;margin-bottom:6px;}
+html[data-design="heaven"] #root .management-booking-dialog dd {margin:0;overflow-wrap:anywhere;white-space:pre-wrap;}
+@media(max-width:700px) {
+ html[data-design="heaven"] #root .management-status-cards {grid-template-columns:repeat(2,minmax(0,1fr));}
+ html[data-design="heaven"] #root .management-status-cards button {padding:16px;}
+ html[data-design="heaven"] #root .management-booking-dialog dl {grid-template-columns:1fr;}
+}
+html[data-design="heaven"] #root .parish-report-tabs {display:grid;gap:22px;min-width:0;}
+html[data-design="heaven"] #root .parish-report-tablist {display:flex;gap:8px;padding:7px;border:1px solid #d3d2f5;border-radius:17px;background:#efedfb;}
+html[data-design="heaven"] #root .parish-report-tablist button {flex:1;min-height:52px;padding:12px 18px;border:1px solid transparent;border-radius:12px;background:transparent;color:#62538b;font:700 13px/1.5 Manrope,'Segoe UI',sans-serif;cursor:pointer;}
+html[data-design="heaven"] #root .parish-report-tablist button[aria-selected="true"] {color:#fff;background:linear-gradient(135deg,#814cff,#5b00db);border-color:#a986ff;box-shadow:inset 2px 2px 4px #ffffff70,0 4px 12px #6833d426;}
+html[data-design="heaven"] #root .parish-report-tablist button:focus-visible {outline:3px solid #9768ff;outline-offset:3px;}
+html[data-design="heaven"] #root .parish-report-panel[hidden] {display:none!important;}
+html[data-design="heaven"] #root .records-report-note {font-size:12px;line-height:1.6;color:#76708f;margin:0;}
+@media(max-width:600px) {html[data-design="heaven"] #root .parish-report-tablist {flex-direction:column;}html[data-design="heaven"] #root .parish-report-tablist button {min-height:44px;font-size:12px;}}
+
+html[data-design="heaven"] body #root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root {
+ & .booking-management:not(.records-reports) .management-table-wrap table {table-layout:fixed!important;min-width:1120px!important;width:100%!important;}
+ & .booking-management:not(.records-reports) .management-table-wrap th:nth-child(1) {width:21%!important;}
+ & .booking-management:not(.records-reports) .management-table-wrap th:nth-child(2) {width:17%!important;}
+ & .booking-management:not(.records-reports) .management-table-wrap th:nth-child(3) {width:21%!important;}
+ & .booking-management:not(.records-reports) .management-table-wrap th:nth-child(4) {width:13%!important;}
+ & .booking-management:not(.records-reports) .management-table-wrap th:nth-child(5) {width:12%!important;}
+ & .booking-management:not(.records-reports) .management-table-wrap th:nth-child(6) {width:16%!important;}
+ & .management-table-wrap :is(th,td) {padding:18px 16px!important;line-height:1.5!important;vertical-align:middle!important;word-break:normal!important;overflow-wrap:break-word!important;}
+ & .management-table-wrap td:first-child {font-variant-numeric:tabular-nums;font-size:12px!important;}
+ & .management-table-wrap .management-status {display:inline-flex!important;align-items:center!important;white-space:nowrap!important;word-break:keep-all!important;overflow-wrap:normal!important;min-width:max-content!important;padding:7px 10px!important;border-radius:8px!important;font-size:11px!important;line-height:1.2!important;letter-spacing:.02em!important;}
+ & .management-row-actions {display:flex!important;flex-direction:row!important;align-items:center!important;flex-wrap:wrap!important;gap:8px!important;min-width:140px!important;}
+ & .management-row-actions button {white-space:nowrap!important;word-break:normal!important;min-height:38px!important;padding:8px 12px!important;border-radius:11px!important;font-size:12px!important;line-height:1.35!important;}
+ & .management-booking-preview[open] {display:flex!important;flex-direction:column!important;width:min(860px,calc(100vw - 32px))!important;max-width:calc(100vw - 32px)!important;max-height:calc(100dvh - 40px)!important;padding:0!important;border:1px solid #c7c3e8!important;border-radius:22px!important;overflow:hidden!important;background:#f7f7ff!important;font-family:Manrope,'Segoe UI',sans-serif!important;}
+ & .management-booking-preview .management-preview-header {flex:0 0 auto!important;display:flex!important;align-items:flex-start!important;gap:16px!important;margin:0!important;padding:24px 28px!important;border:0!important;border-bottom:1px solid #dfdcf2!important;background:linear-gradient(130deg,#f2edff,#fff)!important;}
+ & .management-booking-preview .management-preview-header > div {min-width:0!important;flex:1!important;}
+ & .management-booking-preview .management-preview-eyebrow {display:block!important;color:#7a65ad!important;font-size:10px!important;font-weight:700!important;letter-spacing:.12em!important;margin-bottom:5px!important;}
+ & .management-booking-preview .management-preview-header h3 {margin:0!important;font-size:24px!important;line-height:1.3!important;color:#342364!important;}
+ & .management-booking-preview .management-preview-header p {margin:6px 0 0!important;font-size:12px!important;line-height:1.5!important;color:#70668b!important;overflow-wrap:anywhere!important;}
+ & .management-booking-preview .management-preview-close {display:grid!important;place-items:center!important;flex:0 0 38px!important;width:38px!important;height:38px!important;padding:0!important;border:1px solid #d5cfee!important;border-radius:11px!important;background:#fff!important;color:#604c91!important;cursor:pointer!important;box-shadow:0 3px 8px #4b347510!important;}
+ & .management-booking-preview .management-preview-close svg {width:20px!important;height:20px!important;}
+ & .management-booking-preview .management-preview-body {flex:1 1 auto!important;min-height:0!important;overflow-y:auto!important;overscroll-behavior:contain!important;padding:22px 28px!important;}
+ & .management-booking-preview .management-preview-summary {display:flex!important;justify-content:space-between!important;align-items:center!important;gap:16px!important;margin:0 0 20px!important;padding:18px!important;border:1px solid #ded8f3!important;border-radius:14px!important;background:#eeebfa!important;}
+ & .management-booking-preview .management-preview-summary strong {color:#3e3169!important;font-size:17px!important;font-weight:700!important;}
+ & .management-booking-preview .management-preview-summary p {margin:5px 0 0!important;color:#786b94!important;font-size:13px!important;}
+ & .management-booking-preview .management-status {white-space:nowrap!important;flex-shrink:0!important;padding:7px 10px!important;font-size:11px!important;}
+ & .management-booking-preview .management-preview-section {margin:0 0 16px!important;padding:20px!important;border:1px solid #e4e1f1!important;border-radius:14px!important;background:#fff!important;}
+ & .management-booking-preview .management-preview-section h4 {margin:0 0 16px!important;padding:0 0 10px!important;border-bottom:1px solid #eeebf5!important;color:#5d4688!important;font-size:13px!important;font-weight:700!important;}
+ & .management-booking-preview dl {display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:18px 28px!important;margin:0!important;padding:0!important;}
+ & .management-booking-preview dl > div {min-width:0!important;}
+ & .management-booking-preview dt {margin:0 0 5px!important;color:#8a819c!important;font-size:11px!important;font-weight:500!important;line-height:1.5!important;}
+ & .management-booking-preview dd {margin:0!important;color:#42365e!important;font-size:13px!important;font-weight:500!important;line-height:1.6!important;overflow-wrap:anywhere!important;}
+ & .management-booking-preview .management-preview-footer {flex:0 0 auto!important;display:flex!important;justify-content:flex-end!important;gap:10px!important;padding:16px 28px!important;border:0!important;border-top:1px solid #dfdcf2!important;background:#fff!important;}
+ & .management-booking-preview :is(button,a):focus-visible {outline:3px solid #9b78ef!important;outline-offset:3px!important;}
+ & .management-booking-preview button:focus:not(:focus-visible) {outline:none!important;}
+}
+@media(max-width:600px) {
+ html[data-design="heaven"] body #root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root .management-booking-preview .management-preview-header {padding:18px!important;}
+ html[data-design="heaven"] body #root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root .management-booking-preview .management-preview-body {padding:16px!important;}
+ html[data-design="heaven"] body #root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root .management-booking-preview .management-preview-section {padding:16px!important;}
+ html[data-design="heaven"] body #root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root .management-booking-preview dl {grid-template-columns:1fr!important;gap:14px!important;}
+ html[data-design="heaven"] body #root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root .management-booking-preview .management-preview-summary {align-items:flex-start!important;flex-direction:column!important;}
+}
+
+/* Use the shared blue screen palette for both report tabs and booking management. */
+html[data-design="heaven"] body #root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root {
+ & :is(.booking-management,.parish-report-tabs) {color:#193e75!important;}
+ & .management-heading {background:linear-gradient(135deg,#5279ef,#254bd2)!important;border-color:#8eaaff!important;box-shadow:inset 2px 2px 4px #ffffff66,inset -3px -4px 6px #132f9944,0 4px 9px #4169e11f!important;}
+ & .management-heading :is(h4,p) {color:#fff!important;-webkit-text-fill-color:#fff!important;}
+ & .management-status-cards button {background:linear-gradient(145deg,#f4f8ff,#e5efff)!important;border-color:#b6c8e7!important;color:#193e75!important;box-shadow:inset 2px 2px 5px #fff,0 4px 12px #26477812!important;}
+ & .management-status-cards button :is(span,strong) {color:#193e75!important;-webkit-text-fill-color:#193e75!important;}
+ & .management-status-cards button[aria-pressed="true"] {border-color:#4169e1!important;box-shadow:0 0 0 2px #bed0ff,inset 2px 2px 4px #fff!important;}
+ & .management-filters label {color:#405575!important;}
+ & .management-filters :is(input,select) {background:#f8fbff!important;border-color:#b3c7e5!important;color:#193e75!important;}
+ & .management-filters input::placeholder {color:#7184a4!important;}
+ & .booking-management .primary-action {background:linear-gradient(145deg,#5279ef,#254bd2)!important;border-color:#456bdb!important;color:#fff!important;-webkit-text-fill-color:#fff!important;box-shadow:inset 2px 2px 4px #ffffff66,0 4px 10px #4169e126!important;}
+ & .booking-management .secondary-action {background:linear-gradient(145deg,#fff,#dfeaff)!important;border-color:#9eb5df!important;color:#193e75!important;-webkit-text-fill-color:#193e75!important;box-shadow:inset 2px 2px 4px #fff,0 4px 10px #26477816!important;}
+ & .parish-report-tablist {background:#eef4ff!important;border-color:#bed0eb!important;}
+ & .parish-report-tablist button {color:#405575!important;}
+ & .parish-report-tablist button[aria-selected="true"] {background:linear-gradient(145deg,#5279ef,#254bd2)!important;border-color:#8eaaff!important;color:#fff!important;-webkit-text-fill-color:#fff!important;box-shadow:inset 2px 2px 4px #ffffff66,0 4px 10px #4169e126!important;}
+ & .management-table-wrap {border-color:#c6d6ec!important;}
+ & .management-table-wrap th {background:#2852ce!important;color:#fff!important;-webkit-text-fill-color:#fff!important;}
+ & .management-table-wrap td {color:#405575!important;border-color:#dbe5f3!important;background:#fff!important;}
+ & .management-table-wrap tr:nth-child(even) td {background:#f0f5ff!important;}
+ & .management-results-heading {color:#405575!important;}
+ & .management-service-charts {background:#f7faff!important;border-color:#c6d6ec!important;}
+ & .management-service-charts h4 {color:#193e75!important;-webkit-text-fill-color:#193e75!important;}
+ & .booking-management :is(button,input,select):focus-visible,& .parish-report-tablist button:focus-visible {outline-color:#4169e1!important;}
+}

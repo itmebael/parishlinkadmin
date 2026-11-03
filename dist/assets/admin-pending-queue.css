@@ -83,3 +83,15 @@
     overflow: visible !important;
   }
 }
+
+@layer admin-pending-queue {
+  #root .pending-queue-card button.queue-list__item {
+    width: 100%; font: inherit; text-align: left; color: inherit; cursor: pointer;
+  }
+  #root .pending-queue-card button.queue-list__item:hover {
+    background: #7854e412 !important;
+  }
+  #root .pending-queue-card button.queue-list__item:focus-visible {
+    outline: 2px solid #7854e4 !important; outline-offset: -2px !important;
+  }
+}
