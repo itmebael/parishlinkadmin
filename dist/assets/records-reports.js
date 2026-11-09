@@ -1,3 +1,4 @@
+import {openReportPreview} from './report-preview-dialog.js';
 import {resolveQueueParish} from './parish-queue-scope.js';
 import {reportDateOnly} from './parish-report-print.js?v=20261106-styled-dialogs';
 
@@ -80,7 +81,7 @@ export function RecordsReports({React:R,session,fetchRows}) {
   const base=invalid?[]:filterRecordReports(state.rows,{...filters,category:'all'}),counts=recordReportCounts(base),visible=filterRecordReports(base,{category:filters.category});
   const blocked=!!state.error||(filters.category==='all'?Object.keys(state.errors).length>0:!!state.errors[filters.category]);
   async function generate() {
-    const popup=window.open('','_blank','width=1100,height=760');if(!popup){setNotice('Allow the report window to open, then try again.');return;}
+    const popup=openReportPreview('Report preview');if(!popup){setNotice('Allow the report window to open, then try again.');return;}
     popup.document.write('<title>Preparing Records Report</title><p>Loading latest parish records...</p>');popup.document.close();setGenerating(true);
     try{const data=await load(true);if(filters.category==='all'?Object.keys(data.errors).length:!!data.errors[filters.category])throw Error('Some selected record categories could not be loaded. Resolve the displayed errors before generating this report.');const rows=filterRecordReports(data.rows,filters);popup.document.open();popup.document.write(buildRecordsReport({parish:data.parish,rows,filters}));popup.document.close();popup.focus();}catch(error){popup.document.body.textContent='Could not generate records report: '+error.message;}finally{setGenerating(false);}
   }

@@ -1,3 +1,4 @@
+import {openReportPreview} from './report-preview-dialog.js';
 import {resolveQueueParish} from './parish-queue-scope.js';
 import {reportDateOnly} from './parish-report-print.js?v=20261106-styled-dialogs';
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -32,7 +33,7 @@ export function buildRecordReport({parish,records,config,labels={},filters={},da
  </script></body></html>`;
 }
 export async function previewRecordReport({records,config,labels,filters,session,request,previewWindow}) {
- const popup=previewWindow||window.open('','_blank','width=1100,height=800');
+ const popup=previewWindow||openReportPreview('Report preview');
  if(!popup){await window.parishDialogs.alert('Please allow the record preview window, then try again.');return;}
  if(popup.closed)return;
  popup.document.open();popup.document.write('<!doctype html><title>Record report preview</title><p style="font:14px Arial;padding:24px">Preparing record report...</p>');popup.document.close();

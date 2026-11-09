@@ -1,3 +1,4 @@
+import {openReportPreview} from './report-preview-dialog.js';
 import { previewRecordReport } from './record-report-download.js?v=20261106-record-report';
 import { RecordEditor } from './sacramental-record-editor.js';
 const PAGE_SIZE = 7;
@@ -158,7 +159,7 @@ export function BaptismRecords({ session, React, ui, request, recordType: select
   const field = (key, value) => jsxs('div', { children: [jsx('dt', { children: LABELS[key] || key }), jsx('dd', { children: formatPreviewValue(key, value) })] }, key);
   const resetPage = setter => value => { setter(value); setPage(0); };
   const openFilteredPreview = async () => {
-    const previewWindow = window.open('', '_blank', 'width=960,height=760');
+    const previewWindow = openReportPreview('Report preview');
     if (!previewWindow) { setError('Please allow the report preview window, then try again.'); return; }
     previewWindow.document.write('<!doctype html><title>Record report preview</title><p style="font:14px Arial;padding:24px">Preparing filtered records...</p>');
     previewWindow.document.close();

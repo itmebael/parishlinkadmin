@@ -1,3 +1,4 @@
+import {openReportPreview} from './report-preview-dialog.js';
 import {resolveQueueParish} from './parish-queue-scope.js';
 import {fetchParishBookingRows} from './parish-booking-rows.js';
 import {bookingStatusGroup} from './booking-filters.js';
@@ -147,7 +148,7 @@ export function BookingManagement({React:R,session,fetchRows,request,reports=fal
   async function act(row,action) {
     if(action==='Preview'){setSelected(row.id);return;}
     if(action==='Print') {
-      const popup=window.open('','_blank','width=1000,height=760');
+      const popup=openReportPreview('Report preview');
       if(!popup){setNotice('Allow the print window to open, then try again.');return;}
       try {const latest=await load(true),current=latest.rows.find(item=>item.id===row.id);if(!current||managementStatus(current)!=='completed')throw Error('Only completed requests can be printed.');showReport(popup,latest.parish,[current],{status:'completed',from:'',to:''});}catch(error){popup.close();setNotice(error.message);}return;
     }
@@ -164,7 +165,7 @@ export function BookingManagement({React:R,session,fetchRows,request,reports=fal
   }
   async function generate() {
     if(busy||state.loading||state.error||invalid)return;
-    const popup=window.open('','_blank','width=1000,height=760');if(!popup){setNotice('Allow the report window to open, then try again.');return;}
+    const popup=openReportPreview('Report preview');if(!popup){setNotice('Allow the report window to open, then try again.');return;}
     popup.document.write('<title>Preparing Parish Report</title><p>Loading latest booking information...</p>');popup.document.close();setBusy('report');
     try{const latest=await load(true);showReport(popup,latest.parish,filterManagementRows(latest.rows,filters),filters);}catch(error){popup.document.body.textContent='Could not generate report: '+error.message;}finally{setBusy('');}
   }
