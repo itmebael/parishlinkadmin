@@ -1,4 +1,4 @@
-import {BookingManagement} from './booking-management.js?v=20261103-summary-charts';
+import {BookingManagement} from './booking-management.js?v=20261106-page-label';
 import {RecordsReports} from './records-reports.js?v=20261103-seven-rows';
 export function ParishReports({React:R,session,fetchRows,request}) {
   const h=R.createElement,[tab,setTab]=R.useState('bookings'),[recordsVisited,setRecordsVisited]=R.useState(false);

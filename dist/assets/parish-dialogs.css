@@ -1,0 +1,39 @@
+@layer logo-palette {
+.parish-feedback {
+  position:fixed!important;inset:0!important;margin:auto!important;padding:0!important;
+  width:min(440px,calc(100vw - 32px))!important;max-height:calc(100dvh - 40px)!important;
+  height:fit-content!important;min-height:0!important;box-sizing:border-box!important;
+  border:1px solid #c7e0ef!important;border-radius:20px!important;
+  background:#fff!important;color:#163b5d!important;font:14px/1.6 'Segoe UI',sans-serif!important;
+  box-shadow:0 24px 70px #0c335c33!important;overflow:auto!important;
+  outline:none!important;
+}
+.parish-feedback:not([open]){display:none!important;}
+.parish-feedback::backdrop{background:#102e5066!important;backdrop-filter:blur(4px)!important;}
+.parish-feedback__accent{height:4px!important;background:linear-gradient(100deg,#00aeef,#0054cf)!important;}
+.parish-feedback__body{display:grid!important;grid-template-columns:minmax(0,1fr)!important;row-gap:8px!important;padding:28px 24px!important;align-items:start!important;}
+.parish-feedback__icon{
+  display:grid!important;place-items:center!important;width:42px!important;height:42px!important;
+  border-radius:13px!important;background:#e8f6ff!important;color:#0065c5!important;
+  font:600 23px/1 'Segoe UI',sans-serif!important;margin:0!important;grid-column:1!important;grid-row:1 / 3!important;
+}
+.parish-feedback__eyebrow{color:#52748d!important;font-size:10px!important;letter-spacing:.12em!important;font-weight:700!important;margin:0 0 5px!important;}
+.parish-feedback h2{font:700 22px/1.3 'Segoe UI',sans-serif!important;margin:5px 0 0!important;grid-column:1!important;color:#123b67!important;-webkit-text-fill-color:#123b67!important;}
+#parish-feedback-message{grid-column:1!important;margin:0!important;color:#496079!important;font:400 14px/1.65 'Segoe UI',sans-serif!important;white-space:pre-wrap!important;overflow-wrap:anywhere!important;}
+.parish-feedback footer{display:flex!important;justify-content:flex-end!important;align-items:center!important;gap:12px!important;padding:16px 24px!important;background:#f5f9fc!important;border-top:1px solid #e0edf5!important;}
+.parish-feedback button{
+  display:inline-flex!important;align-items:center!important;justify-content:center!important;
+  flex:1!important;min-width:0!important;min-height:44px!important;margin:0!important;padding:10px 18px!important;
+  box-sizing:border-box!important;border:1px solid #c3d9e9!important;border-radius:10px!important;
+  font:600 14px/1.4 'Segoe UI',sans-serif!important;cursor:pointer!important;
+  outline:none!important;box-shadow:none!important;transition:background-color .15s,filter .15s!important;
+}
+.parish-feedback .parish-feedback__cancel{background:#fff!important;color:#315576!important;-webkit-text-fill-color:#315576!important;}
+.parish-feedback .parish-feedback__accept{background:linear-gradient(125deg,#007db8,#0054cf)!important;color:#fff!important;-webkit-text-fill-color:#fff!important;border-color:#0054cf!important;box-shadow:0 3px 8px #0054cf1a!important;}
+.parish-feedback .parish-feedback__accept.is-destructive{background:linear-gradient(125deg,#cb4359,#ad2740)!important;border-color:#ad2740!important;box-shadow:0 3px 8px #ad27401a!important;}
+.parish-feedback button:hover{filter:brightness(.96)!important;}
+.parish-feedback button:focus-visible{outline:2px solid #69afe4!important;outline-offset:2px!important;}
+.parish-feedback button[hidden]{display:none!important;}
+@media(max-width:480px){.parish-feedback__body{padding:22px!important;}.parish-feedback footer{padding:16px 22px!important;}.parish-feedback footer button{flex:1!important;min-width:0!important;}}
+@media(prefers-reduced-motion:no-preference){.parish-feedback[open]{animation:parish-feedback-in .16s ease-out;}@keyframes parish-feedback-in{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}}
+}

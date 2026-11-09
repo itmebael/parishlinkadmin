@@ -1,0 +1,84 @@
+/* ParishLink logo palette: cyan #00aeef and blue #0054cf.
+   First cascade layer gives these screen colors priority over legacy themes. */
+@layer logo-palette {
+@media screen {
+html[data-design="heaven"] body #root :is(.dashboard-frame--user,.dashboard-frame--parish) {
+  --logo-cyan:#00aeef;
+  --logo-blue:#0054cf;
+  --logo-ink:#123b67;
+  --logo-line:#acd7ef;
+  --logo-soft:#e9f7ff;
+  --logo-gradient:linear-gradient(125deg,#007db8 0%,#006bd1 55%,#0054cf 100%);
+  --royal:#0054cf; --royal-ink:#123b67; --royal-line:#acd7ef; --royal-soft:#e9f7ff;
+  --heaven-accent:#0054cf; --screen-blue:#0054cf;
+  & .sidebar {
+    background:linear-gradient(165deg,#007db8e8 0%,#006bd1eb 48%,#0054cfee 100%),url('/dist/assets/church.jpg') 55% center / cover no-repeat,#0054cf!important;
+    border-right-color:#0054cf!important;
+  }
+  & .sidebar .nav-item:is(.is-active,[aria-current="page"]) {
+    background:linear-gradient(125deg,#fff,#d9f3ff)!important;
+    color:var(--logo-blue)!important; -webkit-text-fill-color:var(--logo-blue)!important;
+    border-color:#a9e4ff!important;
+  }
+  & .sidebar .nav-item:is(.is-active,[aria-current="page"]) :is(span,svg) {
+    color:var(--logo-blue)!important; -webkit-text-fill-color:var(--logo-blue)!important;
+  }
+  & .workspace :is(.glass-card__header,.user-panel__header,.parish-reports-card__header,.user-home-card__header),
+  & .workspace :is(.primary-action,.client-latest-announcement__read,.user-profile-edit-button),
+  & .phone-bottom-nav .phone-nav-home svg {
+    background:var(--logo-gradient)!important; border-color:#62c8f3!important;
+    color:#fff!important; -webkit-text-fill-color:#fff!important;
+    box-shadow:inset 1px 1px 4px #ffffff55,0 4px 10px #0054cf24!important;
+  }
+  & .workspace :is(.glass-card__header,.user-panel__header,.parish-reports-card__header,.user-home-card__header) :is(h3,h4,h5,p,small) {
+    color:#fff!important; -webkit-text-fill-color:#fff!important;
+  }
+  & .workspace :is(.glass-card,.page-card,.user-panel,.parish-dashboard-card,.parish-reports-card),
+  & :is(.user-home-card--mass,.user-home-card--requests,.client-latest-announcement) {
+    background:linear-gradient(140deg,#f7fcff,var(--logo-soft))!important;
+    border-color:var(--logo-line)!important;
+    box-shadow:5px 7px 18px #006abd18,inset 2px 2px 5px #ffffffed!important;
+  }
+  & .workspace :is(.empty-state,.metric-card__stats),
+  & :is(.client-empty-state,.client-latest-announcement__body) {
+    background:linear-gradient(140deg,#f5fcff,#dff2ff)!important;
+    border-color:#c1e5f7!important;
+    box-shadow:inset 2px 2px 6px #82bfdf24,inset -2px -2px 5px #fff!important;
+  }
+  & .user-home-actions > .user-home-action {
+    background:linear-gradient(140deg,#fff,#e1f5ff)!important;
+    border-color:var(--logo-line)!important;
+    box-shadow:0 6px 18px #0054cf20,inset 2px 2px 6px #fff!important;
+  }
+  & .user-home-action::before { background:linear-gradient(110deg,#00aeef45,#bceaff55 65%,#dff4ff00)!important; }
+  & .user-home-action::after { background:linear-gradient(125deg,#008add55,#a5dfff50)!important; }
+  & :is(.user-home-action__icon,.user-home-action__arrow,.user-home-card .dashboard-empty-icon) {
+    background:linear-gradient(145deg,#effbff,#c8edff)!important;
+    color:var(--logo-blue)!important; border-color:#a9ddf5!important;
+    box-shadow:inset 1px 1px 4px #fff,0 3px 8px #006abd1a!important;
+  }
+  & :is(.user-home-hero,.parish-portal__hero) { border-color:var(--logo-line)!important; }
+  & .phone-bottom-nav {
+    background:linear-gradient(145deg,#fff,#e4f7ff)!important;
+    border-color:#b6e4f8!important; box-shadow:0 -4px 18px #0054cf1a!important;
+  }
+  & .phone-bottom-nav a[aria-current] { color:var(--logo-blue)!important; }
+  & .workspace :is(button,a,input,select,textarea):focus-visible { outline-color:var(--logo-blue)!important; }
+}
+}
+}
+/* Neutral admin canvas with the existing ParishLink accents. */
+@layer logo-palette {
+@media screen {
+  html[data-design="heaven"] body #root .dashboard-frame--parish {
+    --heaven-bg:#eef0f3;
+    background:#eef0f3!important;
+    & .workspace,
+    & .workspace__main,
+    & .overview-shell,
+    & .workspace__topbar:not(:has(.notification-menu)) {
+      background:#eef0f3!important;
+    }
+  }
+}
+}

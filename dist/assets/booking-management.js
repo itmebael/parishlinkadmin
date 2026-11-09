@@ -2,10 +2,11 @@ import {resolveQueueParish} from './parish-queue-scope.js';
 import {fetchParishBookingRows} from './parish-booking-rows.js';
 import {bookingStatusGroup} from './booking-filters.js';
 import {isCertificateRequest, takePendingQueueRequest} from './pending-queue.js?v=20261031-clickable';
-import {buildParishReport, reportDateOnly} from './parish-report-print.js';
+import {buildParishReport, reportDateOnly} from './parish-report-print.js?v=20261106-styled-dialogs';
 import {reportDate} from './report-charts.js';
 
 export const STATUS_CARDS = ['pending','approved','completed','rejected'];
+const STATUS_ORDER = [...STATUS_CARDS, 'cancelled'];
 export function bookingDay(row) {
   const value=row.booking_date||row.created_at||'';
   if(!value||!Number.isFinite(Date.parse(value)))return '';
@@ -26,7 +27,7 @@ export function filterManagementRows(rows, {status='all',from='',to='',search=''
     return (status==='all'||managementStatus(row)===status) && (!from||date>=from) && (!to||date<=to) &&
       (type==='all'||isCertificateRequest(row)===(type==='certificates')) &&
       (!text||[row.reference_number,row.client_name,row.service_name,row.booking_status].some(value=>String(value||'').toLowerCase().includes(text)));
-  });
+  }).sort((left,right)=>STATUS_ORDER.indexOf(managementStatus(left))-STATUS_ORDER.indexOf(managementStatus(right)));
 }
 export function serviceSeries(rows) {
   const groups=new Map();
@@ -75,7 +76,7 @@ export function bookingFields(row) {
   return Object.entries(row).filter(([key,value])=>!['id','booked_by','parish_id','certificate_file_url','certificate_file_size'].includes(key)&&value!=null&&value!=='')
     .map(([key,value])=>[label(key),bookingFieldValue(key,value)]);
 }
-function showReport(popup,parish,rows,filters,print=false) {
+function showReport(popup,parish,rows,filters) {
   let html=buildParishReport({parish:parish.parish_name,rows,from:filters.from,to:filters.to,status:filters.status==='all'?'All':filters.status.toUpperCase()});
   const counts=statusCounts(rows);
   const summary='<h2>Booking statuses</h2><table><thead><tr>'+STATUS_CARDS.map(status=>'<th>'+status.toUpperCase()+'</th>').join('')+'</tr></thead><tbody><tr>'+STATUS_CARDS.map(status=>'<td>'+counts[status]+'</td>').join('')+'</tr></tbody></table>';
@@ -83,15 +84,29 @@ function showReport(popup,parish,rows,filters,print=false) {
   html=html.replace('<h2>Certificate requests by type</h2>',summary+'<h2>Certificate requests by type</h2>').replace('<footer>',details+'<footer>');
   html=html.replace('Period: Not recorded to Not recorded','Period: All dates');
   popup.document.open();popup.document.write(html);popup.document.close();
-  if(print)Promise.resolve(popup.document.fonts?.ready).then(()=>{popup.focus();popup.print();});
+  popup.focus();
 }
 function Preview({React:R,row,onClose}) {
   const h=R.createElement,ref=R.useRef(null);
+  const [copyStatus,setCopyStatus]=R.useState('');
+  async function copyReference() {
+    if(!row.reference_number||copyStatus==='Copying...')return;
+    setCopyStatus('Copying...');
+    try {
+      await navigator.clipboard.writeText(String(row.reference_number));
+      setCopyStatus('Reference number copied.');
+    } catch {
+      setCopyStatus('Could not copy. Select the reference number above and copy it manually.');
+    }
+  }
   R.useEffect(()=>{const dialog=ref.current;dialog.showModal();const previous=document.body.style.overflow;document.body.style.overflow='hidden';return()=>{if(dialog.open)dialog.close();document.body.style.overflow=previous;};},[]);
   return h('dialog',{ref,className:'management-booking-dialog management-booking-preview',onCancel:event=>{event.preventDefault();onClose();},'aria-labelledby':'management-preview-title'},
     h('header',{className:'management-preview-header'},h('div',null,h('span',{className:'management-preview-eyebrow'},isCertificateRequest(row)?'CERTIFICATE REQUEST':'PARISH BOOKING'),h('h3',{id:'management-preview-title'},'Booking Details'),h('p',null,row.reference_number||'Reference not provided')),h('button',{type:'button',className:'management-preview-close',onClick:onClose,'aria-label':'Close booking details'},h('svg',{width:20,height:20,viewBox:'0 0 24 24',fill:'none',stroke:'currentColor',strokeWidth:2,strokeLinecap:'round','aria-hidden':true},h('path',{d:'M6 6l12 12M18 6L6 18'})))),
     h('div',{className:'management-preview-body'},h('div',{className:'management-preview-summary'},h('div',null,h('strong',null,row.client_name||'Name not provided'),h('p',null,row.service_name||'Parish service')),h('span',{'data-status':managementStatus(row),className:'management-status'},managementStatus(row).toUpperCase())),bookingSections(row).map(section=>h('section',{key:section.title,className:'management-preview-section'},h('h4',null,section.title),h('dl',null,section.fields.map(([key,value])=>h('div',{key},h('dt',null,key),h('dd',null,value))))))),
-    h('footer',{className:'management-preview-footer'},/^https:\/\//i.test(row.certificate_file_url||'')?h('a',{className:'primary-action',href:row.certificate_file_url,target:'_blank',rel:'noopener noreferrer'},'View certificate'):null,h('button',{type:'button',className:'secondary-action',onClick:onClose},'Close')));
+    h('footer',{className:'management-preview-footer'},
+      h('span',{className:'management-copy-status',role:'status','aria-live':'polite'},copyStatus),
+      h('button',{type:'button',className:'secondary-action',disabled:!row.reference_number||copyStatus==='Copying...',onClick:copyReference},'Copy Reference Number'),
+      /^https:\/\//i.test(row.certificate_file_url||'')?h('a',{className:'primary-action',href:row.certificate_file_url,target:'_blank',rel:'noopener noreferrer'},'View certificate'):null,h('button',{type:'button',className:'secondary-action',onClick:onClose},'Close')));
 }
 export function BookingManagement({React:R,session,fetchRows,request,reports=false}) {
   const h=R.createElement;
@@ -134,9 +149,11 @@ export function BookingManagement({React:R,session,fetchRows,request,reports=fal
     if(action==='Print') {
       const popup=window.open('','_blank','width=1000,height=760');
       if(!popup){setNotice('Allow the print window to open, then try again.');return;}
-      try {const latest=await load(true),current=latest.rows.find(item=>item.id===row.id);if(!current||managementStatus(current)!=='completed')throw Error('Only completed requests can be printed.');showReport(popup,latest.parish,[current],{status:'completed',from:'',to:''},true);}catch(error){popup.close();setNotice(error.message);}return;
+      try {const latest=await load(true),current=latest.rows.find(item=>item.id===row.id);if(!current||managementStatus(current)!=='completed')throw Error('Only completed requests can be printed.');showReport(popup,latest.parish,[current],{status:'completed',from:'',to:''});}catch(error){popup.close();setNotice(error.message);}return;
     }
-    if(busy||!window.confirm(action==='Approve'?'Confirm the priest or parish office is available, then approve this request?':action+' this request?'))return;
+    if(busy)return;
+    setBusy(row.id);
+    if(!(await window.parishDialogs.confirm(action==='Approve'?'Confirm the priest or parish office is available, then approve this request?':action+' this request?'))){setBusy('');return;}
     setBusy(row.id);setNotice('');
     try {
       const saved=await changeBookingStatus({row,action,request,session});
@@ -146,6 +163,7 @@ export function BookingManagement({React:R,session,fetchRows,request,reports=fal
     }catch(error){setNotice(error.message);await load().catch(()=>{});}finally{setBusy('');}
   }
   async function generate() {
+    if(busy||state.loading||state.error||invalid)return;
     const popup=window.open('','_blank','width=1000,height=760');if(!popup){setNotice('Allow the report window to open, then try again.');return;}
     popup.document.write('<title>Preparing Parish Report</title><p>Loading latest booking information...</p>');popup.document.close();setBusy('report');
     try{const latest=await load(true);showReport(popup,latest.parish,filterManagementRows(latest.rows,filters),filters);}catch(error){popup.document.body.textContent='Could not generate report: '+error.message;}finally{setBusy('');}
@@ -158,17 +176,17 @@ export function BookingManagement({React:R,session,fetchRows,request,reports=fal
   return h('section',{className:'booking-management','aria-label':reports?'Parish reports':'Parish bookings'},
     h('header',{className:'management-heading'},h('div',null,h('h4',null,reports?'Booking Management and Reports':'Bookings and Certificate Requests'),h('p',null,'Monitor parish requests and their latest processing status.'))),
     h('div',{className:'management-status-cards'},STATUS_CARDS.map(status=>h('button',{key:status,type:'button','aria-pressed':filters.status===status,'data-status':status,onClick:()=>update('status',filters.status===status?'all':status)},h('span',null,status.toUpperCase()),h('strong',null,state.loading?'—':counts[status])))),
-    h('div',{className:'management-filters'},
+    h('div',{className:'management-filters management-booking-filters'},
       h('label',null,'Booking date from',h('input',{type:'date',value:filters.from,onChange:event=>update('from',event.target.value)})),
       h('label',null,'Booking date to',h('input',{type:'date',value:filters.to,onChange:event=>update('to',event.target.value)})),
       h('label',null,'Request type',h('select',{value:filters.type,onChange:event=>update('type',event.target.value)},[['all','All requests'],['certificates','Certificates'],['appointments','Bookings']].map(([value,text])=>h('option',{key:value,value},text)))),
       h('label',null,'Search',h('input',{type:'search',placeholder:'Name, reference or service',value:filters.search,onChange:event=>update('search',event.target.value)})),
-      h('button',{type:'button',className:'primary-action',disabled:!!busy||state.loading||!!state.error||!!invalid,onClick:generate},busy==='report'?'Generating...':'Generate Reports')),
+      h('button',{type:'button',className:'primary-action',disabled:!!busy||state.loading||!!state.error||!!invalid,onClick:generate},busy==='report'?'Generating...':'Generate Reports'),
+      h('button',{type:'button',className:'secondary-action',onClick:()=>{setFilters({status:'all',from:'',to:'',search:'',type:'all'});setPage(0);}},'Clear filters')),
     invalid?h('p',{role:'alert'},'The start date must be before the end date.'):null,
-    h('div',{className:'management-results-heading'},h('span',{'aria-live':'polite'},visible.length+' requests'+(filters.status==='all'?'':' · '+filters.status.toUpperCase())),h('button',{type:'button',className:'secondary-action',onClick:()=>{setFilters({status:'all',from:'',to:'',search:'',type:'all'});setPage(0);}},'Show all / Clear filters')),
     state.error?h('p',{role:'alert'},state.error):null,notice?h('p',{role:'status',className:'management-notice'},notice):null,
-    state.loading?h('p',{role:'status'},'Loading booking records...'):h('div',{className:'management-table-wrap',onTouchStart:startSwipe,onTouchEnd:endSwipe,onTouchCancel:()=>{swipeStart.current=null;},tabIndex:0,role:'region','aria-label':'Booking requests table. Swipe left for next page or right for previous page.',onKeyDown:event=>{if(event.target!==event.currentTarget)return;if(event.key==='ArrowLeft'||event.key==='ArrowRight'){event.preventDefault();changePage(event.key==='ArrowRight'?1:-1);}}},h('table',null,h('thead',null,h('tr',null,['Reference','Name','Service','Booking date','Status','Actions'].map(text=>h('th',{key:text,scope:'col'},text)))),h('tbody',null,visible.length?pageRows.map(row=>h('tr',{key:row.id},h('td',null,row.reference_number||'—'),h('td',null,row.client_name||'Not provided'),h('td',null,row.service_name||'Parish service'),h('td',null,reportDateOnly(row.booking_date||row.created_at)),h('td',null,h('span',{'data-status':managementStatus(row),className:'management-status'},managementStatus(row).toUpperCase())),h('td',null,h('div',{className:'management-row-actions'},actionsFor(row).map(action=>h('button',{key:action,type:'button',className:action==='Approve'||action==='Mark as Completed'?'primary-action':'secondary-action',disabled:!!busy,onClick:()=>act(row,action)},busy===row.id?'Saving...':action)))))):h('tr',null,h('td',{colSpan:6},'No requests match these filters.'))))),
-    h('nav',{className:'management-results-heading','aria-label':'Booking request pages'},h('button',{type:'button',className:'secondary-action',disabled:state.loading||currentPage===0,onClick:()=>changePage(-1)},'Previous'),h('span',{'aria-live':'polite'},'Page '+(currentPage+1)+' of '+pageCount+' ? '+(visible.length?currentPage*7+1:0)+'?'+Math.min((currentPage+1)*7,visible.length)+' of '+visible.length+' requests'),h('button',{type:'button',className:'secondary-action',disabled:state.loading||currentPage>=pageCount-1,onClick:()=>changePage(1)},'Next')),
+    state.loading?h('p',{role:'status'},'Loading booking records...'):h('div',{className:'management-table-wrap',onTouchStart:startSwipe,onTouchEnd:endSwipe,onTouchCancel:()=>{swipeStart.current=null;},tabIndex:0,role:'region','aria-label':'Booking requests table. Swipe left for next page or right for previous page.',onKeyDown:event=>{if(event.target!==event.currentTarget)return;if(event.key==='ArrowLeft'||event.key==='ArrowRight'){event.preventDefault();changePage(event.key==='ArrowRight'?1:-1);}}},h('table',null,h('thead',null,h('tr',null,['Reference','Name','Service','Booking date','Status','Actions'].map(text=>h('th',{key:text,scope:'col'},text)))),h('tbody',null,visible.length?pageRows.map(row=>h('tr',{key:row.id,className:'management-booking-row',tabIndex:0,'aria-label':'View booking details for '+(row.client_name||row.reference_number||'this request'),onClick:event=>{if(event.target.closest('button,a,input,select,textarea'))return;setSelected(row.id);},onKeyDown:event=>{if(event.target!==event.currentTarget||!['Enter',' '].includes(event.key))return;event.preventDefault();setSelected(row.id);}},h('td',null,row.reference_number||'—'),h('td',null,row.client_name||'Not provided'),h('td',null,row.service_name||'Parish service'),h('td',null,reportDateOnly(row.booking_date||row.created_at)),h('td',null,h('span',{'data-status':managementStatus(row),className:'management-status'},managementStatus(row).toUpperCase())),h('td',null,h('div',{className:'management-row-actions'},actionsFor(row).map(action=>h('button',{key:action,type:'button',className:action==='Approve'||action==='Mark as Completed'?'primary-action':'secondary-action',disabled:!!busy,onClick:()=>act(row,action)},busy===row.id?'Saving...':action)))))):h('tr',null,h('td',{colSpan:6},'No requests match these filters.'))))),
+    h('nav',{className:'management-results-heading','aria-label':'Booking request pages'},h('button',{type:'button',className:'secondary-action',disabled:state.loading||currentPage===0,onClick:()=>changePage(-1)},'Previous'),h('span',{'aria-live':'polite'},'Page '+(currentPage+1)+' of '+pageCount+' \u00b7 Showing '+(visible.length?currentPage*7+1:0)+'\u2013'+Math.min((currentPage+1)*7,visible.length)+' of '+visible.length+' requests'),h('button',{type:'button',className:'secondary-action',disabled:state.loading||currentPage>=pageCount-1,onClick:()=>changePage(1)},'Next')),
     reports&&visible.length?h('section',{className:'management-service-charts','aria-label':'Booking and certificate summary charts'},h('div',{className:'report-charts-grid'},
       h('article',{className:'report-chart'},h('h4',null,'Bookings vs Certificates'),h('div',{className:'report-pie-wrap'},h('div',{className:'report-pie',role:'img','aria-label':bookingsCount+' bookings and '+certificates.length+' certificate requests',style:{background:'conic-gradient(#315cc4 0 '+(bookingsCount/visible.length*100)+'%, #39a58b '+(bookingsCount/visible.length*100)+'% 100%)'}}),h('div',null,h('strong',null,visible.length),h('span',null,'total requests'))),h('div',{className:'report-chart-legend'},h('span',null,h('i',{style:{background:'#315cc4'}}),'Bookings: '+bookingsCount),h('span',null,h('i',{style:{background:'#39a58b'}}),'Certificates: '+certificates.length))),
       topCertificates.length?h('article',{className:'report-chart'},h('h4',null,'Most-requested Certificates'),h('ol',{className:'report-bars'},topCertificates.map(([name,count])=>h('li',{key:name},h('div',null,h('span',null,name),h('strong',null,count)),h('div',{className:'report-bar-track'},h('div',{style:{width:count/topCertificates[0][1]*100+'%'}})))))):null)):null,

@@ -122,3 +122,135 @@ html[data-design="heaven"] body #root#root#root#root#root#root#root#root#root#ro
  & .management-service-charts h4 {color:#193e75!important;-webkit-text-fill-color:#193e75!important;}
  & .booking-management :is(button,input,select):focus-visible,& .parish-report-tablist button:focus-visible {outline-color:#4169e1!important;}
 }
+
+/* One aligned booking toolbar; labels stay above their controls. */
+@layer logo-palette {
+@media screen {
+  html[data-design="heaven"] #root .management-booking-filters {
+    display:grid!important;
+    grid-template-columns:minmax(130px,1fr) minmax(130px,1fr) minmax(130px,1fr) minmax(170px,1.5fr) auto auto!important;
+    gap:12px!important;
+    align-items:end!important;
+    min-width:0;
+    & label { min-width:0; margin:0; }
+    & :is(input,select) { box-sizing:border-box; height:46px!important; min-width:0!important; }
+    & > button { height:46px!important; min-height:46px!important; padding:10px 14px!important; white-space:nowrap; font-size:13px!important; }
+  }
+  @media(max-width:1200px) {
+    html[data-design="heaven"] #root .management-booking-filters {
+      grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    }
+  }
+  @media(max-width:480px) {
+    html[data-design="heaven"] #root .management-booking-filters {
+      gap:12px 8px!important;
+      & label:nth-child(4) { grid-column:1 / -1; }
+      & > button { padding:10px 8px!important; }
+    }
+  }
+}
+}
+/* Status colors make the booking summary easier to scan. */
+@layer logo-palette {
+@media screen {
+  html[data-design="heaven"] #root .management-status-cards {
+    & button[data-status="pending"] { --status-surface:#fff5df; --status-border:#e9c675; --status-ink:#805200; --status-accent:#b47700; }
+    & button[data-status="approved"] { --status-surface:#e8f3ff; --status-border:#9ac4ef; --status-ink:#17528d; --status-accent:#1768b9; }
+    & button[data-status="completed"] { --status-surface:#e6f6ed; --status-border:#8fcdab; --status-ink:#1b6540; --status-accent:#258351; }
+    & button[data-status="rejected"] { --status-surface:#ffebee; --status-border:#e5a0ab; --status-ink:#9b2b3e; --status-accent:#bd354b; }
+    & button[data-status] {
+      background:linear-gradient(140deg,#fff,var(--status-surface))!important;
+      border:1px solid var(--status-border)!important;
+      color:var(--status-ink)!important;
+      box-shadow:inset 2px 2px 5px #ffffffb3,0 4px 12px #243b6010!important;
+    }
+    & button[data-status] :is(span,strong) {
+      color:var(--status-ink)!important;
+      -webkit-text-fill-color:var(--status-ink)!important;
+    }
+    & button[data-status]:hover { border-color:var(--status-accent)!important; }
+    & button[data-status][aria-pressed="true"] {
+      border-color:var(--status-accent)!important;
+      background:var(--status-surface)!important;
+      box-shadow:inset 0 0 0 1px var(--status-accent),0 0 0 3px var(--status-surface)!important;
+    }
+    & button[data-status]:focus-visible {
+      outline:3px solid var(--status-accent)!important;
+      outline-offset:3px!important;
+    }
+  }
+}
+}
+@layer logo-palette {
+@media screen {
+  html[data-design="heaven"] #root .management-booking-row { cursor:pointer; }
+  html[data-design="heaven"] #root .management-booking-row:hover { background:#edf6ff!important; }
+  html[data-design="heaven"] #root .management-booking-row:focus-visible {
+    outline:2px solid #0054cf!important;
+    outline-offset:-2px!important;
+    background:#edf6ff!important;
+  }
+}
+}
+/* Booking Details follows the ParishLink logo palette. */
+@layer logo-palette {
+@media screen {
+html[data-design="heaven"] #root .management-booking-preview {
+  border-color:#acd7ef!important;
+  background:#f3f9fd!important;
+  color:#123b67!important;
+  & .management-preview-header {
+    background:linear-gradient(125deg,#007db8,#006bd1 55%,#0054cf)!important;
+    border-bottom-color:#62c8f3!important;
+  }
+  & .management-preview-header :is(h3,p,.management-preview-eyebrow) {
+    color:#fff!important;
+    -webkit-text-fill-color:#fff!important;
+  }
+  & .management-preview-close {
+    background:#ffffffed!important;
+    border-color:#c3e8ff!important;
+    color:#0054cf!important;
+    box-shadow:0 3px 8px #003c7c20!important;
+  }
+  & .management-preview-close:hover { background:#dff4ff!important; }
+  & .management-preview-body { background:#f3f9fd!important; }
+  & .management-preview-summary {
+    background:linear-gradient(135deg,#e2f6ff,#e9f2ff)!important;
+    border-color:#acd7ef!important;
+  }
+  & .management-preview-summary strong { color:#123b67!important; }
+  & .management-preview-summary p { color:#405c78!important; }
+  & .management-preview-section { background:#fff!important; border-color:#c8e1f0!important; }
+  & .management-preview-section h4 { color:#0054cf!important; border-bottom-color:#d9edf8!important; }
+  & dt { color:#526a80!important; }
+  & dd { color:#163b5d!important; }
+  & .management-preview-footer { background:#fff!important; border-top-color:#c8e1f0!important; }
+  & .management-preview-footer .secondary-action {
+    background:#e9f7ff!important; color:#0054cf!important;
+    border-color:#acd7ef!important; box-shadow:0 3px 8px #0054cf12!important;
+  }
+  & .management-preview-footer .primary-action {
+    background:linear-gradient(125deg,#007db8,#0054cf)!important;
+    color:#fff!important; border-color:#62c8f3!important;
+  }
+  & :is(button,a):focus-visible { outline-color:#0054cf!important; }
+  & .management-status { background:#e9f7ff!important; color:#0054cf!important; }
+  & .management-status[data-status="pending"] { background:#fff5df!important; color:#805200!important; }
+  & .management-status[data-status="completed"] { background:#e6f6ed!important; color:#1b6540!important; }
+  & .management-status[data-status="rejected"] { background:#ffebee!important; color:#9b2b3e!important; }
+  & .management-status[data-status="cancelled"] { background:#eef0f3!important; color:#526174!important; }
+}
+}
+}
+@layer logo-palette {
+@media screen {
+  html[data-design="heaven"] #root .management-booking-preview .management-preview-footer {
+    flex-wrap:wrap!important;
+    align-items:center!important;
+    & .management-copy-status { flex:1 1 180px; font-size:12px; color:#405c78; overflow-wrap:anywhere; }
+    & .management-copy-status:empty { display:none; }
+    & button:disabled { opacity:.55; cursor:default; }
+  }
+}
+}

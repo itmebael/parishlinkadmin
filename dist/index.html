@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en" data-design="heaven">
-  <head><style>@layer system-royal-clay;</style><link rel="stylesheet" href="/dist/assets/system-royal-clay.css?v=20261025-even-blue-sidebar">
+  <head><link rel="stylesheet" href="/dist/assets/announcement-update-editor.css?v=20261106-dashboard-editor"><script src="/dist/assets/parish-dialogs.js?v=20261106-simple-confirm"></script><link rel="stylesheet" href="/dist/assets/parish-dialogs.css?v=20261106-simple-confirm"><style>@layer logo-palette;</style><link rel="stylesheet" href="/dist/assets/logo-palette.css?v=20261106-admin-gray"><style>@layer system-royal-clay;</style><link rel="stylesheet" href="/dist/assets/system-royal-clay.css?v=20261025-even-blue-sidebar">
     <meta charset="UTF-8" />
     <!-- This CSP meta tag allows Vite to use eval() for hot-reloading in development -->
     <meta http-equiv="Content-Security-Policy" content="default-src * 'self' 'unsafe-inline' 'unsafe-eval' data: blob:;">
@@ -11,8 +11,8 @@
     <title>ParishLink | Admin Portal</title>
     <!-- User dashboard: light (white) theme only — runs before React reads localStorage. -->
     
-    <script type="module" crossorigin src="/dist/assets/index-v20260422157000.js?v=20261103-preview-ui"></script>
-    <link rel="stylesheet" href="/dist/assets/parish-calendar-ui.css?v=20261013-mass-audience">
+    <script type="module" crossorigin src="/dist/assets/index-v20260422157000.js?v=20261106-record-report"></script>
+    <link rel="stylesheet" href="/dist/assets/parish-calendar-ui.css?v=20261106-close-button">
     <link rel="stylesheet" href="/dist/assets/broadcast-history.css?v=20261012-delete-dialog">
     <link rel="stylesheet" crossorigin href="/dist/assets/index-yReDnWMe.css">
     <link rel="stylesheet" href="/dist/assets/parish-reports.css?v=20261009-header-colors">
@@ -582,16 +582,16 @@
             '<footer>' + (user.is_active === false ? '' : '<button type="button" class="dio-user-mgmt__action dio-user-mgmt__action--deactivate" data-user-action="deactivate">Deactivate user</button>') +
             '<button type="button" class="dio-user-mgmt__action dio-user-mgmt__action--delete" data-user-action="delete">Delete user</button></footer></section>';
           wrap.appendChild(modal);
-          modal.addEventListener("click", function (event) { if (event.target === modal || event.target.closest("[data-user-close]")) { modal.remove(); return; }
+          modal.addEventListener("click", async function (event) { if (event.target === modal || event.target.closest("[data-user-close]")) { modal.remove(); return; }
             var action = event.target.closest("[data-user-action]"); if (!action) return;
             var kind = action.getAttribute("data-user-action");
             var prompt = kind === "delete" ? "Delete " + name + " from User Management? This removes the user's parish profile." : "Deactivate " + name + "? They will no longer be able to use the portal.";
-            if (!window.confirm(prompt)) return;
+            if (!(await window.parishDialogs.confirm(prompt))) return;
             action.disabled = true;
             action.textContent = kind === "delete" ? "Deleting…" : "Deactivating…";
             restWrite("registered_users", { id: "eq." + user.id }, kind === "delete" ? "DELETE" : "PATCH", kind === "delete" ? null : { is_active: false })
               .then(function () { modal.remove(); if (kind === "delete") { state.rows = state.rows.filter(function (row) { return String(row.id) !== String(user.id); }); deletedUserRows(user); } else { user.is_active = false; } renderRows(wrap); if (kind === "deactivate") openUserPopup(wrap, user); })
-              .catch(function (error) { window.alert("Could not " + kind + " user: " + (error.message || error) + ". Check sql/user_management_actions.sql and database permissions."); action.disabled = false; action.textContent = kind === "delete" ? "Delete user" : "Deactivate user"; });
+              .catch(async function (error) { (await window.parishDialogs.alert("Could not " + kind + " user: " + (error.message || error) + ". Check sql/user_management_actions.sql and database permissions.")); action.disabled = false; action.textContent = kind === "delete" ? "Delete user" : "Deactivate user"; });
           });
           var closeOnEscape = function (event) { if (event.key === "Escape") { modal.remove(); document.removeEventListener("keydown", closeOnEscape); } };
           document.addEventListener("keydown", closeOnEscape);
@@ -1212,7 +1212,7 @@
 .dio-user-mgmt__stats button[aria-pressed="true"] { outline:2px solid #7854e4; outline-offset:-2px; }
 .dio-user-mgmt__stats button:hover { border-color:#7854e4; }
 .dio-user-mgmt__stats button:focus-visible { outline:3px solid #7854e4; outline-offset:2px; }
-</style><link rel="stylesheet" href="/dist/assets/booking-management.css?v=20261103-blue-reports">
+</style><link rel="stylesheet" href="/dist/assets/booking-management.css?v=20261106-copy-reference">
 </head>
   <body>
     <dialog id="login-terms-dialog" class="login-terms-dialog" aria-labelledby="login-terms-title">
@@ -2607,7 +2607,7 @@
           }).join('');
 
           var html =
-            '<!doctype html><html><head><meta charset="utf-8"><title>' + escapeHtml(meta.label) + '</title>' +
+            '<!doctype html><html><head><link rel="stylesheet" href="/dist/assets/announcement-update-editor.css?v=20261106-dashboard-editor"><style>@layer logo-palette;</style><link rel="stylesheet" href="/dist/assets/logo-palette.css?v=20261106-admin-gray"><meta charset="utf-8"><title>' + escapeHtml(meta.label) + '</title>' +
             '<style>' +
               'body{font:13px/1.5 system-ui,sans-serif;color:#0f172a;padding:24px;}' +
               'h1{font:700 20px/1.2 system-ui;margin:0 0 4px;}' +
@@ -2629,7 +2629,7 @@
           if (!w) return;
           w.document.open(); w.document.write(html); w.document.close();
           w.focus();
-          setTimeout(function () { try { w.print(); } catch (e) {} }, 400);
+          var actions=w.document.createElement('div');actions.className='noprint';actions.innerHTML='<button type="button">Print / Save as PDF</button>';actions.querySelector('button').addEventListener('click',function(){w.print();});w.document.body.prepend(actions);
         }
 
         function printSummary() { if (window.parishReportPrint) { window.parishReportPrint(); return; }
@@ -2665,7 +2665,7 @@
           if (!w) return;
           w.document.open();
           w.document.write(
-            '<!doctype html><html><head><meta charset="utf-8"><title>Parish Reports</title>' +
+            '<!doctype html><html><head><link rel="stylesheet" href="/dist/assets/announcement-update-editor.css?v=20261106-dashboard-editor"><style>@layer logo-palette;</style><link rel="stylesheet" href="/dist/assets/logo-palette.css?v=20261106-admin-gray"><meta charset="utf-8"><title>Parish Reports</title>' +
             '<style>' +
               'body{font:13px/1.5 system-ui,sans-serif;color:#0f172a;padding:24px;}' +
               'h1{font:700 24px/1.2 system-ui;margin:0 0 4px;}' +
@@ -2680,7 +2680,7 @@
               'th{background:#f1f5f9;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:#475569;}' +
               '.empty{padding:10px 12px;color:#94a3b8;font-style:italic;}' +
               '.section-count{float:right;font:600 11px/1 system-ui;color:#64748b;letter-spacing:.06em;text-transform:uppercase;}' +
-              '@media print { body{padding:0;} h2{break-after:avoid;} table{page-break-inside:auto;} tr{page-break-inside:avoid;} }' +
+              '@media print { .noprint{display:none;} body{padding:0;} h2{break-after:avoid;} table{page-break-inside:auto;} tr{page-break-inside:avoid;} }' +
             '</style></head><body>' +
               '<h1>Parish Reports</h1>' +
               '<div class="meta">' + escapeHtml(parishName) +
@@ -2746,7 +2746,7 @@
             host.innerHTML = html;
 
             w.focus();
-            setTimeout(function () { try { w.print(); } catch (e) {} }, 500);
+            var actions=w.document.createElement('div');actions.className='noprint';actions.innerHTML='<button type="button">Print / Save as PDF</button>';actions.querySelector('button').addEventListener('click',function(){w.print();});w.document.body.prepend(actions);
           });
         }
 
@@ -3567,9 +3567,9 @@
             .catch(function (e) { showError("Couldn't update: " + (e.message || e)); });
         }
 
-        function del(row) {
+        async function del(row) {
           if (!row) return;
-          if (!window.confirm("Delete \"" + row.chapel_name + "\"? This cannot be undone. Service requests tagged to this chapel will keep their history but lose the chapel link.")) return;
+          if (!(await window.parishDialogs.confirm("Delete \"" + row.chapel_name + "\"? This cannot be undone. Service requests tagged to this chapel will keep their history but lose the chapel link."))) return;
           rpc("delete_parish_chapel", { p_id: row.id })
             .then(refresh)
             .catch(function (e) { showError("Couldn't delete: " + (e.message || e)); });
@@ -3728,23 +3728,21 @@
             document.body.appendChild(wrap);
           }
 
-          btn.addEventListener("click", function () {
+          btn.addEventListener("click", async function () {
             var parishName = parishNameFromSession();
-            if (!parishName) { alert("Parish is not linked to this session."); return; }
+            if (!parishName) { (await window.parishDialogs.alert("Parish is not linked to this session.")); return; }
             btn.disabled = true;
             btn.textContent = "Loading…";
-            restGetBookings(parishName).then(function (rows) {
+            restGetBookings(parishName).then(async function (rows) {
               rows = Array.isArray(rows) ? rows : [];
-              if (!rows.length) { alert("No parish bookings found for " + parishName + "."); return; }
+              if (!rows.length) { (await window.parishDialogs.alert("No parish bookings found for " + parishName + ".")); return; }
               var cert = rows.filter(function (r) { return String(r.reference_number || "").toUpperCase().indexOf("CERT-") === 0; }).length;
               var apt  = rows.filter(function (r) { return String(r.reference_number || "").toUpperCase().indexOf("APT-") === 0; }).length;
-              var ok = window.confirm(
-                "Delete ALL parish bookings for \"" + parishName + "\"?\n\n" +
+              var ok = (await window.parishDialogs.confirm("Delete ALL parish bookings for \"" + parishName + "\"?\n\n" +
                 "Total: " + rows.length + "\n" +
                 "Certificates (CERT-): " + cert + "\n" +
                 "Appointments (APT-): " + apt + "\n\n" +
-                "This cannot be undone."
-              );
+                "This cannot be undone."));
               if (!ok) return;
               btn.textContent = "Deleting…";
               var ids = rows.map(function (r) { return r.id; }).filter(Boolean);
@@ -3754,12 +3752,12 @@
               for (var i = 0; i < ids.length; i += chunkSize) {
                 (function (chunk) { chain = chain.then(function () { return restDeleteIds(chunk); }); })(ids.slice(i, i + chunkSize));
               }
-              return chain.then(function () {
-                alert("Deleted " + ids.length + " parish bookings.");
+              return chain.then(async function () {
+                (await window.parishDialogs.alert("Deleted " + ids.length + " parish bookings."));
                 window.location.reload();
               });
-            }).catch(function (e) {
-              alert("Could not delete parish bookings: " + (e && e.message ? e.message : e));
+            }).catch(async function (e) {
+              (await window.parishDialogs.alert("Could not delete parish bookings: " + (e && e.message ? e.message : e)));
             }).finally(function () {
               btn.disabled = false;
               btn.textContent = "Delete all parish bookings";
@@ -4001,7 +3999,7 @@
           }
           applyRowStatus(row, isDeclined(row) ? "Declined" : "");
           fetchStatus(ref, true).then(function (status) { applyRowStatus(row, status); });
-          btn.addEventListener("click", function () {
+          btn.addEventListener("click", async function () {
             var currentStatus = statusByRef[ref] || "";
             if (isClosedStatus(currentStatus)) {
               applyRowStatus(row, currentStatus);
@@ -4009,14 +4007,14 @@
             }
             var nameEl = row.querySelector("strong");
             var name = nameEl ? (nameEl.textContent || "").trim() : "this booking";
-            if (!window.confirm("Decline " + name + "?\n\nReference: " + ref + "\n\nThis will mark the service/appointment booking as Declined.")) return;
+            if (!(await window.parishDialogs.confirm("Decline " + name + "?\n\nReference: " + ref + "\n\nThis will mark the service/appointment booking as Declined."))) return;
             btn.disabled = true;
             btn.textContent = "Declining...";
             patchDecline(ref).then(function () {
               statusByRef[ref] = "Declined";
               applyRowStatus(row, "Declined");
-            }).catch(function (err) {
-              alert("Could not decline booking: " + (err && err.message ? err.message : err));
+            }).catch(async function (err) {
+              (await window.parishDialogs.alert("Could not decline booking: " + (err && err.message ? err.message : err)));
               btn.disabled = false;
               btn.textContent = "Decline";
             });
@@ -4027,7 +4025,7 @@
           var ref = extractRef(row);
           if (!ref) return;
           row.setAttribute("data-pab-confirm-watch", "1");
-          row.addEventListener("click", function (event) {
+          row.addEventListener("click", async function (event) {
             var target = event.target && event.target.closest && event.target.closest("button, a");
             if (!target) return;
             var label = String(target.textContent || "").replace(/\s+/g, " ").trim().toLowerCase();
@@ -4042,15 +4040,15 @@
             }
             var nameEl = row.querySelector("strong");
             var name = nameEl ? (nameEl.textContent || "").trim() : "this appointment";
-            if (!window.confirm("Confirm " + name + "?\n\nReference: " + ref + "\n\nThis will mark the appointment as Confirmed.")) return;
+            if (!(await window.parishDialogs.confirm("Confirm " + name + "?\n\nReference: " + ref + "\n\nThis will mark the appointment as Confirmed."))) return;
             target.disabled = true;
             target.textContent = "Confirming...";
             patchConfirmed(ref).then(function () {
               statusByRef[ref] = "Confirmed";
               applyRowStatus(row, "Confirmed");
               target.textContent = "Confirmed";
-            }).catch(function (err) {
-              alert("Could not confirm appointment: " + (err && err.message ? err.message : err));
+            }).catch(async function (err) {
+              (await window.parishDialogs.alert("Could not confirm appointment: " + (err && err.message ? err.message : err)));
               target.disabled = false;
               target.textContent = "Confirm Appointment";
               fetchStatus(ref).then(function (fresh) { applyRowStatus(row, fresh); });
@@ -4272,17 +4270,17 @@
             rpc("parish_reports_by_id", { p_parish_id: id })
               .then(function (d) { return Array.isArray(d) ? (d[0] || d) : d; })
               .catch(function (e) { return { __error: (e && e.message) ? e.message : String(e || "") }; })
-          ]).then(function (parts) {
+          ]).then(async function (parts) {
             var parish = parts[0] || {};
             var stats = parts[1] || {};
             if (stats && stats.__error) {
               openModal(parish.parish_name ? parish : { parish_name: "Parish" }, { month_bookings: 0, pending_bookings: 0, members: 0, events: 0, announcements: 0, archive_records: 0, chapels: 0, live_streams: 0 });
-              try { window.alert("Could not load parish summary: " + stats.__error); } catch (e) {}
+              try { (await window.parishDialogs.alert("Could not load parish summary: " + stats.__error)); } catch (e) {}
               return;
             }
             openModal(parish.parish_name ? parish : { parish_name: "Parish" }, stats);
-          }).catch(function (e) {
-            try { window.alert("Could not load parish summary."); } catch (e2) {}
+          }).catch(async function (e) {
+            try { (await window.parishDialogs.alert("Could not load parish summary.")); } catch (e2) {}
           });
         };
 
@@ -4849,8 +4847,8 @@
             wrap.querySelector("[data-dio-rpc-dl-bookings]").textContent = "Downloading…";
             step().then(function (rows) {
               downloadCsv("diocese-all-bookings.csv", rows);
-            }).catch(function (e) {
-              window.alert("Could not download bookings: " + (e && e.message ? e.message : e));
+            }).catch(async function (e) {
+              (await window.parishDialogs.alert("Could not download bookings: " + (e && e.message ? e.message : e)));
             }).finally(function () {
               var b = wrap.querySelector("[data-dio-rpc-dl-bookings]");
               b.disabled = false;
@@ -5737,145 +5735,7 @@
         }
       })();
     </script>
-    <script>
-      // Certificate Request: make Death Certificate visible in services.
-      (function () {
-        if (window.__dioDeathCertificateService) return;
-        window.__dioDeathCertificateService = true;
-
-        function text(node) {
-          return String((node && node.textContent) || "").replace(/\s+/g, " ").trim();
-        }
-
-        function hasDeathCertificate(root) {
-          return /death certificate/i.test(text(root || document));
-        }
-
-        function clickLike(reference) {
-          if (!reference) return;
-          var event = new MouseEvent("click", { bubbles: true, cancelable: true, view: window });
-          reference.dispatchEvent(event);
-        }
-
-        function findCertificateRequestCard(root) {
-          var candidates = (root || document).querySelectorAll("button, article, section, div, label, option");
-          for (var i = 0; i < candidates.length; i++) {
-            if (/certificate request/i.test(text(candidates[i]))) return candidates[i];
-          }
-          return null;
-        }
-
-        function addDeathOption(root) {
-          root = root || document;
-          var certCard = findCertificateRequestCard(root);
-          if (!certCard) return;
-          var area = certCard.closest("article, section, form, .glass-card, .page-card, .service-card, .certificate-service-card") || certCard.parentElement;
-          if (!area || hasDeathCertificate(area)) return;
-
-          var button = document.createElement("button");
-          button.type = "button";
-          button.className = "secondary-action certificate-request-button dio-death-certificate-option";
-          button.textContent = "Death Certificate";
-          button.addEventListener("click", function () {
-            clickLike(certCard);
-            setTimeout(function () {
-              var select = Array.from(document.querySelectorAll("select")).find(function (el) {
-                return /baptismal certificate|confirmation certificate|marriage certificate|certificate request/i.test(text(el));
-              });
-              if (select) {
-                var option = Array.from(select.options || []).find(function (opt) { return /death certificate/i.test(opt.textContent || opt.value); });
-                if (option) {
-                  select.value = option.value;
-                  select.dispatchEvent(new Event("change", { bubbles: true }));
-                }
-              }
-            }, 100);
-          });
-          area.appendChild(button);
-        }
-
-        function fieldValue(labels) {
-          labels = labels.map(function (x) { return x.toLowerCase(); });
-          var fields = Array.from(document.querySelectorAll("label"));
-          for (var i = 0; i < fields.length; i++) {
-            var label = fields[i];
-            var copy = text(label).toLowerCase();
-            if (!labels.some(function (needle) { return copy.indexOf(needle) !== -1; })) continue;
-            var control = label.querySelector("input, textarea, select") || label.parentElement && label.parentElement.querySelector("input, textarea, select");
-            if (control && control.value) return control.value;
-          }
-          return "";
-        }
-
-        function buildPreview() {
-          var name = fieldValue(["name of deceased", "deceased", "full name", "name"]) || "____________________________";
-          var diedOn = fieldValue(["died on", "date of death", "death date"]) || "";
-          var age = fieldValue(["age"]) || "";
-          var buriedOn = fieldValue(["buried", "burial date", "interment"]) || "";
-          var reverend = fieldValue(["rev", "priest", "minister"]) || "REV. FR. REY M. PALOMAS";
-          return '' +
-            '<section class="death-certificate-preview" aria-label="Death Certificate preview">' +
-              '<header class="death-certificate-preview__head">' +
-                '<img src="/dist/assets/logocalbayog-BWgE7R35.png" alt="">' +
-                '<div><span>Diocese of Calbayog</span><strong>Our Lady of the Annunciation Parish</strong><small>6715 Calbiga, Samar<br>Philippines</small></div>' +
-                '<img src="/dist/assets/virgen-maria-anunciacion.png" alt="">' +
-              '</header>' +
-              '<h3>DEATH CERTIFICATE</h3>' +
-              '<div class="death-certificate-preview__body">' +
-                '<p class="death-certificate-preview__center">THIS IS TO CERTIFY THAT</p>' +
-                '<div class="death-certificate-preview__line death-certificate-preview__line--full"><strong>' + name + '</strong></div>' +
-                '<div class="death-certificate-preview__line"><span>DIED ON</span><strong>' + diedOn + '</strong></div>' +
-                '<div class="death-certificate-preview__line"><span>AT THE AGE OF</span><strong>' + age + '</strong></div>' +
-                '<p class="death-certificate-preview__center">WAS SOLEMNLY BURIED ACCORDING<br>TO THE RITES OF THE ROMAN CATHOLIC CHURCH</p>' +
-                '<div class="death-certificate-preview__line"><span>ON THE</span><strong>' + buriedOn + '</strong></div>' +
-                '<p class="death-certificate-preview__center">AT THE CALBIGA CATHOLIC CEMETERY<br>CALBIGA, SAMAR</p>' +
-                '<div class="death-certificate-preview__line"><span>BY THE REV.</span><strong>' + reverend + '</strong></div>' +
-                '<div class="death-certificate-preview__line"><span>AS RECORDED IN THE DEATH REGISTRY NO.</span><strong></strong></div>' +
-                '<div class="death-certificate-preview__register"><span>PAGE</span><strong class="death-certificate-preview__blank"></strong><span>LINE</span><strong class="death-certificate-preview__blank"></strong><span>DATE OF ISSUE</span><strong class="death-certificate-preview__blank"></strong></div>' +
-              '</div>' +
-              '<footer class="death-certificate-preview__foot"><span>PARISH SEAL</span><div class="death-certificate-preview__signature">PARISH REGISTRAR</div></footer>' +
-            '</section>';
-        }
-
-        function showPreview(root) {
-          root = root || document;
-          var chosen = Array.from(root.querySelectorAll("select, input, textarea, button, option")).some(function (el) {
-            return /death certificate/i.test(text(el) + " " + (el.value || ""));
-          });
-          if (!chosen && !/death certificate/i.test(text(root))) return;
-          var host = Array.from(document.querySelectorAll("form, [role='dialog'], .certificate-builder, .page-card, .glass-card")).find(function (el) {
-            return /death certificate/i.test(text(el));
-          });
-          if (!host || host.querySelector(".death-certificate-preview")) return;
-          var wrap = document.createElement("div");
-          wrap.innerHTML = buildPreview();
-          host.appendChild(wrap.firstChild);
-        }
-
-        function tick(root) {
-          try {
-            addDeathOption(root || document);
-          } catch (e) {}
-        }
-
-        if (document.readyState === "loading") {
-          document.addEventListener("DOMContentLoaded", function () { setTimeout(tick, 400); });
-        } else {
-          setTimeout(tick, 400);
-        }
-
-        if (document.body) {
-          new MutationObserver(function (muts) {
-            for (var i = 0; i < muts.length; i++) {
-              for (var j = 0; j < (muts[i].addedNodes || []).length; j++) {
-                var node = muts[i].addedNodes[j];
-                if (node && node.nodeType === 1) tick(node);
-              }
-            }
-          }).observe(document.body, { childList: true, subtree: true });
-        }
-      })();
-    </script>
+    
     <style>
       .dio-archive-csv{display:none!important;margin:14px 0 0;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none}
       html[data-theme="dark"] .dio-archive-csv{background:transparent;border-color:transparent;box-shadow:none}
@@ -6062,9 +5922,9 @@
           }
           setMeta();
 
-          wrap.querySelector("[data-archive-dl]").addEventListener("click", function () {
+          wrap.querySelector("[data-archive-dl]").addEventListener("click", async function () {
             var rows = getCache();
-            if (!rows.length) { window.alert("No archived records cached yet. Create/archive a record first."); return; }
+            if (!rows.length) { (await window.parishDialogs.alert("No archived records cached yet. Create/archive a record first.")); return; }
             // Pick a stable subset of columns that Excel opens nicely.
             var out = rows.map(function (r) {
               return {
@@ -6181,13 +6041,13 @@
             return {"<":"&lt;",">":"&gt;","&":"&amp;","\"":"&quot;","'":"&#39;"}[ch];
           });
         }
-        function downloadExcel(name, rows, title) {
+        async function downloadExcel(name, rows, title) {
           rows = Array.isArray(rows) ? rows : [];
-          if (!rows.length) { window.alert("No rows to export."); return; }
+          if (!rows.length) { (await window.parishDialogs.alert("No rows to export.")); return; }
           var keys = Object.keys(rows[0] || {});
           var generated = excelDate(new Date());
           var html =
-            '<html><head><meta charset="utf-8">' +
+            '<html><head><link rel="stylesheet" href="/dist/assets/announcement-update-editor.css?v=20261106-dashboard-editor"><style>@layer logo-palette;</style><link rel="stylesheet" href="/dist/assets/logo-palette.css?v=20261106-admin-gray"><meta charset="utf-8">' +
             '<style>' +
             'body{font-family:Arial,sans-serif;color:#111827}' +
             'table{border-collapse:collapse;width:100%}' +
@@ -6377,8 +6237,8 @@
             var p = fetchAll(cfg.table, cfg.select, cfg.order).then(function (rows) {
               renderPreview(cfg.title, cfg.fileName, rows);
             });
-            Promise.resolve(p).catch(function (err) {
-              window.alert("Export failed: " + (err && err.message ? err.message : err));
+            Promise.resolve(p).catch(async function (err) {
+              (await window.parishDialogs.alert("Export failed: " + (err && err.message ? err.message : err)));
             }).finally(function () {
               setBusy(btn, false);
             });
@@ -6439,7 +6299,7 @@
         }
 
         var _fetch = window.fetch;
-        window.fetch = function (input, init) {
+        window.fetch = async function (input, init) {
           var url = (typeof input === "string") ? input : (input && input.url) || "";
           var method = (init && init.method) ? String(init.method).toUpperCase() : "GET";
           // Only guard write calls to bookings/events endpoints.
@@ -6469,7 +6329,7 @@
                 var dval = pickDate(payload);
                 if (isPastDate(dval)) {
                   var msg = "You cannot book an event or service on a past date. Please select today or a future date.";
-                  try { window.alert(msg); } catch (e2) {}
+                  try { (await window.parishDialogs.alert(msg)); } catch (e2) {}
                   return Promise.resolve(errResponse(msg));
                 }
               }
@@ -8089,9 +7949,9 @@
     <link rel="stylesheet" href="/dist/assets/admin-pending-queue.css?v=1">
     <link rel="stylesheet" href="/dist/assets/admin-record-screen.css?v=1">
     <link rel="stylesheet" href="/dist/assets/admin-broadcast-history.css?v=1">
-    <link rel="stylesheet" href="/dist/assets/admin-services-layout.css?v=1">
-<link rel="stylesheet" href="/dist/assets/admin-header-cleanup.css?v=20261019-1"><link rel="stylesheet" href="/dist/assets/report-charts.css?v=1"><link rel="stylesheet" href="/dist/assets/sacramental-record-editor.css?v=1"><link rel="stylesheet" href="/dist/assets/record-preview-formal.css?v=1"><link rel="stylesheet" href="/dist/assets/record-create-dialog.css?v=20261019-visible-add"></body>
-  <script src="/dist/assets/chapel-information-menu.js?v=20260921-1"></script>
+    <link rel="stylesheet" href="/dist/assets/admin-services-layout.css?v=20261106-subtitle">
+<link rel="stylesheet" href="/dist/assets/admin-header-cleanup.css?v=20261019-1"><link rel="stylesheet" href="/dist/assets/report-charts.css?v=1"><link rel="stylesheet" href="/dist/assets/sacramental-record-editor.css?v=1"><link rel="stylesheet" href="/dist/assets/record-preview-formal.css?v=1"><link rel="stylesheet" href="/dist/assets/record-create-dialog.css?v=20261106-readable-toolbar"></body>
+  <script src="/dist/assets/chapel-information-menu.js?v=20261106-styled-dialogs"></script>
   <script src="/dist/assets/parish-text-sizing.js?v=20261012-fit-font"></script>
   <script src="/dist/assets/parish-settings-toggles.js?v=20261009-no-dark-floating"></script>
   <script src="/dist/assets/baptism-certificate-design.js?v=20261003-marriage-longpaper-1"></script>

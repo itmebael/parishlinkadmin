@@ -49,12 +49,14 @@ export function createParishCalendarUI(jsx, React) {
     }, {});
     const days = new Date(year, month + 1, 0).getDate();
     const offset = new Date(year, month, 1).getDay();
+    const now = new Date();
+    const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
     const dateLabel = date => new Date(date + 'T12:00:00').toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
     return h('section', { className: 'pc-calendar screen-grid__full', 'aria-label': 'Parish Calendar' },
-      h('header', { className: 'pc-toolbar' }, h('h4', null, visibleMonth.toLocaleDateString(undefined, { month: 'long', year: 'numeric' })),
-        h('div', { className: 'pc-toolbar__actions' },
-          h('button', { type: 'button', className: 'pc-icon', title: 'Previous month', 'aria-label': 'Previous month', onClick: () => onChangeMonth(-1) }, '\u2039'),
-          h('button', { type: 'button', className: 'pc-icon', title: 'Next month', 'aria-label': 'Next month', onClick: () => onChangeMonth(1) }, '\u203a'))),
+      h('header', { className: 'pc-toolbar' },
+        h('button', { type: 'button', className: 'pc-month-nav', 'aria-label': 'Previous month', onClick: () => onChangeMonth(-1) }, '\u2039 Previous'),
+        h('h4', { 'aria-live': 'polite', 'aria-atomic': true }, visibleMonth.toLocaleDateString(undefined, { month: 'long', year: 'numeric' })),
+        h('button', { type: 'button', className: 'pc-month-nav', 'aria-label': 'Next month', onClick: () => onChangeMonth(1) }, 'Next \u203a')),
       message ? h('p', { role: 'status' }, message.message) : null,
       isLoading ? h('p', { role: 'status' }, 'Loading schedules...') : null,
       h('div', { className: 'pc-weekdays', 'aria-hidden': true }, ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => h('span', { key: day }, day))),
@@ -62,8 +64,9 @@ export function createParishCalendarUI(jsx, React) {
         Array.from({ length: offset }, (_, i) => h('div', { key: `blank-${i}`, className: 'pc-day pc-day--blank' })),
         Array.from({ length: days }, (_, i) => {
           const date = key(i + 1), events = grouped[date] || [];
-          return h('button', { key: date, type: 'button', className: `pc-day${date === selectedDate ? ' is-selected' : ''}`, 'aria-label': `${dateLabel(date)}, ${events.length} events`, onClick: () => { onSelectDate(date); setOpenDate(date); } },
-            h('strong', null, i + 1), events.map(event => h('span', { key: event.id, className: `pc-event pc-event--${event.tone}`, title: event.title }, event.title)));
+          return h('button', { key: date, type: 'button', className: `pc-day${date === selectedDate ? ' is-selected' : ''}${date === today ? ' is-today' : ''}`, 'aria-current': date === today ? 'date' : undefined, 'aria-pressed': date === selectedDate, 'aria-label': `${dateLabel(date)}, ${events.length} events`, onClick: () => { onSelectDate(date); setOpenDate(date); } },
+            h('strong', null, i + 1), events.slice(0, 2).map(event => h('span', { key: event.id, className: `pc-event pc-event--${event.tone}`, title: event.title }, event.title)),
+            events.length > 2 ? h('span', { className: 'pc-more' }, `+${events.length - 2} more`) : null);
         }),
         Array.from({ length: (7 - (offset + days) % 7) % 7 }, (_, i) => h('div', { key: `end-${i}`, className: 'pc-day pc-day--blank' }))),
       openDate ? h(Modal, { title: dateLabel(openDate), className: 'pc-dialog--day-details', onClose: () => setOpenDate(null), headerAction: h('button', { type: 'button', className: 'primary-action pc-day-add', onClick: () => { setOpenDate(null); onAdd(); } }, '+ Add Mass Schedule') },

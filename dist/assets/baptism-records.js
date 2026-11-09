@@ -1,4 +1,4 @@
-import { previewRecordReport } from './record-report-download.js';
+import { previewRecordReport } from './record-report-download.js?v=20261106-record-report';
 import { RecordEditor } from './sacramental-record-editor.js';
 const PAGE_SIZE = 7;
 const COLUMNS = 'id,year_baptism,month_batism,date_batism,name,year_birth,month_birth,day_birth,mother_name,father_name,forefathers,foremothers,godparents,location,fee,minister,created_at,parish_id';
@@ -174,7 +174,7 @@ export function BaptismRecords({ session, React, ui, request, recordType: select
         currentPage += 1;
       }
       setSearch(input.trim());
-      await previewRecordReport({ records: allRows, config, labels: LABELS, session, request, previewWindow });
+      await previewRecordReport({ records: allRows, config, labels: LABELS, filters:{search:input.trim(),searchBy,month,year}, session, request, previewWindow });
     } catch (reason) {
       previewWindow.close();
       setError(reason.message || 'Could not prepare the filtered preview.');

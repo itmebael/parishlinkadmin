@@ -172,7 +172,7 @@ export function ParishPublishing({React:R, request, getHeaders, url, session}) {
     } finally {setBusy(false);}
   }
   async function deletePost(row) {
-    if (!window.confirm('Delete this ' + noun.toLowerCase() + '? This cannot be undone.')) return;
+    if (!(await window.parishDialogs.confirm('Delete this ' + noun.toLowerCase() + '? This cannot be undone.'))) return;
     setBusy(true);
     try {
       const deleted = await rest('/rest/v1/' + table + '?id=eq.' + encodeURIComponent(row.id) + '&' + scope(parish), {method:'DELETE', headers:{Prefer:'return=representation'}});
@@ -183,13 +183,13 @@ export function ParishPublishing({React:R, request, getHeaders, url, session}) {
       setNotice({text:noun + ' deleted.' + cleanup});
     } catch (e) {setNotice({error:true, text:readableError(e)});} finally {setBusy(false);}
   }
-  function switchKind(next) {
+  async function switchKind(next) {
     if (next === kind || busy) return;
-    if ((draft.title || draft.content || draft.activities?.some(item => item.date || item.activity) || files.length || draft.id) && !window.confirm('Discard your unsaved changes?')) return;
+    if ((draft.title || draft.content || draft.activities?.some(item => item.date || item.activity) || files.length || draft.id) && !(await window.parishDialogs.confirm('Discard your unsaved changes?'))) return;
     setKind(next); setDraft(blank(next)); setFiles([]); if (fileInput.current) fileInput.current.value = '';
   }
-  function editPost(row) {
-    if ((draft.title || draft.content || draft.activities?.some(item => item.date || item.activity) || files.length) && !window.confirm('Discard your unsaved changes?')) return;
+  async function editPost(row) {
+    if ((draft.title || draft.content || draft.activities?.some(item => item.date || item.activity) || files.length) && !(await window.parishDialogs.confirm('Discard your unsaved changes?'))) return;
     setDraft({...blank(kind), ...row, activities:kind === 'announcement' ? announcementActivities(row) : blank(kind).activities, attachments:postAttachments(row)});
     setFiles([]); if (fileInput.current) fileInput.current.value = '';
     formRef.current?.scrollIntoView({behavior:'smooth', block:'start'});
@@ -233,5 +233,5 @@ export function ParishPublishing({React:R, request, getHeaders, url, session}) {
           h('div', {className:'publishing-post-meta'}, h('span', null, row.category || 'Notice'), h('span', {className:'status-badge status-badge--' + (row.status === 'Published' ? 'green' : 'blue')}, row.status)),
           kind === 'announcement' ? activityTable(announcementActivities(row)) : h(R.Fragment, null, h('h5', null, row.title), h('p', {className:'publishing-post-content'}, row.content || 'No announcement details saved.')), attachmentNodes(row),
           h('small', null, new Date(row.published_at || row.created_at).toLocaleString()),
-          h('div', {className:'publishing-actions'}, h('button', {type:'button', className:'secondary-action', disabled:busy, onClick:() => {if ((draft.title || draft.content || draft.activities?.some(item => item.date || item.activity) || files.length) && !window.confirm('Discard your unsaved changes?')) return; setDraft({...blank(kind), ...row, activities:kind === 'announcement' ? announcementActivities(row) : blank(kind).activities, attachments:postAttachments(row)}); setFiles([]); if(fileInput.current) fileInput.current.value = ''; formRef.current?.scrollIntoView({behavior:'smooth', block:'start'});}}, 'Edit'), h('button', {type:'button', className:'secondary-action', disabled:busy, onClick:() => deletePost(row)}, 'Delete')))))));
+          h('div', {className:'publishing-actions'}, h('button', {type:'button', className:'secondary-action', disabled:busy, onClick:async () => {if ((draft.title || draft.content || draft.activities?.some(item => item.date || item.activity) || files.length) && !(await window.parishDialogs.confirm('Discard your unsaved changes?'))) return; setDraft({...blank(kind), ...row, activities:kind === 'announcement' ? announcementActivities(row) : blank(kind).activities, attachments:postAttachments(row)}); setFiles([]); if(fileInput.current) fileInput.current.value = ''; formRef.current?.scrollIntoView({behavior:'smooth', block:'start'});}}, 'Edit'), h('button', {type:'button', className:'secondary-action', disabled:busy, onClick:() => deletePost(row)}, 'Delete')))))));
 }

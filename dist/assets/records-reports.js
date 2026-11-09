@@ -1,5 +1,5 @@
 import {resolveQueueParish} from './parish-queue-scope.js';
-import {reportDateOnly} from './parish-report-print.js';
+import {reportDateOnly} from './parish-report-print.js?v=20261106-styled-dialogs';
 
 export const RECORD_CATEGORIES=[['baptism','BAPTISMAL'],['confirmation','CONFIRMATION'],['marriage','MARRIAGE'],['funeral','FUNERAL']];
 const sources={baptism:'baptism_records',confirmation:'confirmation_records',marriage:'marriage_records',funeral:'diocese_archive_records'};

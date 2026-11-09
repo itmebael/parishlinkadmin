@@ -14,6 +14,10 @@ assert.deepEqual(actionsFor(database[3]),['Preview']);
 assert.equal(filterManagementRows(database,{status:'pending',search:'confirmation'}).length,1);
 assert.equal(filterManagementRows(database,{from:'2026-12-01'}).length,0);
 assert.equal(filterManagementRows(database,{type:'certificates'}).length,2);
+const mixed=[row('c','Completed'),row('p1','Pending'),row('r','Declined'),row('a','Approved'),row('x','Cancelled'),row('p2','Booked')];
+assert.deepEqual(filterManagementRows(mixed).map(item=>item.id),['p1','p2','a','c','r','x'],'Group all matching rows by normalized status, preserving order inside each group');
+assert.deepEqual(mixed.map(item=>item.id),['c','p1','r','a','x','p2'],'Grouping must not mutate API data');
+assert.deepEqual(filterManagementRows(mixed,{status:'pending'}).map(item=>item.id),['p1','p2'],'Status filtering retains both pending aliases');
 const series=serviceSeries([row('1','Pending'),row('2','Approved','Mass booking - Thanksgiving'),row('3','Released','Baptismal Certificate','2025-04-05')]);
 assert.equal(series.length,2);assert.equal(series[0].months[10],2);assert.equal(series[1].months[3],1);
 assert.deepEqual(serviceSeries([]),[]);
@@ -34,7 +38,7 @@ await assert.rejects(changeBookingStatus({row:stale,action:'Approve',request,ses
 
 // Mount the production component against an in-memory booking API.
 globalThis.document=new EventTarget();document.visibilityState='visible';
-globalThis.window=new EventTarget();window.confirm=()=>true;window.setInterval=()=>1;window.clearInterval=()=>{};
+globalThis.window=new EventTarget();window.parishDialogs={confirm:async()=>true,alert:async()=>{}};window.setInterval=()=>1;window.clearInterval=()=>{};
 globalThis.CustomEvent=class extends Event{constructor(type,options){super(type);this.detail=options.detail;}};
 let printed=false,reportHtml='';const popup={document:{write:html=>{reportHtml=html;},open(){},close(){},body:{},fonts:{ready:Promise.resolve()}},focus(){},print(){printed=true;},close(){}};window.open=()=>popup;
 const hookStates=[],refs=[],effects=[];let cursor=0,refIndex=0;
@@ -42,17 +46,31 @@ const React={createElement:(type,props,...children)=>({type,props:props||{},chil
 let reads=0;const fetchRows=async(table,query,token)=>{assert.equal(token,'admin-token');if(table==='parishes')return[{id:'parish-1',parish_name:'Parish of Catbalogan'}];assert.equal(table,'diocese_service_bookings');assert.ok(query.includes('parish_name=ilike.Parish%20of%20Catbalogan'));reads++;return database.map(row=>({...row}));};
 function render(){cursor=0;refIndex=0;return BookingManagement({React,session,fetchRows,request,reports:true});}
 function nodes(root,predicate){if(!root||typeof root!=='object')return [];return [...(predicate(root)?[root]:[]),...(root.children||[]).flat(Infinity).flatMap(child=>nodes(child,predicate))];}
-render();await new Promise(resolve=>setTimeout(resolve,0));let tree=render();
+render();await new Promise(resolve=>setTimeout(resolve,0));let tree=render();assert.equal(reportHtml,'','Mounting must not open a report');window.dispatchEvent(new Event('focus'));await new Promise(resolve=>setTimeout(resolve,0));assert.equal(reportHtml,'','Background refresh must not open a report');
+const clickRow=nodes(tree,node=>node.props.className==='management-booking-row')[0];
+clickRow.props.onClick({target:{closest:()=>null}});tree=render();
+let details=nodes(tree,node=>typeof node.type==='function'&&node.props.row)[0];
+assert.ok(details,'Clicking a booking row opens its detail preview');
+assert.equal(details.props.row.id,clickRow.props.key);details.props.onClose();tree=render();
+clickRow.props.onClick({target:{closest:()=>({tagName:'BUTTON'})}});tree=render();
+assert.equal(nodes(tree,node=>typeof node.type==='function'&&node.props.row).length,0,'Action buttons do not trigger the row preview');
+const focusedRow={};let prevented=false;clickRow.props.onKeyDown({target:focusedRow,currentTarget:focusedRow,key:'Enter',preventDefault(){prevented=true;}});tree=render();
+assert.equal(prevented,true);details=nodes(tree,node=>typeof node.type==='function'&&node.props.row)[0];assert.ok(details,'Enter opens the row preview');details.props.onClose();tree=render();
 const cards=nodes(tree,node=>node.type==='button'&&node.props['data-status']);assert.equal(cards.length,4);
 cards.find(node=>node.props['data-status']==='approved').props.onClick();tree=render();
 assert.equal(nodes(tree,node=>node.type==='tr').length,2,'Approved filter has one booking plus header');
-const completeButton=nodes(tree,node=>node.type==='button'&&node.children.includes('Mark as Completed'))[0];await completeButton.props.onClick();tree=render();
+const completeButton=nodes(tree,node=>node.type==='button'&&node.children.includes('Mark as Completed'))[0];
+let confirmAction;window.parishDialogs.confirm=()=>new Promise(resolve=>{confirmAction=resolve;});
+const patchCount=patches;const pendingAction=completeButton.props.onClick();
+assert.equal(patches,patchCount,'No update while confirmation is pending');
+confirmAction(false);await pendingAction;assert.equal(patches,patchCount,'Cancel must not update the booking');
+window.parishDialogs.confirm=async()=>true;tree=render();await nodes(tree,node=>node.type==='button'&&node.children.includes('Mark as Completed'))[0].props.onClick();tree=render();
 assert.equal(statusCounts(database).completed,3);assert.equal(nodes(tree,node=>node.type==='tr').length,2,'Empty result row plus header after request leaves approved filter');
 cards.find(node=>node.props['data-status']==='completed').props.onClick();tree=render();
-const printButton=nodes(tree,node=>node.type==='button'&&node.children.includes('Print'))[0];await printButton.props.onClick();await Promise.resolve();assert.equal(printed,true);assert.ok(reportHtml.includes('Request register'));
+const printButton=nodes(tree,node=>node.type==='button'&&node.children.includes('Print'))[0];await printButton.props.onClick();await Promise.resolve();assert.equal(printed,false,"Opening a report must not start printing or saving");assert.ok(reportHtml.includes('Request register'));
 const previousReads=reads;await nodes(tree,node=>node.type==='button'&&node.children.includes('Generate Reports'))[0].props.onClick();
 assert.ok(reads>previousReads,'Generate refreshes records');assert.ok(reportHtml.includes('COMPLETED'));assert.ok(reportHtml.includes('APT-2'));assert.ok(!reportHtml.includes('APT-4'),'Rejected records excluded from completed report');
-assert.ok(reportHtml.includes('Booking statuses'));
+assert.ok(reportHtml.includes('Booking statuses'));assert.equal(printed,false,'Generate Reports previews without printing');assert.ok(reportHtml.includes('onclick="window.print()"'),'Saving is an explicit report button action');
 database.push(...Array.from({length:14},(_,index)=>row(String(100+index),'Completed')));
 await nodes(tree,node=>node.type==='button'&&node.children.includes('Generate Reports'))[0].props.onClick();tree=render();
 assert.equal(nodes(tree,node=>node.type==='tr').length,8,'Seven booking rows plus header');assert.ok(reportHtml.includes('APT-113'),'Report retains records beyond the visible page');
@@ -61,4 +79,4 @@ const region=nodes(tree,node=>node.props.role==='region')[0];region.props.onTouc
 assert.equal(nodes(tree,node=>node.type==='button'&&node.children.includes('Previous'))[0].props.disabled,true,'Swipe right returns to first page');
 const pie=nodes(tree,node=>node.props.className==='report-pie')[0];assert.ok(pie);assert.ok(pie.props['aria-label'].includes('1 certificate requests'),'Pie counts all matching rows beyond one page');assert.ok(nodes(tree,node=>node.type==='h4'&&node.children.includes('Most-requested Certificates')).length);
 effects.forEach(effect=>effect?.cleanup?.());
-console.log('PASS: status aliases, counts, scoped reads, date/type/search filters, actual service charts, valid transitions, stale-update guards, immediate UI updates, completed printing, and fresh filtered reports.');
+console.log('PASS: status aliases, counts, scoped reads, date/type/search filters, actual service charts, valid transitions, stale-update guards, immediate UI updates, manual print/save controls, no reports on mount or background refresh, and fresh filtered report previews.');

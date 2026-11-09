@@ -1,5 +1,6 @@
-import {AdminAnnouncementTables} from './admin-announcement-tables.js';
-import {isSundayMassSponsor} from './announcement-kind.js';
+import {ActivityUpdateEditor,activityDocuments} from './announcement-update-editor.js?v=20261106-dashboard-editor';
+import {AdminAnnouncementTables} from './admin-announcement-tables.js?v=20261106-sponsor-cleanup';
+import {isSundayMassSponsor} from './announcement-kind.js?v=20261106-matched-announcements';
 import { parseAnnouncementActivities, serializeAnnouncementActivities } from './announcement-activities.js';
 import { ADDRESS_OPTIONS } from './address-options.js';
 export const BULLETIN_CATEGORIES = ['Project transparency', 'Donations & contributions', 'Visiting priests', 'Fundraising', 'Parish matters'];
@@ -107,6 +108,7 @@ export function ParishPublishing({React:R, request, getHeaders, url, session}) {
   const [files, setFiles] = R.useState([]), [busy, setBusy] = R.useState(false), [loading, setLoading] = R.useState(true);
   const [notice, setNotice] = R.useState(null);
   const [composerOpen, setComposerOpen] = R.useState(false);
+  const [updateOpen,setUpdateOpen]=R.useState(false);
   const fileInput = R.useRef(null), formRef = R.useRef(null), generation = R.useRef(0);
   const table = kind === 'bulletin' ? 'parish_bulletins' : 'diocese_announcements';
   const noun = kind === 'bulletin' ? 'Bulletin' : 'Announcement';
@@ -176,8 +178,50 @@ export function ParishPublishing({React:R, request, getHeaders, url, session}) {
       setNotice({error:true, text:readableError(e) + cleanup});
     } finally {setBusy(false);}
   }
+  async function saveActivityUpdates(documents,onSaved) {
+    if(busy||!parish)throw new Error('Please wait until the parish announcements are ready.');
+    // Validate the entire table before starting any uploads or writes.
+    const plans=documents.map(doc=>{
+      const attachments=postAttachments(doc.post||{}).map(item=>({...item,type:item.type||'application/octet-stream'}));
+      const checked=validateFiles(doc.files,attachments.length);
+      const prepared=announcementDraft({...blank('announcement'),id:doc.post?.id,category:'Notice',status:doc.status,activities:doc.activities});
+      publishingPayload('announcement',prepared,parish,attachments,doc.id);
+      const baseline=doc.post?activityDocuments([doc.post])[0]:null;
+      const changed=!doc.post||doc.status!==doc.post.status||doc.files.length||JSON.stringify(doc.activities)!==JSON.stringify(baseline?.activities);
+      return {doc,prepared,attachments,checked,changed};
+    }).filter(plan=>plan.changed);
+    setBusy(true);let completed=0;
+    try {
+      for(const {doc,prepared,attachments,checked} of plans) {
+        const uploaded=[];let committed=false;
+        try {
+          for(const {file,type,ext} of checked) {
+            const path=parish.id+'/announcement/'+doc.id+'/'+crypto.randomUUID()+'.'+ext;
+            const response=await fetch(url+'/storage/v1/object/'+BUCKET+'/'+encodePath(path),{method:'POST',headers:{...getHeaders(token),'Content-Type':type,'x-upsert':'false'},body:file});
+            if(!response.ok)throw new Error('Could not upload '+file.name+'. Please try again.');
+            uploaded.push({path,name:file.name,type,size:file.size,url:url+'/storage/v1/object/authenticated/'+BUCKET+'/'+encodePath(path)});
+          }
+          const payload=publishingPayload('announcement',prepared,parish,[...attachments,...uploaded],doc.id);
+          // Editing table content does not change a post's category or audience.
+          if(doc.post){delete payload.parish_name;delete payload.audience;delete payload.category;}
+          const target='/rest/v1/diocese_announcements'+(doc.post?'?id=eq.'+encodeURIComponent(doc.id)+'&parish_name=eq.'+encodeURIComponent(parish.parish_name):'');
+          const saved=await rest(target,{method:doc.post?'PATCH':'POST',headers:{Prefer:'return=representation'},body:payload});
+          if(!Array.isArray(saved)||saved.length!==1)throw new Error('An announcement was not saved. Please check your parish permissions.');
+          committed=true;completed++;
+          setRows(current=>[saved[0],...current.filter(row=>row.id!==saved[0].id)]);
+          onSaved(doc.id,saved[0]);
+        } catch(error) {
+          if(!committed&&uploaded.length)try{await removeObjects(uploaded.map(item=>item.path));}catch{error.message+=' Some uploaded files could not be cleaned up.';}
+          throw error;
+        }
+      }
+      setNotice({text:'Latest announcements saved.'});
+    } catch(error) {
+      throw new Error((completed?'Some changes were saved. Your remaining edits are still in the table. ':'')+readableError(error));
+    } finally{setBusy(false);}
+  }
   async function deletePost(row) {
-    if (!window.confirm('Delete this ' + noun.toLowerCase() + '? This cannot be undone.')) return;
+    if (!(await window.parishDialogs.confirm('Delete this ' + noun.toLowerCase() + '? This cannot be undone.'))) return;
     setBusy(true);
     try {
       const deleted = await rest('/rest/v1/' + table + '?id=eq.' + encodeURIComponent(row.id) + '&' + scope(parish), {method:'DELETE', headers:{Prefer:'return=representation'}});
@@ -199,12 +243,12 @@ export function ParishPublishing({React:R, request, getHeaders, url, session}) {
       setNotice({text:'Announcement status changed to ' + status + '.'});
     } catch (error) {setNotice({error:true, text:readableError(error)});} finally {setBusy(false);}
   }
-  function switchKind(next) {
+  async function switchKind(next) {
     if (next === kind || busy) return;
-    if ((draft.title || draft.content || draft.activities?.some(item => item.date || item.activity) || files.length || draft.id) && !window.confirm('Discard your unsaved changes?')) return;
+    if ((draft.title || draft.content || draft.activities?.some(item => item.date || item.activity) || files.length || draft.id) && !(await window.parishDialogs.confirm('Discard your unsaved changes?'))) return;
     setKind(next); setDraft(blank(next)); setFiles([]); if (fileInput.current) fileInput.current.value = '';
   }
-  function editPost(row) {if ((draft.title || draft.content || draft.activities?.some(item => item.date || item.activity) || files.length) && !window.confirm('Discard your unsaved changes?')) return; setDraft({...blank(kind), ...row, category:kind==='announcement'?(isSundayMassSponsor(row)?'Sunday Mass Sponsor':'Notice'):row.category, audience_type:/^BEC Area:/i.test(row.audience || '') ? 'bec_area' : 'main_parish', audience_area:/^BEC Area:/i.test(row.audience || '') ? row.audience.replace(/^BEC Area:\s*/i, '') : '', activities:kind === 'announcement' ? announcementActivities(row) : blank(kind).activities, attachments:postAttachments(row)});  setFiles([]); if(fileInput.current) fileInput.current.value = ''; setNotice(null);setComposerOpen(true);return true;}
+  async function editPost(row) {if ((draft.title || draft.content || draft.activities?.some(item => item.date || item.activity) || files.length) && !(await window.parishDialogs.confirm('Discard your unsaved changes?'))) return; setDraft({...blank(kind), ...row, category:kind==='announcement'?(isSundayMassSponsor(row)?'Sunday Mass Sponsor':'Notice'):row.category, audience_type:/^BEC Area:/i.test(row.audience || '') ? 'bec_area' : 'main_parish', audience_area:/^BEC Area:/i.test(row.audience || '') ? row.audience.replace(/^BEC Area:\s*/i, '') : '', activities:kind === 'announcement' ? announcementActivities(row) : blank(kind).activities, attachments:postAttachments(row)});  setFiles([]); if(fileInput.current) fileInput.current.value = ''; setNotice(null);setComposerOpen(true);return true;}
   const field = (label, control) => h('label', {className:'login-field'}, h('span', null, label), control);
   const update = key => event => setDraft({...draft, [key]:event.target.value});
   const updateActivity = (index, key, value) => setDraft(current => ({...current, activities:current.activities.map((item, i) => i === index ? {...item, [key]:value} : item)}));
@@ -230,6 +274,7 @@ export function ParishPublishing({React:R, request, getHeaders, url, session}) {
     return h('div', {className:'publishing-attachments'}, items.map((item, i) => h(Attachment, {key:item.path || item.url || i, React:R, request, token, url, item})));
   };
   return h('div', {className:'parish-publishing' + (kind === 'announcement' ? ' parish-publishing--announcements' : '')},
+    updateOpen?h(ActivityUpdateEditor,{React:R,posts:rows,onSave:saveActivityUpdates,onClose:()=>setUpdateOpen(false)}):null,
     h('div', {className:'publishing-tabs', role:'tablist', 'aria-label':'Parish posts'}, ['announcement','bulletin'].map(value => h('button', {key:value, type:'button', role:'tab', 'aria-selected':kind === value, 'aria-controls':'parish-post-panel', disabled:busy, onClick:() => switchKind(value)}, value === 'bulletin' ? 'Bulletins' : 'Announcements'))),
     notice ? h('p', {className:'publishing-notice' + (notice.error ? ' is-error' : ''), role:notice.error ? 'alert' : 'status'}, notice.text) : null,
     h('div', {id:'parish-post-panel', role:'tabpanel', 'aria-label':noun + ' publishing', className:'publishing-layout'},
@@ -254,7 +299,7 @@ export function ParishPublishing({React:R, request, getHeaders, url, session}) {
       h('article', {className:'glass-card page-card publishing-board'},
         h('h4', null, kind === 'bulletin' ? 'Bulletin Board' : 'Announcements'),
         h('p', null, kind === 'bulletin' ? 'Review parish bulletins and their publication status.' : 'Review the announcements parish members will receive.'),
-        loading ? h('p', {role:'status'}, 'Loading ' + noun.toLowerCase() + 's…') : kind === 'announcement' ? h(AdminAnnouncementTables,{React:R,posts:rows,busy,onEdit:editPost,onDelete:deletePost,attachments:attachmentNodes,onStatusChange:changeStatus,onAttach:row=>{if(editPost(row))fileInput.current?.click();},onAdd:()=>{if((draft.id||files.length||draft.activities?.some(item=>item.date||item.activity))&&!window.confirm("Discard unsaved changes and add a parish activity?"))return;reset();setNotice(null);setComposerOpen(true);}}) : rows.length === 0 ? h('div', {className:'empty-state'}, 'No parish ' + noun.toLowerCase() + 's yet.') : rows.map(row => h('section', {key:row.id, className:'publishing-post'},
+        loading ? h('p', {role:'status'}, 'Loading ' + noun.toLowerCase() + 's…') : kind === 'announcement' ? h(AdminAnnouncementTables,{React:R,posts:rows,busy,onEdit:editPost,onDelete:deletePost,attachments:attachmentNodes,onStatusChange:changeStatus,onUpdate:()=>{setNotice(null);setUpdateOpen(true);},onAdd:async ()=>{if((draft.id||files.length||draft.activities?.some(item=>item.date||item.activity))&&!(await window.parishDialogs.confirm("Discard unsaved changes and add a parish activity?")))return;reset();setDraft({...blank('announcement'),category:'Sunday Mass Sponsor'});setNotice(null);setComposerOpen(true);}}) : rows.length === 0 ? h('div', {className:'empty-state'}, 'No parish ' + noun.toLowerCase() + 's yet.') : rows.map(row => h('section', {key:row.id, className:'publishing-post'},
           h('div', {className:'publishing-post-meta'}, h('span', null, row.category || 'Notice'), kind === 'announcement' ? h('span', null, row.audience || 'Parish Members') : null, h('span', {className:'status-badge status-badge--' + (row.status === 'Published' ? 'green' : 'blue')}, row.status)),
           kind === 'announcement' ? activityTable(announcementActivities(row),false,isSundayMassSponsor(row)) : h(R.Fragment, null, h('h5', null, row.title), h('p', {className:'publishing-post-content'}, row.content || 'No announcement details saved.')), attachmentNodes(row),
           h('small', null, new Date(row.published_at || row.created_at).toLocaleString()),

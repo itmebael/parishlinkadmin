@@ -238,3 +238,128 @@ dialog.pc-dialog--day-details[open] {
 }
 
 .pc-location-audience { display:block; color:#6c7f99; font-size:12px; line-height:1.5; }
+
+/* Match the member calendar while keeping parish schedule management. */
+@layer logo-palette {
+@media screen {
+html[data-design="heaven"] body #root .dashboard-frame--parish .pc-calendar {
+  box-sizing:border-box; min-width:0; width:100%; padding:16px;
+  background:#fff; border:1px solid #acd7ef; border-radius:22px;
+  box-shadow:0 6px 20px #0054cf0c;
+  & .pc-toolbar {
+    display:grid!important; grid-template-columns:auto minmax(0,1fr) auto!important;
+    align-items:center!important; gap:12px!important; padding:0 0 16px!important;
+  }
+  & .pc-toolbar h4 {
+    margin:0!important; text-align:center!important; color:#123b67!important;
+    font-size:24px!important; line-height:1.3!important;
+  }
+  & .pc-month-nav {
+    display:inline-flex!important; align-items:center!important; justify-content:center!important;
+    min-height:44px!important; padding:8px 14px!important; white-space:nowrap!important;
+    border:1px solid #acd7ef!important; border-radius:12px!important;
+    background:#e9f7ff!important; color:#0054cf!important; font:inherit;
+    font-size:14px!important; font-weight:600; cursor:pointer;
+    box-shadow:inset 1px 1px 3px #fff,0 3px 7px #0054cf12!important;
+  }
+  & .pc-month-nav:hover { background:#d9f1ff!important; }
+  & .pc-weekdays {
+    display:grid; grid-template-columns:repeat(7,minmax(0,1fr));
+    background:#e9f7ff!important; border:1px solid #acd7ef!important;
+    border-bottom:0!important; border-radius:12px 12px 0 0!important;
+  }
+  & .pc-weekdays span { padding:12px 0!important; color:#405575!important; font-size:12px!important; }
+  & .pc-grid {
+    display:grid!important; grid-template-columns:repeat(7,minmax(0,1fr))!important;
+    gap:0!important; border-top:1px solid #acd7ef!important;
+    border-left:1px solid #acd7ef!important; border-radius:0 0 12px 12px!important;
+    overflow:hidden!important;
+  }
+  & .pc-day {
+    box-sizing:border-box!important; display:flex!important; flex-direction:column!important;
+    align-items:stretch!important; justify-content:flex-start!important;
+    min-width:0!important; min-height:112px!important; padding:7px!important; gap:5px!important;
+    border:0!important; border-right:1px solid #d6e5f0!important; border-bottom:1px solid #d6e5f0!important;
+    border-radius:0!important; background:#fff!important; color:#243b60!important;
+    box-shadow:none!important; font:inherit; text-align:left!important; overflow:hidden!important;
+  }
+  & .pc-day > strong {
+    display:grid!important; place-items:center!important; flex:0 0 auto;
+    width:28px; height:28px; font-size:13px; border-radius:50%;
+  }
+  & .pc-day--blank { background:#f2f4f7!important; }
+  & button.pc-day:hover { background:#eff8ff!important; }
+  & .pc-day.is-today > strong { background:#0054cf!important; color:#fff!important; }
+  & .pc-day.is-selected { background:#e9f7ff!important; box-shadow:inset 0 0 0 2px #0054cf!important; }
+  & .pc-event {
+    min-width:0!important; max-width:100%; padding:4px 5px!important;
+    display:-webkit-box!important; -webkit-line-clamp:2; -webkit-box-orient:vertical;
+    overflow:hidden!important; overflow-wrap:anywhere; font-size:11px!important; line-height:1.35!important;
+  }
+  & .pc-more { font-size:11px; color:#405575; }
+  & button:focus-visible { outline:3px solid #0054cf!important; outline-offset:-3px!important; }
+}
+@media(max-width:600px) {
+  html[data-design="heaven"] body #root .dashboard-frame--parish .pc-calendar {
+    padding:8px; border-radius:16px;
+    & .pc-toolbar { gap:6px!important; }
+    & .pc-toolbar h4 { font-size:17px!important; }
+    & .pc-month-nav { padding:8px!important; font-size:12px!important; }
+    & .pc-weekdays span { font-size:10px!important; }
+    & .pc-day { min-height:92px!important; padding:4px 2px!important; }
+    & .pc-day > strong { width:23px; height:23px; font-size:11px; }
+    & .pc-event { font-size:9px!important; padding:3px 2px!important; }
+    & .pc-more { font-size:9px; }
+  }
+}
+}
+}
+@layer logo-palette {
+@media screen {
+  html[data-design="heaven"] body #root .dashboard-frame--parish .parish-events-manage > .glass-card__header > .status-badge {
+    background:#fff!important;
+    border:1px solid #fff!important;
+    color:#0054cf!important;
+    -webkit-text-fill-color:#0054cf!important;
+  }
+}
+}
+/* Add Mass dialog close control. */
+@layer logo-palette {
+@media screen {
+  .pc-dialog--add-schedule .pc-dialog__header > .pc-icon {
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    flex:0 0 40px!important;
+    box-sizing:border-box!important;
+    width:40px!important;
+    height:40px!important;
+    min-height:40px!important;
+    padding:0!important;
+    border:1px solid #d5e3ef!important;
+    border-radius:12px!important;
+    background:#f1f7fc!important;
+    color:#315576!important;
+    font-family:Arial,sans-serif!important;
+    font-size:26px!important;
+    font-weight:400!important;
+    line-height:1!important;
+    box-shadow:0 2px 5px #123b670a!important;
+    cursor:pointer;
+    transition:background-color .15s ease,border-color .15s ease,color .15s ease;
+  }
+  .pc-dialog--add-schedule .pc-dialog__header > .pc-icon:hover {
+    background:#e1f1ff!important;
+    border-color:#92c7ed!important;
+    color:#0054cf!important;
+  }
+  .pc-dialog--add-schedule .pc-dialog__header > .pc-icon:active {
+    background:#d0e8fc!important;
+  }
+  .pc-dialog--add-schedule .pc-dialog__header > .pc-icon:focus-visible {
+    outline:3px solid #0054cf!important;
+    outline-offset:3px!important;
+  }
+}
+}

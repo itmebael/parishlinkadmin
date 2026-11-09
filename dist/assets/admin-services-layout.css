@@ -33,3 +33,12 @@ html:has(.parish-services-screen),body:has(.parish-services-screen) { height:aut
 }
 }
 }
+
+@layer logo-palette {
+@media screen {
+  #root .parish-services-screen > .page-card > .glass-card__header .page-card__lead {
+    display:none!important;
+    margin:0!important;
+  }
+}
+}
